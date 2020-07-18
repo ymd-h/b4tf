@@ -53,3 +53,38 @@ def multivariate_normal_fn(loc,relative=0.01):
         batch_ndims = tf.size(dist.batch_shape_tensor())
         return tfp.distributions.Independent(dist,reinterpreted_batch_ndims=batch_ndims)
     return _fn
+
+
+def BNN_like(NN,cls,copy_weight=False,**kwargs):
+    """
+    Create Bayesian Neural Network like input Neural Network shape
+
+    Parameters
+    ----------
+    NN : tf.keras.Model
+        Neural Network for imitating shape
+    cls : tfp.layers
+        Bayes layers class
+    copy_weight : bool, optional
+        Copy weight from NN when `True`. The default is `False`
+
+
+    Returns
+    -------
+    model : tf.keras.Model
+        Bayes Neural Network
+    """
+    inputs = tf.keras.Input(shape=(tf.shape(NN.layers[0].kernel)[0],))
+    x = inputs
+
+    N = len(NN.layers)
+    for i, L in enumerate(NN.layers):
+        layer_kwargs = { **kwargs }
+
+        if copy_weight:
+            layer_kwargs["kernel_prior_fn": multivariate_normal_fn(L.kernel)]
+            layer_kwargs["bias_prior_fn": multivariate_normal_fn(L.bias)]
+
+        x = cls(L.units,activation=L.activation,**layer_kwargs)(x)
+
+    return tf.keras.Model(inputs=inputs,outputs=x)
