@@ -2,7 +2,8 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 
 
-def create_model(units,cls,input_shape=(1,),activation=tf.nn.leaky_relu,**kwargs):
+def create_model(units,cls=tfp.layers.DenseReparameterization,
+                 input_shape=(1,),activation=tf.nn.leaky_relu,**kwargs):
     """
     Create model (network) with specified size units
 
@@ -55,7 +56,7 @@ def multivariate_normal_fn(loc,relative=0.01):
     return _fn
 
 
-def BNN_like(NN,cls,copy_weight=False,**kwargs):
+def BNN_like(NN,cls=DenseReparameterization,copy_weight=False,**kwargs):
     """
     Create Bayesian Neural Network like input Neural Network shape
 
