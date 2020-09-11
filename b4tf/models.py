@@ -30,6 +30,7 @@ class PBPLayer(tf.keras.layers.Layer):
         self.units = units
         self.alpha = alpha
         self.beta = beta
+        pi = tf.math.atan(tf.constant(1.0)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
     def build(self,input_shape):
@@ -63,7 +64,7 @@ class PBPLayer(tf.keras.layers.Layer):
                                       initializer=,
                                       dtype=self.dtype,
                                       trainable=True)
-        pi = tf.math.atan(tf.constant(1.0)) * 4
+        self.Normal = tfp.distribution.Normal(loc=0.0, scale=1.0)
         self.built = True
 
     @tf.function
