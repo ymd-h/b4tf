@@ -223,7 +223,7 @@ class PBP:
             logZ2 += _logZ2
 
 
-        alpha1 = self.alpha + 1
+        alpha1 = self.alpha_w + 1
         logZ2_logZ1 = logZ2 - logZ1
         logZ1_logZ0 = logZ1 - logZ0
         # Must update beta first
