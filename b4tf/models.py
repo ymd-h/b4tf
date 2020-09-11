@@ -241,6 +241,8 @@ class PBP:
 
     @tf.function
     def _call(self,x:tf.Tensor):
-        for l in self.layers:
+        for l in self.layers[:-1]:
             x = l(x)
-        return x
+            x = tf.maximum(x,tf.zeros_like(x)) # ReLU
+
+        return self.layers[-1](x)
