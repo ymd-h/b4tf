@@ -158,31 +158,6 @@ class PBPLayer(tf.keras.layers.Layer):
         W, b = self._sample_weights()
         return (tf.tensordot(W,x,axes=[-1,1]) + b)*self.inv_sqrtV1
 
-    def fit(self,x,y):
-        logZ0 = tf.constant(0.0)
-        logZ1 = tf.constant(0.0)
-        logZ2 = tf.constant(0.0)
-        for l in self.layers:
-            l.update_weight()
-            _logZ0, _logZ1, _logZ2 = l.logZ0_logZ1_logZ2()
-            logZ0 += _logZ0
-            logZ1 += _logZ1
-            logZ2 += _logZ2
-
-
-        alpha1 = self.alpha + 1
-        inv_beta = 1.0/self.beta_lambda
-        alpha_inv_beta = self.alpha * inv_beta
-        alpha1_inv_beta = alpha_inv_beta + inv_beta
-        logZ2_logZ1 = logZ2 - logZ1
-        logZ1_logZ0 = logZ1 - logZ0
-        # Must update beta first
-        self.beta_lambda.assign(1.0/(tf.math.exp(logZ2_logZ1)*alpha1_inv_beta -
-                                     tf.math.exp(logZ1_logZ0)*alpha_inv_beta))
-        self.alpha_lambda.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
-                                      alpha1/self.alpha_lambda  - 1.0))
-
-
     def get_config(self):
         return {**super().get_config(),}
 
@@ -233,7 +208,28 @@ class PBP:
         pass
 
     def fit(self,x,y):
-        pass
+        logZ0 = tf.constant(0.0)
+        logZ1 = tf.constant(0.0)
+        logZ2 = tf.constant(0.0)
+        for l in self.layers:
+            l.update_weight()
+            _logZ0, _logZ1, _logZ2 = l.logZ0_logZ1_logZ2()
+            logZ0 += _logZ0
+            logZ1 += _logZ1
+            logZ2 += _logZ2
+
+
+        alpha1 = self.alpha + 1
+        inv_beta = 1.0/self.beta_lambda
+        alpha_inv_beta = self.alpha * inv_beta
+        alpha1_inv_beta = alpha_inv_beta + inv_beta
+        logZ2_logZ1 = logZ2 - logZ1
+        logZ1_logZ0 = logZ1 - logZ0
+        # Must update beta first
+        self.beta_lambda.assign(1.0/(tf.math.exp(logZ2_logZ1)*alpha1_inv_beta -
+                                     tf.math.exp(logZ1_logZ0)*alpha_inv_beta))
+        self.alpha_lambda.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
+                                      alpha1/self.alpha_lambda  - 1.0))
 
     def __call__(self,x):
         x = tf.convert_to_tensor(x,shape=(-1,*self.input_shape))
