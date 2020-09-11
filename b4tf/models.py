@@ -185,8 +185,8 @@ class PBP:
         input_shape : Iterable[int], optional
             Input shape for PBP model. The default value is `(1,)`
         """
-        self.alpha_gamma  = tf.Variable(1.0,trainable=True)
-        self.beta_gamma   = tf.Variable(0.0,trainable=True)
+        self.alpha_y  = tf.Variable(1.0,trainable=True)
+        self.beta_y   = tf.Variable(0.0,trainable=True)
 
         self.alpha_lambda = tf.Variable(1.0,trainable=True)
         self.beta_lambda  = tf.Variable(0.0,trainable=True)
@@ -203,8 +203,8 @@ class PBP:
             last_shape = u
 
         self.Normal = tfp.distributions.Norma(loc=0.0,scale=1.0)
-        self.Gamma = tfp.distributions.Gamma(concentration=self.alpha_gamma,
-                                             rate=self.beta_gamma)
+        self.Gamma = tfp.distributions.Gamma(concentration=self.alpha_y,
+                                             rate=self.beta_y)
 
     def _logZ(self,y: tf.Tensor,
               alpha: tf.Tensor,beta: tf.Tensor,
