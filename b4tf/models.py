@@ -93,8 +93,43 @@ class PBP:
     "Probabilistic Backpropagation for Scalable Learning of Bayesian Neural Networks",
     arXiv 1502.05336, 2015
     """
-    def __init__(self,units):
+    def __init__(self,units: Iterable[int],*,
+                 input_shape: Iterable[int]=(1,)):
+        """
+        Initialize PBP model
+
+        Parameters
+        ----------
+        units : Iterable[int]
+            Numbers of hidden units and outputs
+        input_shape : Iterable[int], optional
+            Input shape for PBP model. The default value is `(1,)`
+        """
+        self.alpha_gamma  = tf.Variable(1.0,trainable=True)
+        self.alpha_lambda = tf.Variable(1.0,trainable=True)
+        self.beta_gamma   = tf.Variable(0.0,trainable=True)
+        self.beta_lambda  = tf.Variable(0.0,trainable=True)
+
+
+        D = tf.keras.layers.Dense
+        S = tf.keras.layers.Sequential
+
+        self.input_shape = input_shape
+        self.layers = S([[D(units[0],activation="relu",input_shape=input_shape)] +
+                         [D(units[i],activation="relu") for i in units[1:-1]] +
+                         [D(units[-1])]])
+
+    def _Z(self):
         pass
+
 
     def prob(self,x):
         pass
+
+    def __call__(self,x):
+        x = tf.convert_to_tensor(x,shape=(-1,*self.input_shape))
+        return self._call(x)
+
+    @tf.function
+    def _call(self,x:tf.Tensor):
+        return self.layers(x)
