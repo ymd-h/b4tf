@@ -156,7 +156,7 @@ class PBPLayer(tf.keras.layers.Layer):
     @tf.function
     def call(self,x: tf.Tensor):
         W, b = self._sample_weights()
-        return tf.tensordot(W,x,axes=[-1,1]) + b
+        return (tf.tensordot(W,x,axes=[-1,1]) + b)*self.inv_sqrtV1
 
     def fit(self,x,y):
         logZ0 = tf.constant(0.0)
