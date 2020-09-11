@@ -91,6 +91,32 @@ class PBPLayer(tf.keras.layers.Layer):
         y_hat = (y - m)/std
         return tf.reduce_sum(tf.math.square(y_hat)+self.log_inv_sqrt2pi)
 
+    @tf.function
+    def logZ0_logZ1_logZ2(self):
+        """
+        Calculate LogZ
+
+        Returns
+        -------
+        logZ0 : tf.Tensor
+            Log Z(alpha,beta)
+        LogZ1 : tf.Tensor
+            Log Z(alpha+1,beta)
+        LogZ2 : tf.Tensor
+            Log Z(alpha+2,beta)
+        """
+        zeros_m = tf.zeros_like(self.kernel_m)
+        zeros_b = tf.zeros_like(self.bias_m)
+        alpha1 = self.alpha + 1
+        alpha2 = self.alpha + 2
+        return (self._logZ(self.kernel_m,self.alpha,self.beta,zeros_m,self.kernel_v) +
+                self._logZ(self.bias_m,self.alpha,self.beta,zeros_b,self.bias_v),
+                self._logZ(self.kernel_m,alpha1,self.beta,zeros_m,self.kernel_v) +
+                self._logZ(self.bias_m,alpha1,self.beta,zeros_b,self.bias_v),
+                self._logZ(self.kernel_m,alpha2,self.beta,zeros_m,self.kernel_v) +
+                self._logZ(self.bias_m,alpha2,self.beta,zeros_b,self.bias_v))
+
+
     def update_weight(self):
         # Kernel
         with tf.GradientTape() as g:
