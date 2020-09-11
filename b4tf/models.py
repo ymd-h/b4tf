@@ -203,6 +203,8 @@ class PBP:
             last_shape = u
 
         self.Normal = tfp.distributions.Norma(loc=0.0,scale=1.0)
+        self.Gamma = tfp.distributions.Gamma(concentration=self.alpha_gamma,
+                                             rate=self.beta_gamma)
 
     def _logZ(self,y: tf.Tensor,
               alpha: tf.Tensor,beta: tf.Tensor,
@@ -244,4 +246,5 @@ class PBP:
             x = tf.maximum(x,tf.zeros_like(x)) # ReLU
 
         x = self.layers[-1](x)
-        return x + self.Normal.sample(x.shape)
+        return x + (self.Normal.sample(x.shape) /
+                    tf.math.sqrt(self.Gamma.sample(x.shape)))
