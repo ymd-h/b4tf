@@ -116,7 +116,7 @@ class PBPLayer(tf.keras.layers.Layer):
                 self._logZ(self.kernel_m,alpha2,self.beta,zeros_m,self.kernel_v) +
                 self._logZ(self.bias_m,alpha2,self.beta,zeros_b,self.bias_v))
 
-
+    @tf.function
     def update_weight(self):
         # Kernel
         with tf.GradientTape() as g:
