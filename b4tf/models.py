@@ -90,11 +90,46 @@ class PBPLayer(tf.keras.layers.Layer):
         y_hat = (y - m)/std
         return tf.reduce_sum(tf.math.square(y_hat)+self.log_inv_sqrt2pi)
 
-    def fit(self,x,y):
-        pass
+    def update_weight(self):
+        # Kernel
+        with tf.GradientTape() as g:
+            g.watch([self.kernel_m,self.kernel_v])
+            logZ = self._logZ(self.kernel_m,
+                              self.alpha,self.beta,
+                              tf.zeros_like(self.kernel_m),self.kernel_v)
+        dlogZ_dm, dlogZ_dv = g.gradient(logZ,[self.kernel_m,self.kernel_v])
+        self.kernel_m.assign_add(self.kernel_v * dlogZ_dm)
+        self.kernel_v.assign_sub(tf.math.square(self.kernel_v) *
+                                 (tf.math.square(dlogZ_dm) - 2*dlogZ_dv))
 
-    def call(self,*args,**kwargs):
-        pass
+        # Bias
+        with tf.GradientTape() as g:
+            g.watch([self.bias_m,self.bias_v])
+            logZ = self._logZ(self.bias_m,
+                              self.alpha,self.beta,
+                              tf.zeros_like(self.bias_m),self.bias_v)
+        dlogZ_dm, dlogZ_dv = g.gradient(logZ,[self.bias_m,self.bias_v])
+        self.bias_m.assign_add(self.bias_v * dlogZ_dm)
+        self.bias_v.assign_sub(tf.math.squre(self.bias_v) *
+                               (tf.math.square(dlogZ_dm) - 2*dlogZ_dv))
+
+    @tf.function
+    def _sample_weights(self):
+        eps = self.Normal.sample(self.kernel_m.shape)
+        std = tf.math.sqrt(tf.math.maximum(self.kernel_v,
+                                           tf.zeros_like(self.kernel_v)))
+        W = self.kernel_m + std * eps
+
+        eps = self.Normal.sample(self.bias_m.shape)
+        std = tf.math.sqrt(tf.math.maximum(self.bias_v,
+                                           tf.zeros_like(self.bias_v)))
+        b = self.bias_m + std * eps
+        return W, b
+
+    @tf.function
+    def call(self,x: tf.Tensor):
+        W, b = self._sample_weights()
+        return tf.tensordot(W,x,axes=[-1,1]) + b
 
     def get_config(self):
         return {**super().get_config(),}
