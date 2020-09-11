@@ -224,14 +224,11 @@ class PBP:
 
 
         alpha1 = self.alpha + 1
-        inv_beta = 1.0/self.beta_lambda
-        alpha_inv_beta = self.alpha * inv_beta
-        alpha1_inv_beta = alpha_inv_beta + inv_beta
         logZ2_logZ1 = logZ2 - logZ1
         logZ1_logZ0 = logZ1 - logZ0
         # Must update beta first
-        self.beta_lambda.assign(1.0/(tf.math.exp(logZ2_logZ1)*alpha1_inv_beta -
-                                     tf.math.exp(logZ1_logZ0)*alpha_inv_beta))
+        self.beta_lambda.assign(self.beta_lambda/(tf.math.exp(logZ2_logZ1)*alpha1 -
+                                                  tf.math.exp(logZ1_logZ0)*self.alpha_lambda))
         self.alpha_lambda.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
                                       alpha1/self.alpha_lambda  - 1.0))
 
