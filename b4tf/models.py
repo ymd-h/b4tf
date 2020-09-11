@@ -30,6 +30,7 @@ class PBPLayer(tf.keras.layers.Layer):
         self.units = units
         self.alpha = alpha
         self.beta = beta
+        self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
     def build(self,input_shape):
         input_shape = tensor_shape.TensorShape(input_shape)
@@ -63,7 +64,6 @@ class PBPLayer(tf.keras.layers.Layer):
                                       dtype=self.dtype,
                                       trainable=True)
         pi = tf.math.atan(tf.constant(1.0)) * 4
-        self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
         self.built = True
 
     @tf.function
