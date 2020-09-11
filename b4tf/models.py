@@ -202,6 +202,8 @@ class PBP:
             self.layers.append(l)
             last_shape = u
 
+        self.Normal = tfp.distributions.Norma(loc=0.0,scale=1.0)
+
     def _logZ(self,y: tf.Tensor,
               alpha: tf.Tensor,beta: tf.Tensor,
               m: tf.Tensor,v: tf.Tensor):
@@ -241,4 +243,5 @@ class PBP:
             x = l(x)
             x = tf.maximum(x,tf.zeros_like(x)) # ReLU
 
-        return self.layers[-1](x)
+        x = self.layers[-1](x)
+        return x + self.Normal.sample(x.shape)
