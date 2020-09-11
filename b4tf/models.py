@@ -193,6 +193,7 @@ class PBP:
 
 
         self.input_shape = input_shape
+        self.call_shape = (-1,*self.input_shape)
 
         last_shape = self.input_shape
         self.layers = []
@@ -233,7 +234,7 @@ class PBP:
                                  alpha1/self.alpha_w  - 1.0))
 
     def __call__(self,x):
-        x = tf.convert_to_tensor(x,shape=(-1,*self.input_shape))
+        x = tf.convert_to_tensor(x,shape=self.call_shape)
         return self._call(x)
 
     @tf.function
