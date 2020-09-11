@@ -188,8 +188,8 @@ class PBP:
         self.alpha_y  = tf.Variable(1.0,trainable=True)
         self.beta_y   = tf.Variable(0.0,trainable=True)
 
-        self.alpha_lambda = tf.Variable(1.0,trainable=True)
-        self.beta_lambda  = tf.Variable(0.0,trainable=True)
+        self.alpha_w = tf.Variable(1.0,trainable=True)
+        self.beta_w  = tf.Variable(0.0,trainable=True)
 
 
         self.input_shape = input_shape
@@ -197,7 +197,7 @@ class PBP:
         last_shape = self.input_shape
         self.layers = []
         for u in units:
-            l = PBPLayer(u,self.alpha_lambda,self.beta_lambda)
+            l = PBPLayer(u,self.alpha_w,self.beta_w)
             l.build(last_shape)
             self.layers.append(l)
             last_shape = u
@@ -227,10 +227,10 @@ class PBP:
         logZ2_logZ1 = logZ2 - logZ1
         logZ1_logZ0 = logZ1 - logZ0
         # Must update beta first
-        self.beta_lambda.assign(self.beta_lambda/(tf.math.exp(logZ2_logZ1)*alpha1 -
-                                                  tf.math.exp(logZ1_logZ0)*self.alpha_lambda))
-        self.alpha_lambda.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
-                                      alpha1/self.alpha_lambda  - 1.0))
+        self.beta_w.assign(self.beta_w/(tf.math.exp(logZ2_logZ1)*alpha1 -
+                                        tf.math.exp(logZ1_logZ0)*self.alpha_w))
+        self.alpha_w.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
+                                 alpha1/self.alpha_w  - 1.0))
 
     def __call__(self,x):
         x = tf.convert_to_tensor(x,shape=(-1,*self.input_shape))
