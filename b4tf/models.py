@@ -62,15 +62,33 @@ class PBPLayer(tf.keras.layers.Layer):
                                       initializer=,
                                       dtype=self.dtype,
                                       trainable=True)
-        self.kernel_fn = tfp.distributions.
+        pi = tf.math.atan(tf.constant(1.0)) * 4
+        self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
         self.built = True
 
     @tf.function
-    def _Z(self,y: tf.Tensor,
-           alpha: tf.Tensor, beta: tf.Tensor, m: tf.Tensor, v: tf.Tensor):
-        std = tf.math.sqrt(tf.math.maximum(beta/(alpha-1) + v,tf.zeros_like(v)))
-        N = tfp.distributions.Normal(loc=m, scale=std)
-        return N.prob(y)
+    def _logZ(self,y: tf.Tensor,
+              alpha: tf.Tensor, beta: tf.Tensor, m: tf.Tensor, v: tf.Tensor):
+        """
+        Log of Partition Function
+
+        Parameters
+        ----------
+        y : tf.Tensor
+            Observed value
+        alpha : tf.Tensor
+            Parameter for Gamma(alpha, beta)
+        beta : tf.Tensor
+            Parameter for Gamma(alpha, beta)
+        m : tf.Tensor
+            Mean of N(m,v)
+        v : tf.Tensor
+            Variance of N(m,v)
+        """
+        std = tf.math.sqrt(tf.math.maximum(beta/(alpha-1) + v,
+                                           tf.zeros_like(v)+1e-12))
+        y_hat = (y - m)/std
+        return tf.reduce_sum(tf.math.square(y_hat)+self.log_inv_sqrt2pi)
 
     def fit(self,x,y):
         pass
