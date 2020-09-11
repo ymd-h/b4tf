@@ -46,7 +46,7 @@ class PBPLayer(tf.keras.layers.Layer):
 
         self.kernel_m = self.add_weight("kernel_mean",
                                         shape=[last_dim,self.units],
-                                        initializer=,
+                                        initializer=tf.keras.initializers.HeNormal(),
                                         dtype=self.dtype,
                                         trainable=True)
         self.kernel_v = self.add_weight("kernel_variance",
@@ -56,7 +56,7 @@ class PBPLayer(tf.keras.layers.Layer):
                                         trainable=True)
         self.bias_m = self.add_weight("bias_mean",
                                       shape=[self.units,],
-                                      initializer=,
+                                      initializer=tf.keras.initializers.HeNormal(),
                                       dtype=self.dtype,
                                       trainable=True)
         self.bias_v = self.add_weight("bias_variance",
