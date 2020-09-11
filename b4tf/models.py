@@ -160,24 +160,28 @@ class PBP:
             Input shape for PBP model. The default value is `(1,)`
         """
         self.alpha_gamma  = tf.Variable(1.0,trainable=True)
-        self.alpha_lambda = tf.Variable(1.0,trainable=True)
         self.beta_gamma   = tf.Variable(0.0,trainable=True)
+
+        self.alpha_lambda = tf.Variable(1.0,trainable=True)
         self.beta_lambda  = tf.Variable(0.0,trainable=True)
 
 
-        D = tf.keras.layers.Dense
-        S = tf.keras.layers.Sequential
-
         self.input_shape = input_shape
-        self.layers = S([[D(units[0],activation="relu",input_shape=input_shape)] +
-                         [D(units[i],activation="relu") for i in units[1:-1]] +
-                         [D(units[-1])]])
 
-    def _Z(self):
+        last_shape = self.input_shape
+        self.layers = []
+        for u in units:
+            l = PBPLayer(u,self.alpha_lambda,self.beta_lambda)
+            l.build(last_shape)
+            self.layers.append(l)
+            last_shape = u
+
+    def _logZ(self,y: tf.Tensor,
+              alpha: tf.Tensor,beta: tf.Tensor,
+              m: tf.Tensor,v: tf.Tensor):
         pass
 
-
-    def prob(self,x):
+    def fit(self,x,y):
         pass
 
     def __call__(self,x):
@@ -186,4 +190,6 @@ class PBP:
 
     @tf.function
     def _call(self,x:tf.Tensor):
-        return self.layers(x)
+        for l in self.layers:
+            x = l(x)
+        return x
