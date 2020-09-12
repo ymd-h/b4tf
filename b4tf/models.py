@@ -155,6 +155,19 @@ class PBPLayer(tf.keras.layers.Layer):
 
     @tf.function
     def call(self,x: tf.Tensor):
+        """
+        Calculate deterministic output
+
+        Parameters
+        ----------
+        x : tf.Tensor
+            Input
+
+        Returns
+        -------
+        z : tf.Tensor
+            Output
+        """
         W, b = self._sample_weights()
         return (tf.tensordot(W,x,axes=[-1,1]) + b)*self.inv_sqrtV1
 
