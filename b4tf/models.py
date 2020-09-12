@@ -195,6 +195,24 @@ class PBPLayer(tf.keras.layers.Layer):
 
 class PBPReLULayer(PBPLayer):
     @tf.function
+    def call(self,x: tf.Tensor):
+        """
+        Calculate deterministic output
+
+        Parameters
+        ----------
+        x : tf.Tensor
+            Input
+
+        Returns
+        -------
+        z : tf.Tensor
+            Output
+        """
+        x = super().call(x)
+        return tf.maximum(x,tf.zeros_like(x))
+
+    @tf.function
     def predict(self, m_prev: tf.Tensor, v_prev: tf.Tensor):
         """
         Predict Mean and Variance
