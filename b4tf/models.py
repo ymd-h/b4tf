@@ -41,7 +41,7 @@ class PBPLayer(tf.keras.layers.Layer):
                              'should be defined. Found `None`.')
         self.input_spec = InputSpec(min_ndim=2, axes={-1: last_dim})
         self.inv_sqrtV1 = 1.0 / tf.math.sqrt(last_dim + 1)
-        self.inv_V1 = tf.math.square(inv_sqrtV1)
+        self.inv_V1 = tf.math.square(self.inv_sqrtV1)
 
 
         self.kernel_m = self.add_weight("kernel_mean",
