@@ -162,6 +162,73 @@ class PBPLayer(tf.keras.layers.Layer):
         return {**super().get_config(),}
 
 
+    @tf.function
+    def predict(self, m_prev: tf.Tensor, v_prev: tf.Tensor):
+        """
+        Predict Mean and Variance
+
+        Parameters
+        ----------
+        m_prev : tf.Tensor
+            Previous Mean
+        v_prev : tf.Tensor
+            Previous Variance
+
+        Returns
+        -------
+        m : tf.Tensor
+            Mean
+        v : tf.Tensor
+            Variance
+        """
+        m = ((tf.tensordot(self.kernel_m,m_prev,axes=[-1,0]) + self.bias_m)
+             * self.inv_sqrtV1)
+
+        v = ((tf.tensordot(tf.math.square(self.kernel_m),v_prev,axes=[-1,0]) +
+              tf.tensordot(self.kernel_v,tf.math.square(m_prev),axes=[-1,0]) +
+              self.bias_v +
+              tf.tensordot(self.kernel_v,v_prev,axes=[-1,0]))
+             * self.inv_V1)
+
+        return m, v
+
+
+class PBPReLULayer(PBPLayer):
+    @tf.function
+    def predict(self, m_prev: tf.Tensor, v_prev: tf.Tensor):
+        """
+        Predict Mean and Variance
+
+        Parameters
+        ----------
+        m_prev : tf.Tensor
+            Previous Mean
+        v_prev : tf.Tensor
+            Previous Variance
+
+        Returns
+        -------
+        mb : tf.Tensor
+            Mean
+        vb : tf.Tensor
+            Variance
+        """
+        ma, va = seuper().predict(m_prev,v_prev)
+
+        _sqrt_v = tf.math.sqrt(va)
+        _alpha = ma / _sqrt_v
+        _inv_alpha = 1.0/_alpha
+        _cdf_alpha = self.Normal.cdf(_alpha)
+        _gamma = tf.where(_alpha < -30,
+                          -_alpha + _inv_alpha * (-1 + 2*tf.math.squre(_inv_alpha)),
+                          self.Normal.prob(-_alpha)/_cdf_alpha)
+        _vp = ma + _sqrt_v * _gamma
+
+        mb = _cdf_alpha * _vp
+        vb = (mb * _vp * self.Normal.cdf(-_alpha) +
+              _cdf_alpha * va * (1 - _gamma * (_gamma + _alpha)))
+
+        return mb, vb
 
 class PBP:
     """
