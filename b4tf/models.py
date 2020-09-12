@@ -295,11 +295,18 @@ class PBP:
 
         last_shape = self.input_shape
         self.layers = []
-        for u in units:
-            l = PBPLayer(u,self.alpha_w,self.beta_w)
+        for u in units[:-1]:
+            # Hidden Layer's Activation is ReLU
+            l = PBPReLULayer(u,self.alpha_w,self.beta_w)
             l.build(last_shape)
             self.layers.append(l)
             last_shape = u
+        else:
+            # Output Layer's Activation is Linear
+            l = PBPLayer(units[-1],self.alpha_w,self.beta_w)
+            l.build(last_shape)
+            self.layers.append(l)
+
 
         self.Normal = tfp.distributions.Norma(loc=0.0,scale=1.0)
         self.Gamma = tfp.distributions.Gamma(concentration=self.alpha_y,
@@ -337,10 +344,8 @@ class PBP:
 
     @tf.function
     def _call(self,x:tf.Tensor):
-        for l in self.layers[:-1]:
+        for l in self.layers:
             x = l(x)
-            x = tf.maximum(x,tf.zeros_like(x)) # ReLU
 
-        x = self.layers[-1](x)
         return x + (self.Normal.sample(x.shape) /
                     tf.math.sqrt(self.Gamma.sample(x.shape)))
