@@ -25,12 +25,13 @@ class TestPBP(unittest.TestCase):
 
 
 class TestPBPLayer(unittest.TestCase):
+    _class = PBPLayer
     def test_init(self):
-        layer = PBPLayer(10)
+        layer = self._class(10)
         self.assertEqual(layer.units,10)
 
     def test_build(self):
-        layer = PBPLayer(5)
+        layer = self._class(5)
         layer.build(3)
         self.assertTrue(layer.built)
 
@@ -43,12 +44,23 @@ class TestPBPLayer(unittest.TestCase):
 
 
     def test_call(self):
-        layer = PBPLayer(5)
+        layer = self._class(5)
         layer.build(3)
 
         y = layer(tf.constant([[1.0,2.0,3.0],
                                [2.0,3.0,4.0]]))
         self.assertEqual(y.shape,(2,5))
+
+
+class TestPBPReLULayer(unittest.TestCase):
+    _class = PBPReLULayer
+    def test_relu_call(self):
+        layer = self._class(5)
+        layer.build(3)
+
+        y = layer(tf.constant([[1.0,2.0,3.0],
+                               [2.0,3.0,4.0]]))
+        self.assertTrue(tf.reduce_all(y>=0.0))
 
 if __name__ == "__main__":
     unittest.main()
