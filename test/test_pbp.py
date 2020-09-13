@@ -46,8 +46,9 @@ class TestPBPLayer(unittest.TestCase):
         layer = PBPLayer(5)
         layer.build(3)
 
-        layer(tf.constant([[1.0,2.0,3.0],
-                           [2.0,3.0,4.0]]))
+        y = layer(tf.constant([[1.0,2.0,3.0],
+                               [2.0,3.0,4.0]]))
+        self.assertEqual(y.shape,(2,5))
 
 if __name__ == "__main__":
     unittest.main()
