@@ -339,7 +339,9 @@ class PBP:
             diff_square = tf.math.square(y - m)
             logZ0 = self._logZ(diff_square,v0)
 
-        tape.gradient(logZ0,trainables)
+        grad = tape.gradient(logZ0,trainables)
+        for l, g in zip(self.layers, grad):
+            l.apply_gradient(g)
 
 
         alpha1 = self.alpha_y + 1
