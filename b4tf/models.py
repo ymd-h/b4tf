@@ -113,7 +113,8 @@ class PBPLayer(tf.keras.layers.Layer):
             Output
         """
         W, b = self._sample_weights()
-        return (tf.tensordot(W,x,axes=[-1,1]) + b)*self.inv_sqrtV1
+        return ((tf.tensordot(W,x,axes=[-1,1]) + tf.expand_dims(b,axis=0))
+                * self.inv_sqrtV1)
 
     def get_config(self):
         return {**super().get_config(),}
