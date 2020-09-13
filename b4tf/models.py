@@ -139,13 +139,14 @@ class PBPLayer(tf.keras.layers.Layer):
         v : tf.Tensor
             Variance. [batch, features]
         """
-        m = ((tf.tensordot(self.kernel_m,m_prev,axes=[-1,1]) + self.bias_m)
+        m = ((tf.tensordot(m_prev,self.kernel_m,axes=[1,0]) +
+              tf.expand_dims(self.bias_m,axis=0))
              * self.inv_sqrtV1)
 
-        v = ((tf.tensordot(tf.math.square(self.kernel_m),v_prev,axes=[-1,1]) +
-              tf.tensordot(self.kernel_v,tf.math.square(m_prev),axes=[-1,1]) +
-              self.bias_v +
-              tf.tensordot(self.kernel_v,v_prev,axes=[-1,1]))
+        v = ((tf.tensordot(v_prev,tf.math.square(self.kernel_m),axes=[1,0]) +
+              tf.tensordot(tf.math.square(m_prev),self.kernel_v,axes=[1,0]) +
+              tf.expand_dims(self.bias_v,axis=0) +
+              tf.tensordot(v_prev,self.kernel_v,axes=[1,0]))
              * self.inv_V1)
 
         return m, v
