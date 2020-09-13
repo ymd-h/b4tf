@@ -100,3 +100,19 @@ README_MD:
       - README.md
   except:
     - schedules
+
+pypi:
+  image: *dev_image
+  stage: upload
+  environment: production
+  script:
+    - python3 setup.py clean
+    - python3 setup.py sdist
+    - twine upload dist/b4tf-*.tar.gz
+  only:
+    - tags
+  except:
+    - branches
+    - schedules
+  needs:
+    - README_MD
