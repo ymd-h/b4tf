@@ -23,6 +23,7 @@ class TestPBP(unittest.TestCase):
 
         self.assertTrue(tf.reduce_all(pbp._logZ(diff2,v) == -0.5*tf.math.log(2.0*pi*v)))
 
+
 class TestPBPLayer(unittest.TestCase):
     def test_init(self):
         layer = PBPLayer(10)
