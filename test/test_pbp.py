@@ -29,6 +29,18 @@ class TestPBPLayer(unittest.TestCase):
         layer = PBPLayer(10)
         self.assertEqual(layer.units,10)
 
+    def test_build(self):
+        layer = PBPLayer(5)
+        layer.build(3)
+        self.assertTrue(layer.built)
+
+        v = layer.trainable_weights
+
+        self.assertTrue(tf.reduce_all(layer.kernel_m == v[0]))
+        self.assertTrue(tf.reduce_all(layer.kernel_v == v[1]))
+        self.assertTrue(tf.reduce_all(layer.bias_m   == v[2]))
+        self.assertTrue(tf.reduce_all(layer.bias_v   == v[3]))
+
 
 if __name__ == "__main__":
     unittest.main()
