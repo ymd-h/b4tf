@@ -24,6 +24,10 @@ class TestPBP(unittest.TestCase):
         self.assertEqual(pbp._logZ(diff2,v),
                          -0.5*tf.math.log(2.0*pi*v))
 
+class TestPBPLayer(unittest.TestCase):
+    def test_init(self):
+        layer = PBPLayer(10)
+        self.assertEqual(layer.units,10)
 
 
 if __name__ == "__main__":
