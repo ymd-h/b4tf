@@ -21,8 +21,7 @@ class TestPBP(unittest.TestCase):
         v = tf.constant(1.0)
         pi = tf.math.atan(1.0) * 4
 
-        self.assertEqual(pbp._logZ(diff2,v),
-                         -0.5*tf.math.log(2.0*pi*v))
+        self.assertTrue(tf.reduce_all(pbp._logZ(diff2,v) == -0.5*tf.math.log(2.0*pi*v)))
 
 class TestPBPLayer(unittest.TestCase):
     def test_init(self):
