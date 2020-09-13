@@ -363,10 +363,7 @@ class PBP:
             x = tf.expand_dims(x,axis=0)
         m, v = self._predict(x)
 
-        # TODO:
-        # Convolute by Normal(0,Gamma(alpha,beta)^{-1})
-
-        return m, v
+        return m, v + self.beta/(self.alpha - 1)
 
     @tf.function
     def _predict(self,x: tf.Tensor):
