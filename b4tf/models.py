@@ -60,28 +60,29 @@ class PBPLayer(tf.keras.layers.Layer):
         self.built = True
 
     @tf.function
-    def update_weight(self):
+    def apply_gradient(self,gradient):
+        """
+        Applay gradient and update weights and bias
+
+        Parameters
+        ----------
+        gradient : list
+            List of gradients for weights and bias.
+            [d(logZ)/d(kernel_m), d(logZ)/d(kernel_v),
+             d(logZ)/d(bias_m)  , d(logZ)/d(bias_v)]
+        """
+
+        dlogZ_dkm, dlogZ_dkv, dlogZ_dbm, dlogZ_dbv = gradient
+
         # Kernel
-        with tf.GradientTape() as g:
-            g.watch([self.kernel_m,self.kernel_v])
-            logZ = self._logZ(self.kernel_m,
-                              self.alpha,self.beta,
-                              tf.zeros_like(self.kernel_m),self.kernel_v)
-        dlogZ_dm, dlogZ_dv = g.gradient(logZ,[self.kernel_m,self.kernel_v])
-        self.kernel_m.assign_add(self.kernel_v * dlogZ_dm)
+        self.kernel_m.assign_add(self.kernel_v * dlogZ_dkm)
         self.kernel_v.assign_sub(tf.math.square(self.kernel_v) *
-                                 (tf.math.square(dlogZ_dm) - 2*dlogZ_dv))
+                                 (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv))
 
         # Bias
-        with tf.GradientTape() as g:
-            g.watch([self.bias_m,self.bias_v])
-            logZ = self._logZ(self.bias_m,
-                              self.alpha,self.beta,
-                              tf.zeros_like(self.bias_m),self.bias_v)
-        dlogZ_dm, dlogZ_dv = g.gradient(logZ,[self.bias_m,self.bias_v])
-        self.bias_m.assign_add(self.bias_v * dlogZ_dm)
+        self.bias_m.assign_add(self.bias_v * dlogZ_dbm)
         self.bias_v.assign_sub(tf.math.squre(self.bias_v) *
-                               (tf.math.square(dlogZ_dm) - 2*dlogZ_dv))
+                               (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv))
 
     @tf.function
     def _sample_weights(self):
