@@ -69,3 +69,39 @@
 
 
 * Overview
+b4tf is a Python module providing a set of bayesian neural network on
+[[https://www.tensorflow.org/][TensorFlow]].
+
+
+* Installation
+b4tf requires following softwares before installation
+
+- TensorFlow 2.x
+- Python 3.x
+
+** Install from [[https://pypi.org/][PyPI]] (Recommended)
+
+The following command installs b4tf together with other dependancies.
+
+#+BEGIN_SRC shell
+pip install b4tf
+#+END_SRC
+
+Depending on your environment, you might need =sudo= or =--user= flag
+for installation.
+
+** Install from source code
+
+First, download source code manually or clone the repository;
+
+#+begin_src shell
+git clone https://gitlab.com/ymd_h/b4tf.git
+#+end_src
+
+Then you can install same way;
+
+#+begin_src shell
+cd b4tf
+pip install .
+#+end_src
+
