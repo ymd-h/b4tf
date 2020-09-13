@@ -38,6 +38,17 @@ class TestPBP(unittest.TestCase):
         pbp.fit(x2,y2)
 
 
+    def test_call(self):
+        pbp = PBP([2,2,1],input_shape=(3,))
+
+        x1 = tf.constant([1.0,2.0,3.0])
+        pbp(x1)
+
+        x2 = tf.constant([[1.0,2.0,3.0],
+                          [2.0,3.0,4.0]])
+        pbp(x2)
+
+
 class TestPBPLayer(unittest.TestCase):
     _class = PBPLayer
     def test_init(self):
