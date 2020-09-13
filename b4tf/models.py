@@ -117,7 +117,7 @@ class PBPLayer(tf.keras.layers.Layer):
                 * self.inv_sqrtV1)
 
     def get_config(self):
-        return {**super().get_config(),}
+        return {**super().get_config()}
 
 
     @tf.function
