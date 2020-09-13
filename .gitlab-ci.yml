@@ -1,0 +1,72 @@
+variables: &global-variables
+  COVERAGE_RCFILE: .coveragerc
+  DOCKER_BUILDKIT: 1
+  GIT_DEPTH: 10
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip"
+
+stages:
+  - build_image
+  - build
+  - test
+  - test_coverage
+  - upload
+
+.test_template: &py_setup
+  image: &dev_image $CI_REGISTRY_IMAGE/build:latest
+  stage: test
+  before_script:
+    - g++ --version
+    - python3 --version
+    - DEBUG_CPPRB=1 pip3 install $(echo dist/*.whl)['all']
+  except:
+    - schedules
+  artifacts:
+    paths:
+      - .coverage.*
+      - "*.xml"
+    reports:
+      junit:
+        - "*.xml"
+  interruptible: true
+
+
+.docker_build_base: &docker_build
+  image: docker:latest
+  stage: build_image
+  services:
+    - docker:dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/build:latest || true
+    - docker build --pull=true --cache-from $CI_REGISTRY_IMAGE/build:latest -t $CI_REGISTRY_IMAGE/build:latest .
+    - docker push $CI_REGISTRY_IMAGE/build:latest
+
+docker_build_schedule:
+  <<: *docker_build
+  only:
+    - schedules
+
+docker_build_manual:
+  <<: *docker_build
+  when: manual
+  except:
+    - schedules
+
+
+PBP:
+  <<: *py_setup
+  script:
+    - coverage run -m xmlrunner test/test_pbp.py
+
+coverage:
+  <<: *setup
+  stage: test_coverage
+  script:
+    - mkdir -p public/coverage
+    - coverage combine
+    - coverage report
+    - coverage html -d public/coverage
+  artifacts:
+    paths:
+      - public/coverage
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
