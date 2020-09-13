@@ -52,22 +52,6 @@ class TestPBP(unittest.TestCase):
         self.assertEqual(y2.shape,(2,1))
 
 
-    def test_call_multi_dim(self):
-        pbp = PBP([2,2,1],input_shape=(2,2))
-
-        x1 = tf.constant([[1.0,2.0],
-                          [2.0,3.0]])
-        y1 = pbp(x1)
-        self.assertEqual(y1.shape,(1,1))
-
-        x2 = tf.constant([[[1.0,2.0],
-                           [2.0,3.0]],
-                          [[1.0,2.0],
-                           [2.0,3.0]]])
-        y2 = pbp(x2)
-        self.assertEqual(y2.shape,(2,1))
-
-
 class TestPBPLayer(unittest.TestCase):
     _class = PBPLayer
     def test_init(self):
