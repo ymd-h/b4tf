@@ -190,7 +190,7 @@ class PBPReLULayer(PBPLayer):
         vb : tf.Tensor
             Variance
         """
-        ma, va = seuper().predict(m_prev,v_prev)
+        ma, va = super().predict(m_prev,v_prev)
 
         _sqrt_v = tf.math.sqrt(va)
         _alpha = ma / _sqrt_v
