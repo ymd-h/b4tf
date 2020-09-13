@@ -5,6 +5,7 @@ from tensorflow.python.framework import tensor_shape
 
 import tensorflow_probability as tfp
 
+from b4tf.utils import ReciprocalGammaInitializer
 
 class PBPLayer(tf.keras.layers.Layer):
     """
@@ -36,6 +37,7 @@ class PBPLayer(tf.keras.layers.Layer):
         self.inv_V1 = tf.math.square(self.inv_sqrtV1)
 
 
+        over_gamma = ReciprocalGammaInitializer(1.0,1e-6)
         self.kernel_m = self.add_weight("kernel_mean",
                                         shape=[last_dim,self.units],
                                         initializer=tf.keras.initializers.HeNormal(),
@@ -43,7 +45,7 @@ class PBPLayer(tf.keras.layers.Layer):
                                         trainable=True)
         self.kernel_v = self.add_weight("kernel_variance",
                                         shape=[last_dim,self.units],
-                                        initializer=,
+                                        initializer=over_gamma,
                                         dtype=self.dtype,
                                         trainable=True)
         self.bias_m = self.add_weight("bias_mean",
@@ -53,7 +55,7 @@ class PBPLayer(tf.keras.layers.Layer):
                                       trainable=True)
         self.bias_v = self.add_weight("bias_variance",
                                       shape=[self.units,],
-                                      initializer=,
+                                      initializer=over_gamma,
                                       dtype=self.dtype,
                                       trainable=True)
         self.Normal = tfp.distribution.Normal(loc=0.0, scale=1.0)
