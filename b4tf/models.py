@@ -236,7 +236,7 @@ class PBP:
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
         self.input_shape = input_shape
-        self.call_shape = (-1,*self.input_shape)
+        self.call_rank = len(self.input_shape) + 1
 
         last_shape = self.input_shape
         self.layers = []
@@ -273,7 +273,9 @@ class PBP:
         y : array-like
             Observed output
         """
-        x = tf.convert_to_tensor(x,shape=self.call_shape)
+        x = tf.constant(x)
+        if tf.rank(x) < self.call_rank:
+            x = tf.expand_dims(x,axis=0)
 
         trainables = [l.trainable_weights for l in self.layers]
         with tf.GradientTape() as tape:
@@ -317,7 +319,9 @@ class PBP:
         y : tf.Tensor
             Neural netork output
         """
-        x = tf.convert_to_tensor(x,shape=self.call_shape)
+        x = tf.constant(x)
+        if tf.rank(x) < self.call_rank:
+            x = tf.expand_dims(x,axis=0)
         return self._call(x)
 
     @tf.function
@@ -345,7 +349,9 @@ class PBP:
         v : tf.Tensor
             Variance
         """
-        x = tf.convert_to_tensor(x,shape=self.call_shape)
+        x = tf.constant(x)
+        if tf.rank(x) < self.call_rank:
+            x = tf.expand_dims(x,axis=0)
         m, v = self._predict(x)
 
         # TODO:
