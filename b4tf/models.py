@@ -81,7 +81,7 @@ class PBPLayer(tf.keras.layers.Layer):
 
         # Bias
         self.bias_m.assign_add(self.bias_v * dlogZ_dbm)
-        self.bias_v.assign_sub(tf.math.squre(self.bias_v) *
+        self.bias_v.assign_sub(tf.math.square(self.bias_v) *
                                (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv))
 
     @tf.function
@@ -197,7 +197,7 @@ class PBPReLULayer(PBPLayer):
         _inv_alpha = 1.0/_alpha
         _cdf_alpha = self.Normal.cdf(_alpha)
         _gamma = tf.where(_alpha < -30,
-                          -_alpha + _inv_alpha * (-1 + 2*tf.math.squre(_inv_alpha)),
+                          -_alpha + _inv_alpha * (-1 + 2*tf.math.square(_inv_alpha)),
                           self.Normal.prob(-_alpha)/_cdf_alpha)
         _vp = ma + _sqrt_v * _gamma
 
