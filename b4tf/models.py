@@ -58,7 +58,7 @@ class PBPLayer(tf.keras.layers.Layer):
                                       initializer=over_gamma,
                                       dtype=self.dtype,
                                       trainable=True)
-        self.Normal = tfp.distribution.Normal(loc=0.0, scale=1.0)
+        self.Normal = tfp.distributions.Normal(loc=0.0, scale=1.0)
         self.built = True
 
     @tf.function
