@@ -52,6 +52,15 @@ class TestPBPLayer(unittest.TestCase):
         self.assertEqual(y.shape,(2,5))
 
 
+    def test_sample_weight(self):
+        layer = self._class(5)
+        layer.build(3)
+        w, b = layer._sample_weights()
+
+        self.assertEqual(w.shape,(3,5))
+        self.assertEqual(b.shape,(5,))
+
+
 class TestPBPReLULayer(unittest.TestCase):
     _class = PBPReLULayer
     def test_relu_call(self):
