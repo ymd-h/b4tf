@@ -29,13 +29,13 @@ class TestPBP(unittest.TestCase):
 
         x = tf.constant([1.0,2.0])
         y = tf.constant(0.5)
-
         pbp.fit(x,y)
 
 
         x2 = tf.constant([[1.0,2.0],
                           [2.0,3.0]])
         y2 = tf.constant([0.5,0.2])
+        pbp.fit(x2,y2)
 
 
 class TestPBPLayer(unittest.TestCase):
