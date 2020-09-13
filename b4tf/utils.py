@@ -36,4 +36,6 @@ class ReciprocalGammaInitializer:
         : tf.Tensor
             Initialized tensor
         """
-        return 1.0/self.Gamma.sample(shape,dtype)
+        if dtype:
+            self.Gamma.dtype = dtype
+        return 1.0/self.Gamma.sample(shape)
