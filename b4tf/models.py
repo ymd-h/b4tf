@@ -160,12 +160,12 @@ class PBPReLULayer(PBPLayer):
         Parameters
         ----------
         x : tf.Tensor
-            Input
+            Input. [batch, features]
 
         Returns
         -------
         z : tf.Tensor
-            Output
+            Output. [batch, features]
         """
         x = super().call(x)
         return tf.maximum(x,tf.zeros_like(x))
