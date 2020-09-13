@@ -228,8 +228,8 @@ class PBP:
         input_shape : Iterable[int], optional
             Input shape for PBP model. The default value is `(1,)`
         """
-        self.alpha_y  = tf.Variable(1.0,trainable=True)
-        self.beta_y   = tf.Variable(0.0,trainable=True)
+        self.alpha  = tf.Variable(1.0,trainable=True)
+        self.beta   = tf.Variable(0.0,trainable=True)
 
 
         self.input_shape = input_shape
@@ -251,8 +251,8 @@ class PBP:
 
 
         self.Normal = tfp.distributions.Norma(loc=0.0,scale=1.0)
-        self.Gamma = tfp.distributions.Gamma(concentration=self.alpha_y,
-                                             rate=self.beta_y)
+        self.Gamma = tfp.distributions.Gamma(concentration=self.alpha,
+                                             rate=self.beta)
 
     def _logZ(self,diff_square: tf.Tensor, v: tf.Tensor):
         return tf.reduce_sum(-0.5 * (diff_square / v) +
@@ -277,7 +277,7 @@ class PBP:
             tape.watch(trainables)
             m, v = self._predict(x)
 
-            v0 = v + self.beta_y/(self.alpha_y - 1)
+            v0 = v + self.beta/(self.alpha - 1)
             diff_square = tf.math.square(y - m)
             logZ0 = self._logZ(diff_square,v0)
 
@@ -286,9 +286,9 @@ class PBP:
             l.apply_gradient(g)
 
 
-        alpha1 = self.alpha_y + 1
-        v1 = v + self.beta_y/self.alpha_y
-        v2 = v + self.beta_y/alpha1
+        alpha1 = self.alpha + 1
+        v1 = v + self.beta/self.alpha
+        v2 = v + self.beta/alpha1
 
         logZ1 = self._logZ(diff_square,v1)
         logZ2 = self._logZ(diff_square,v2)
@@ -296,10 +296,10 @@ class PBP:
         logZ2_logZ1 = logZ2 - logZ1
         logZ1_logZ0 = logZ1 - logZ0
         # Must update beta first
-        self.beta_y.assign(self.beta_y/(tf.math.exp(logZ2_logZ1)*alpha1 -
-                                        tf.math.exp(logZ1_logZ0)*self.alpha_y))
-        self.alpha_y.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
-                                 alpha1/self.alpha_y  - 1.0))
+        self.beta.assign(self.beta/(tf.math.exp(logZ2_logZ1)*alpha1 -
+                                    tf.math.exp(logZ1_logZ0)*self.alpha))
+        self.alpha.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
+                               alpha1/self.alpha  - 1.0))
 
     def __call__(self,x):
         """
