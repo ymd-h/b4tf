@@ -127,24 +127,24 @@ class PBPLayer(tf.keras.layers.Layer):
         Parameters
         ----------
         m_prev : tf.Tensor
-            Previous Mean
+            Previous Mean. [batch, features]
         v_prev : tf.Tensor
-            Previous Variance
+            Previous Variance. [batch, features]
 
         Returns
         -------
         m : tf.Tensor
-            Mean
+            Mean. [batch, features]
         v : tf.Tensor
-            Variance
+            Variance. [batch, features]
         """
-        m = ((tf.tensordot(self.kernel_m,m_prev,axes=[-1,0]) + self.bias_m)
+        m = ((tf.tensordot(self.kernel_m,m_prev,axes=[-1,1]) + self.bias_m)
              * self.inv_sqrtV1)
 
-        v = ((tf.tensordot(tf.math.square(self.kernel_m),v_prev,axes=[-1,0]) +
-              tf.tensordot(self.kernel_v,tf.math.square(m_prev),axes=[-1,0]) +
+        v = ((tf.tensordot(tf.math.square(self.kernel_m),v_prev,axes=[-1,1]) +
+              tf.tensordot(self.kernel_v,tf.math.square(m_prev),axes=[-1,1]) +
               self.bias_v +
-              tf.tensordot(self.kernel_v,v_prev,axes=[-1,0]))
+              tf.tensordot(self.kernel_v,v_prev,axes=[-1,1]))
              * self.inv_V1)
 
         return m, v
