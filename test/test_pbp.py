@@ -4,6 +4,15 @@ from b4tf.models import PBP, PBPLayer, PBPReLULayer
 
 
 class TestPBP(unittest.TestCase):
+    def test_init(self):
+        pbp = PBP([2,1])
+
+        self.assertEqual(len(pbp.layers),2)
+        self.assertIsInstance(pbp.layers[0],PBPReLULayer)
+        self.assertIsInstance(pbp.layers[1],PBPLayer)
+        self.assertEqual(pbp.input_shape,(1,))
+
+
     def test_logZ(self):
         pbp = PBP([2,1])
 
