@@ -380,16 +380,17 @@ class PBP:
             Variance
         """
         x = tf.convert_to_tensor(x,shape=self.call_shape)
-        return self._predict(x)
+        m, v = self._predict(x)
 
+        # TODO:
+        # Convolute by Normal(0,Gamma(alpha,beta)^{-1})
+
+        return m, v
 
     @tf.function
     def _predict(self,x: tf.Tensor):
         m, v = x, tf.zeros_like(x)
         for l in self.layers:
             m, v = l.predict(m,v)
-
-        # TODO:
-        # Convolute by Normal(0,Gamma(alpha,beta)^{-1})
 
         return m, v
