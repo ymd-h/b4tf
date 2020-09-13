@@ -1,5 +1,6 @@
 import unittest
 
+import tensorflow as tf
 from b4tf.models import PBP, PBPLayer, PBPReLULayer
 
 
