@@ -11,8 +11,6 @@ class PBPLayer(tf.keras.layers.Layer):
     Layer for Probabilistic Backpropagation
     """
     def __init__(self,units: int,
-                 alpha : tf.Variable,
-                 beta: tf.Variable,
                  *args,**kwargs):
         """
         Initialize PBP layer
@@ -21,15 +19,9 @@ class PBPLayer(tf.keras.layers.Layer):
         ----------
         units: int
            Number of units in layer. (Output shape)
-        alpha : tf.Variable
-           Model wide parameter alpha for Gamma(alpha, beta)
-        beta : tf.Variable
-           Model wide parameter beta for Gamma(alpha, beta)
         """
         super().__init__(*args,**kwargs)
         self.units = units
-        self.alpha = alpha
-        self.beta = beta
         pi = tf.math.atan(tf.constant(1.0)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
@@ -66,55 +58,6 @@ class PBPLayer(tf.keras.layers.Layer):
                                       trainable=True)
         self.Normal = tfp.distribution.Normal(loc=0.0, scale=1.0)
         self.built = True
-
-    @tf.function
-    def _logZ(self,y: tf.Tensor,
-              alpha: tf.Tensor, beta: tf.Tensor, m: tf.Tensor, v: tf.Tensor):
-        """
-        Log of Partition Function
-
-        Parameters
-        ----------
-        y : tf.Tensor
-            Observed value
-        alpha : tf.Tensor
-            Parameter for Gamma(alpha, beta)
-        beta : tf.Tensor
-            Parameter for Gamma(alpha, beta)
-        m : tf.Tensor
-            Mean of N(m,v)
-        v : tf.Tensor
-            Variance of N(m,v)
-        """
-        std = tf.math.sqrt(tf.math.maximum(beta/(alpha-1) + v,
-                                           tf.zeros_like(v)+1e-12))
-        y_hat = (y - m)/std
-        return tf.reduce_sum(tf.math.square(y_hat)+self.log_inv_sqrt2pi)
-
-    @tf.function
-    def logZ0_logZ1_logZ2(self):
-        """
-        Calculate LogZ
-
-        Returns
-        -------
-        logZ0 : tf.Tensor
-            Log Z(alpha,beta)
-        LogZ1 : tf.Tensor
-            Log Z(alpha+1,beta)
-        LogZ2 : tf.Tensor
-            Log Z(alpha+2,beta)
-        """
-        zeros_m = tf.zeros_like(self.kernel_m)
-        zeros_b = tf.zeros_like(self.bias_m)
-        alpha1 = self.alpha + 1
-        alpha2 = self.alpha + 2
-        return (self._logZ(self.kernel_m,self.alpha,self.beta,zeros_m,self.kernel_v) +
-                self._logZ(self.bias_m,self.alpha,self.beta,zeros_b,self.bias_v),
-                self._logZ(self.kernel_m,alpha1,self.beta,zeros_m,self.kernel_v) +
-                self._logZ(self.bias_m,alpha1,self.beta,zeros_b,self.bias_v),
-                self._logZ(self.kernel_m,alpha2,self.beta,zeros_m,self.kernel_v) +
-                self._logZ(self.bias_m,alpha2,self.beta,zeros_b,self.bias_v))
 
     @tf.function
     def update_weight(self):
@@ -286,9 +229,6 @@ class PBP:
         self.alpha_y  = tf.Variable(1.0,trainable=True)
         self.beta_y   = tf.Variable(0.0,trainable=True)
 
-        self.alpha_w = tf.Variable(1.0,trainable=True)
-        self.beta_w  = tf.Variable(0.0,trainable=True)
-
 
         self.input_shape = input_shape
         self.call_shape = (-1,*self.input_shape)
@@ -297,13 +237,13 @@ class PBP:
         self.layers = []
         for u in units[:-1]:
             # Hidden Layer's Activation is ReLU
-            l = PBPReLULayer(u,self.alpha_w,self.beta_w)
+            l = PBPReLULayer(u)
             l.build(last_shape)
             self.layers.append(l)
             last_shape = u
         else:
             # Output Layer's Activation is Linear
-            l = PBPLayer(units[-1],self.alpha_w,self.beta_w)
+            l = PBPLayer(units[-1])
             l.build(last_shape)
             self.layers.append(l)
 
