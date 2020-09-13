@@ -339,6 +339,18 @@ class PBP:
                                  alpha1/self.alpha_w  - 1.0))
 
     def __call__(self,x):
+        """
+        Calculate deterministic output
+
+        Parameters
+        ----------
+        x : array-like
+            Input
+
+        Returns
+        y : tf.Tensor
+            Neural netork output
+        """
         x = tf.convert_to_tensor(x,shape=self.call_shape)
         return self._call(x)
 
