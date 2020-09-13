@@ -11,6 +11,16 @@ stages:
   - test_coverage
   - upload
 
+
+.job_template: &setup
+  image: &dev_image $CI_REGISTRY_IMAGE/build:latest
+  before_script:
+    - g++ --version
+    - python3 --version
+  except:
+    - schedules
+
+
 .test_template: &py_setup
   image: &dev_image $CI_REGISTRY_IMAGE/build:latest
   stage: test
