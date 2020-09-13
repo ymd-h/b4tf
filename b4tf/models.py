@@ -258,7 +258,7 @@ class PBP:
 
     def _logZ(self,diff_square: tf.Tensor, v: tf.Tensor):
         return tf.reduce_sum(-0.5 * (diff_square / v) +
-                             self.log_inv_sqrt2pi - tf.matn.log(v))
+                             self.log_inv_sqrt2pi - tf.math.log(v))
 
 
     def fit(self,x,y):
