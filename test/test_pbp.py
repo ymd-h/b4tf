@@ -24,6 +24,20 @@ class TestPBP(unittest.TestCase):
         self.assertTrue(tf.reduce_all(pbp._logZ(diff2,v) == -0.5*tf.math.log(2.0*pi*v)))
 
 
+    def test_fit(self):
+        pbp = PBP([2,2,1],input_shape=(2,))
+
+        x = tf.constant([1.0,2.0])
+        y = tf.constant(0.5)
+
+        pbp.fit(x,y)
+
+
+        x2 = tf.constant([[1.0,2.0],
+                          [2.0,3.0]])
+        y2 = tf.constant([0.5,0.2])
+
+
 class TestPBPLayer(unittest.TestCase):
     _class = PBPLayer
     def test_init(self):
