@@ -252,7 +252,7 @@ class PBP:
             self.layers.append(l)
 
 
-        self.Normal = tfp.distributions.Norma(loc=0.0,scale=1.0)
+        self.Normal = tfp.distributions.Normal(loc=0.0,scale=1.0)
         self.Gamma = tfp.distributions.Gamma(concentration=self.alpha,
                                              rate=self.beta)
 
