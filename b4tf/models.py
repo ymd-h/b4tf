@@ -349,3 +349,35 @@ class PBP:
 
         return x + (self.Normal.sample(x.shape) /
                     tf.math.sqrt(self.Gamma.sample(x.shape)))
+
+
+    def predict(self,x):
+        """
+        Predict distribution
+
+        Parameters
+        ----------
+        x : array-like
+            Input
+
+        Returns
+        -------
+        m : tf.Tensor
+            Mean
+        v : tf.Tensor
+            Variance
+        """
+        x = tf.convert_to_tensor(x,shape=self.call_shape)
+        return self._predict(x)
+
+
+    @tf.function
+    def _predict(self,x: tf.Tensor):
+        m, v = x, tf.zeros_like(x)
+        for l in self.layers:
+            m, v = l.predict(m,v)
+
+        # TODO:
+        # Convolute by Normal(0,Gamma(alpha,beta)^{-1})
+
+        return m, v
