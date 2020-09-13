@@ -312,31 +312,50 @@ class PBP:
         self.Gamma = tfp.distributions.Gamma(concentration=self.alpha_y,
                                              rate=self.beta_y)
 
-    def _logZ(self,y: tf.Tensor,
-              alpha: tf.Tensor,beta: tf.Tensor,
-              m: tf.Tensor,v: tf.Tensor):
-        pass
+    def _logZ(self,diff_square: tf.Tensor, v: tf.Tensor):
+        return tf.reduce_sum(-0.5 * (diff_square / v) +
+                             self.log_inv_sqrt2pi - tf.matn.log(v))
+
 
     def fit(self,x,y):
-        logZ0 = tf.constant(0.0)
-        logZ1 = tf.constant(0.0)
-        logZ2 = tf.constant(0.0)
-        for l in self.layers:
-            l.update_weight()
-            _logZ0, _logZ1, _logZ2 = l.logZ0_logZ1_logZ2()
-            logZ0 += _logZ0
-            logZ1 += _logZ1
-            logZ2 += _logZ2
+        """
+        Fit posterior distribution with observation
+
+        Parameters
+        ----------
+        x : array-like
+            Observed input
+        y : array-like
+            Observed output
+        """
+        x = tf.convert_to_tensor(x,shape=self.call_shape)
+
+        trainables = [l.trainable_weights for l in self.layers]
+        with tf.GradientTape() as tape:
+            tape.watch(trainables)
+            m, v = self._predict(x)
+
+            v0 = v + self.beta_y/(self.alpha_y - 1)
+            diff_square = tf.math.square(y - m)
+            logZ0 = self._logZ(diff_square,v0)
+
+        tape.gradient(logZ0,trainables)
 
 
-        alpha1 = self.alpha_w + 1
+        alpha1 = self.alpha_y + 1
+        v1 = v + self.beta_y/self.alpha_y
+        v2 = v + self.beta_y/alpha1
+
+        logZ1 = self._logZ(diff_square,v1)
+        logZ2 = self._logZ(diff_square,v2)
+
         logZ2_logZ1 = logZ2 - logZ1
         logZ1_logZ0 = logZ1 - logZ0
         # Must update beta first
-        self.beta_w.assign(self.beta_w/(tf.math.exp(logZ2_logZ1)*alpha1 -
-                                        tf.math.exp(logZ1_logZ0)*self.alpha_w))
-        self.alpha_w.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
-                                 alpha1/self.alpha_w  - 1.0))
+        self.beta_y.assign(self.beta_y/(tf.math.exp(logZ2_logZ1)*alpha1 -
+                                        tf.math.exp(logZ1_logZ0)*self.alpha_y))
+        self.alpha_y.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
+                                 alpha1/self.alpha_y  - 1.0))
 
     def __call__(self,x):
         """
