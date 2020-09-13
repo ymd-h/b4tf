@@ -50,6 +50,20 @@ class TestPBP(unittest.TestCase):
         pbp(x2)
 
 
+    def test_call_multi_dim(self):
+        pbp = PBP([2,2,1],input_shape=(2,2))
+
+        x1 = tf.constant([[1.0,2.0],
+                          [2.0,3.0]])
+        pbp.call(x1)
+
+        x2 = tf.constant([[[1.0,2.0],
+                           [2.0,3.0]],
+                          [[1.0,2.0],
+                           [2.0,3.0]]])
+        pbp.call(x2)
+
+
 class TestPBPLayer(unittest.TestCase):
     _class = PBPLayer
     def test_init(self):
