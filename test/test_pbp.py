@@ -60,6 +60,16 @@ class TestPBPLayer(unittest.TestCase):
         self.assertEqual(w.shape,(3,5))
         self.assertEqual(b.shape,(5,))
 
+    def test_predict(self):
+        layer = self._class(5)
+        layer.build(3)
+
+        m_prev = tf.constant([[1.0,2.0,3.0],
+                              [2.0,3.0,4.0]])
+        v_prev = tf.constant([[1.0,2.0,3.0],
+                              [2.0,3.0,4.0]])
+        m, v = layer.predict(m_prev,v_prev)
+
 
 class TestPBPReLULayer(unittest.TestCase):
     _class = PBPReLULayer
