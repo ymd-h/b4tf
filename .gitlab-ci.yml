@@ -27,7 +27,7 @@ stages:
   before_script:
     - g++ --version
     - python3 --version
-    - DEBUG_CPPRB=1 pip3 install $(echo dist/*.whl)['all']
+    - pip3 install $(echo dist/*.whl)
   except:
     - schedules
   artifacts:
