@@ -42,5 +42,12 @@ class TestPBPLayer(unittest.TestCase):
         self.assertTrue(tf.reduce_all(layer.bias_v   == v[3]))
 
 
+    def test_call(self):
+        layer = PBPLayer(5)
+        layer.build(3)
+
+        layer(tf.constant([[1.0,2.0,3.0],
+                           [2.0,3.0,4.0]]))
+
 if __name__ == "__main__":
     unittest.main()
