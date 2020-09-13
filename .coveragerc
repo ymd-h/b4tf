@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = b4tf
+parallel = True
+
+[report]
+show_missing = True
