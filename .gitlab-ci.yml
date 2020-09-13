@@ -88,3 +88,15 @@ coverage:
     paths:
       - public/coverage
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+
+README_MD:
+  image: iquiw/alpine-emacs
+  stage: build
+  script:
+    - emacs --batch README.org --eval '(org-md-export-to-markdown)'
+  artifacts:
+    paths:
+      - README.md
+  except:
+    - schedules
