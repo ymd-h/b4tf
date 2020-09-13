@@ -57,14 +57,14 @@ class TestPBP(unittest.TestCase):
 
         x1 = tf.constant([[1.0,2.0],
                           [2.0,3.0]])
-        y1 = pbp.call(x1)
+        y1 = pbp(x1)
         self.assertEqual(y1.shape,(1,1))
 
         x2 = tf.constant([[[1.0,2.0],
                            [2.0,3.0]],
                           [[1.0,2.0],
                            [2.0,3.0]]])
-        y2 = pbp.call(x2)
+        y2 = pbp(x2)
         self.assertEqual(y2.shape,(2,1))
 
 
