@@ -236,7 +236,8 @@ class PBP:
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
         self.input_shape = input_shape
-        self.call_rank = len(self.input_shape) + 1
+        self.call_rank = tf.rank(tf.constant(0,shape=self.input_shape)) + 1
+        self.output_rank = units[-1] + 1
 
         last_shape = self.input_shape
         self.layers = []
@@ -277,6 +278,14 @@ class PBP:
         if tf.rank(x) < self.call_rank:
             x = tf.expand_dims(x,axis=0)
 
+        y = tf.constant(y)
+        if tf.rank(y) < self.output_rank:
+            y = tf.expand_dims(y,axis=0)
+
+        self._fit(x,y)
+
+    @tf.function
+    def _fit(self,x: tf.Tensor, y: tf.Tensor):
         trainables = [l.trainable_weights for l in self.layers]
         with tf.GradientTape() as tape:
             tape.watch(trainables)
