@@ -70,6 +70,15 @@ class TestPBPLayer(unittest.TestCase):
                               [2.0,3.0,4.0]])
         m, v = layer.predict(m_prev,v_prev)
 
+    def test_predict_without_variance(self):
+        layer = self._class(5)
+        layer.build(3)
+
+        m_prev = tf.constant([[1.0,2.0,3.0],
+                              [2.0,3.0,4.0]])
+        v_prev = tf.zeros_like(m_prev)
+        m, v = layer.predict(m_prev,v_prev)
+
 
 class TestPBPReLULayer(unittest.TestCase):
     _class = PBPReLULayer
