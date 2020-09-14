@@ -88,3 +88,31 @@ coverage:
     paths:
       - public/coverage
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+
+README_MD:
+  image: iquiw/alpine-emacs
+  stage: build
+  script:
+    - emacs --batch README.org --eval '(org-md-export-to-markdown)'
+  artifacts:
+    paths:
+      - README.md
+  except:
+    - schedules
+
+pypi:
+  image: *dev_image
+  stage: upload
+  environment: production
+  script:
+    - python3 setup.py clean
+    - python3 setup.py sdist
+    - twine upload dist/b4tf-*.tar.gz
+  only:
+    - tags
+  except:
+    - branches
+    - schedules
+  needs:
+    - README_MD

@@ -1,13 +1,121 @@
-#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
-#+options: author:t broken-links:nil c:nil creator:nil
-#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
-#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+options: timestamp:t title:t toc:t todo:t |:t
-#+title: Bayes for TensorFlow (b4tf)
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:nil todo:nil |:t
+#+title: Bayes Neural Net for TensorFlow (b4tf)
 #+date: <2020-07-18 Sat>
 #+author: Hiroyuki Yamada
-#+language: en
-#+select_tags: export
-#+exclude_tags: noexport
-#+creator: Emacs 26.3 (Org mode 9.3.6)
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.1 (Org mode 9.1.14)
+
+#+HUGO_WITH_LOCALE:
+#+HUGO_FRONT_MATTER_FORMAT: toml
+#+HUGO_LEVEL_OFFSET: 1
+#+HUGO_PRESERVE_FILLING:
+#+HUGO_DELETE_TRAILING_WS:
+#+HUGO_SECTION: .
+#+HUGO_BUNDLE:
+#+HUGO_BASE_DIR: ./site
+#+HUGO_CODE_FENCE:
+#+HUGO_USE_CODE_FOR_KBD:
+#+HUGO_PREFER_HYPHEN_IN_TAGS:
+#+HUGO_ALLOW_SPACES_IN_TAGS:
+#+HUGO_AUTO_SET_LASTMOD:
+#+HUGO_CUSTOM_FRONT_MATTER:
+#+HUGO_BLACKFRIDAY:
+#+HUGO_FRONT_MATTER_KEY_REPLACE:
+#+HUGO_DATE_FORMAT: %Y-%m-%dT%T+09:00
+#+HUGO_PAIRED_SHORTCODES:
+#+HUGO_PANDOC_CITATIONS:
+#+BIBLIOGRAPHY:
+#+HUGO_ALIASES:
+#+HUGO_AUDIO:
+#+DESCRIPTION:
+#+HUGO_DRAFT:
+#+HUGO_EXPIRYDATE:
+#+HUGO_HEADLESS:
+#+HUGO_IMAGES:
+#+HUGO_ISCJKLANGUAGE:
+#+KEYWORDS:
+#+HUGO_LAYOUT:
+#+HUGO_LASTMOD:
+#+HUGO_LINKTITLE:
+#+HUGO_LOCALE:
+#+HUGO_MARKUP:
+#+HUGO_MENU:
+#+HUGO_MENU_OVERRIDE:
+#+HUGO_OUTPUTS:
+#+HUGO_PUBLISHDATE:
+#+HUGO_SERIES:
+#+HUGO_SLUG:
+#+HUGO_TAGS:
+#+HUGO_CATEGORIES:
+#+HUGO_RESOURCES:
+#+HUGO_TYPE:
+#+HUGO_URL:
+#+HUGO_VIDEOS:
+#+HUGO_WEIGHT: auto
+
+#+STARTUP: showall logdone
+
+[[https://img.shields.io/gitlab/pipeline/ymd_h/b4tf.svg]]
+[[https://img.shields.io/pypi/v/b4tf.svg]]
+[[https://img.shields.io/pypi/l/b4tf.svg]]
+[[https://img.shields.io/pypi/status/b4tf.svg]]
+[[https://ymd_h.gitlab.io/b4tf/coverage/][https://gitlab.com/ymd_h/b4tf/badges/master/coverage.svg]]
+
+
+* Overview
+b4tf is a Python module providing a set of bayesian neural network on
+[[https://www.tensorflow.org/][TensorFlow]].
+
+
+* Installation
+b4tf requires following softwares before installation
+
+- TensorFlow 2.x
+- [[https://www.tensorflow.org/probability][TnesorFlow Probability]]
+- Python 3.x
+
+** Install from [[https://pypi.org/][PyPI]] (Recommended)
+
+The following command installs b4tf together with other dependancies.
+
+#+BEGIN_SRC shell
+pip install b4tf
+#+END_SRC
+
+Depending on your environment, you might need =sudo= or =--user= flag
+for installation.
+
+** Install from source code
+
+First, download source code manually or clone the repository;
+
+#+begin_src shell
+git clone https://gitlab.com/ymd_h/b4tf.git
+#+end_src
+
+Then you can install same way;
+
+#+begin_src shell
+cd b4tf
+pip install .
+#+end_src
+
+* Implemented Algorithms
+
+Currently, b4tf implements following algorithms. We will implements
+more.
+
+- Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]])
+
+
+* Lisence
+b4tf is available under MIT lisence.
+
+#+INCLUDE: "./LICENSE" src
 
