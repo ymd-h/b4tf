@@ -9,6 +9,10 @@ class TestB4TF(unittest.TestCase):
         from b4tf.models import PBP as _PBP
         pbp = _PBP([2,1])
 
+    def test_import_models(self):
+        import b4tf.models
+        pbp = b4tf.models.PBP([2,1])
+
     def test_relative_import(self):
         from b4tf import PBP as _PBP_
         pbp = _PBP_([2,1])
