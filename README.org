@@ -77,6 +77,7 @@ b4tf is a Python module providing a set of bayesian neural network on
 b4tf requires following softwares before installation
 
 - TensorFlow 2.x
+- [[https://www.tensorflow.org/probability][TnesorFlow Probability]]
 - Python 3.x
 
 ** Install from [[https://pypi.org/][PyPI]] (Recommended)
