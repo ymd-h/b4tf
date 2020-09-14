@@ -288,11 +288,11 @@ class PBP:
             Observed output
         """
         x = tf.constant(x,dtype=self.dtype)
-        if tf.rank(x) < self.call_rank:
+        while tf.rank(x) < self.call_rank:
             x = tf.expand_dims(x,axis=0)
 
         y = tf.constant(y,dtype=self.dtype)
-        if tf.rank(y) < self.output_rank:
+        while tf.rank(y) < self.output_rank:
             y = tf.expand_dims(y,axis=0)
 
         self._fit(x,y)
@@ -342,7 +342,7 @@ class PBP:
             Neural netork output
         """
         x = tf.constant(x,dtype=self.dtype)
-        if tf.rank(x) < self.call_rank:
+        while tf.rank(x) < self.call_rank:
             x = tf.expand_dims(x,axis=0)
         return self._call(x)
 
@@ -372,7 +372,7 @@ class PBP:
             Variance
         """
         x = tf.constant(x,dtype=self.dtype)
-        if tf.rank(x) < self.call_rank:
+        while tf.rank(x) < self.call_rank:
             x = tf.expand_dims(x,axis=0)
         m, v = self._predict(x)
 
