@@ -1,5 +1,8 @@
-from setuptools import setup, find_packages
 import os
+import warnings
+
+from setuptools import setup, find_packages
+
 
 description = "Bayian Neural Network for TensorFlow"
 README = os.path.join(os.path.abspath(os.path.dirname(__file__)),'README.md')
