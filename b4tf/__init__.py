@@ -56,7 +56,7 @@ def multivariate_normal_fn(loc,relative=0.01):
     return _fn
 
 
-def BNN_like(NN,cls=DenseReparameterization,copy_weight=False,**kwargs):
+def BNN_like(NN,cls=tfp.layers.DenseReparameterization,copy_weight=False,**kwargs):
     """
     Create Bayesian Neural Network like input Neural Network shape
 
