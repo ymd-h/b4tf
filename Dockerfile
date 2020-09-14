@@ -12,6 +12,7 @@ RUN pip3 install -U pip setuptools \
 	&& pip3 install -U \
 	coverage \
 	tensorflow \
+	tensorflow_probability \
 	twine \
 	unittest-xml-reporting \
 	wheel
