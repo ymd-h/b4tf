@@ -59,6 +59,12 @@ class TestPBP(unittest.TestCase):
         y1 = pbp(x1)
         self.assertEqual(y1.dtype,tf.float32)
 
+    def test_dtype(self):
+        pbp = PBP([2,1],dtype=tf.float16)
+
+        x1 = np.asarray(1.0)
+        y1 = pbp(x1)
+        self.assertEqua;(y1.dtype,tf.float16)
 
 class TestPBPLayer(unittest.TestCase):
     _class = PBPLayer
