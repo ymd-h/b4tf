@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(name="b4tf",
       author="Hiroyuki Yamada",
-      version="0.0.0",
+      version="0.0.1",
       description="Bayes for TensorFlow",
       install_requires=["tensorflow>=2","tensorflow_probability"],
       packages=find_packages(),
