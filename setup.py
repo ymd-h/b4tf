@@ -15,7 +15,7 @@ else:
 
 setup(name="b4tf",
       author="Hiroyuki Yamada",
-      version="0.0.1",
+      version="0.0.3",
       description=description,
       install_requires=["tensorflow>=2","tensorflow_probability"],
       packages=find_packages(),
