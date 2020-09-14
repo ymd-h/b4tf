@@ -1,5 +1,6 @@
-from typing import Iterable
+from typing import Iterable, Union
 
+import numpy as np
 import tensorflow as tf
 from tensorflow.python.framework import tensor_shape
 
@@ -12,6 +13,7 @@ class PBPLayer(tf.keras.layers.Layer):
     Layer for Probabilistic Backpropagation
     """
     def __init__(self,units: int,
+                 dtype=tf.float32,
                  *args,**kwargs):
         """
         Initialize PBP layer
@@ -20,8 +22,10 @@ class PBPLayer(tf.keras.layers.Layer):
         ----------
         units: int
            Number of units in layer. (Output shape)
+        dtype : tf.dtypes.DType
+           Data type
         """
-        super().__init__(*args,**kwargs)
+        super().__init__(dtype=tf.as_dtype(dtype),*args,**kwargs)
         self.units = units
 
     def build(self,input_shape):
@@ -31,7 +35,8 @@ class PBPLayer(tf.keras.layers.Layer):
             raise ValueError('The last dimension of the inputs to `PBPLayer` '
                              'should be defined. Found `None`.')
         self.input_spec = tf.keras.layers.InputSpec(min_ndim=2, axes={-1: last_dim})
-        self.inv_sqrtV1 = 1.0 / tf.math.sqrt(1.0*last_dim + 1)
+        self.inv_sqrtV1 = tf.cast(1.0 / tf.math.sqrt(1.0*last_dim + 1),
+                                  dtype=self.dtype)
         self.inv_V1 = tf.math.square(self.inv_sqrtV1)
 
 
@@ -56,7 +61,8 @@ class PBPLayer(tf.keras.layers.Layer):
                                       initializer=over_gamma,
                                       dtype=self.dtype,
                                       trainable=True)
-        self.Normal = tfp.distributions.Normal(loc=0.0, scale=1.0)
+        self.Normal=tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
+                                             scale=tf.constant(1.0,dtype=self.dtype))
         self.built = True
 
     @tf.function
@@ -218,7 +224,8 @@ class PBP:
     arXiv 1502.05336, 2015
     """
     def __init__(self,units: Iterable[int],*,
-                 input_shape: Iterable[int]=(1,)):
+                 input_shape: Iterable[int]=(1,),
+                 dtype: Union[tf.dtypes.DType,np.dtype,str]=tf.float32):
         """
         Initialize PBP model
 
@@ -228,33 +235,39 @@ class PBP:
             Numbers of hidden units and outputs
         input_shape : Iterable[int], optional
             Input shape for PBP model. The default value is `(1,)`
+        dtype : tf.dtypes.DType or np.dtype or str
+            Data type
         """
-        self.alpha  = tf.Variable(1.0,trainable=True)
-        self.beta   = tf.Variable(0.0,trainable=True)
+        self.dtype = tf.as_dtype(dtype)
+        self.alpha  = tf.Variable(1.0,trainable=True,dtype=self.dtype)
+        self.beta   = tf.Variable(0.0,trainable=True,dtype=self.dtype)
 
-        pi = tf.math.atan(tf.constant(1.0)) * 4
+        pi = tf.math.atan(tf.constant(1.0,dtype=self.dtype)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
         self.input_shape = input_shape
-        self.call_rank = tf.rank(tf.constant(0,shape=self.input_shape)) + 1
+        self.call_rank = tf.rank(tf.constant(0,
+                                             shape=self.input_shape,
+                                             dtype=self.dtype)) + 1
         self.output_rank = units[-1] + 1
 
         last_shape = self.input_shape
         self.layers = []
         for u in units[:-1]:
             # Hidden Layer's Activation is ReLU
-            l = PBPReLULayer(u)
+            l = PBPReLULayer(u,dtype=self.dtype)
             l.build(last_shape)
             self.layers.append(l)
             last_shape = u
         else:
             # Output Layer's Activation is Linear
-            l = PBPLayer(units[-1])
+            l = PBPLayer(units[-1],dtype=self.dtype)
             l.build(last_shape)
             self.layers.append(l)
 
 
-        self.Normal = tfp.distributions.Normal(loc=0.0,scale=1.0)
+        self.Normal=tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
+                                             scale=tf.constant(1.0,dtype=self.dtype))
         self.Gamma = tfp.distributions.Gamma(concentration=self.alpha,
                                              rate=self.beta)
 
@@ -274,12 +287,12 @@ class PBP:
         y : array-like
             Observed output
         """
-        x = tf.constant(x)
-        if tf.rank(x) < self.call_rank:
+        x = tf.constant(x,dtype=self.dtype)
+        while tf.rank(x) < self.call_rank:
             x = tf.expand_dims(x,axis=0)
 
-        y = tf.constant(y)
-        if tf.rank(y) < self.output_rank:
+        y = tf.constant(y,dtype=self.dtype)
+        while tf.rank(y) < self.output_rank:
             y = tf.expand_dims(y,axis=0)
 
         self._fit(x,y)
@@ -328,8 +341,8 @@ class PBP:
         y : tf.Tensor
             Neural netork output
         """
-        x = tf.constant(x)
-        if tf.rank(x) < self.call_rank:
+        x = tf.constant(x,dtype=self.dtype)
+        while tf.rank(x) < self.call_rank:
             x = tf.expand_dims(x,axis=0)
         return self._call(x)
 
@@ -358,8 +371,8 @@ class PBP:
         v : tf.Tensor
             Variance
         """
-        x = tf.constant(x)
-        if tf.rank(x) < self.call_rank:
+        x = tf.constant(x,dtype=self.dtype)
+        while tf.rank(x) < self.call_rank:
             x = tf.expand_dims(x,axis=0)
         m, v = self._predict(x)
 

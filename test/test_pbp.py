@@ -1,5 +1,6 @@
 import unittest
 
+import numpy as np
 import tensorflow as tf
 from b4tf.models import PBP, PBPLayer, PBPReLULayer
 
@@ -46,10 +47,33 @@ class TestPBP(unittest.TestCase):
         y1 = pbp(x1)
         self.assertEqual(y1.shape,(1,1))
 
+        m1,v1 = pbp.predict(x1)
+        pbp.fit(x1,y1)
+
         x2 = tf.constant([[1.0,2.0,3.0],
                           [2.0,3.0,4.0]])
         y2 = pbp(x2)
         self.assertEqual(y2.shape,(2,1))
+
+        m2, v2 = pbp.predict(x2)
+        pbp.fit(x2,y2)
+
+    def test_call_with_different_dtype(self):
+        pbp = PBP([2,2,1],input_shape=(2,))
+
+        x1 = np.arange(2)
+        y1 = pbp(x1)
+        self.assertEqual(y1.dtype,tf.float32)
+
+    def test_dtype(self):
+        pbp = PBP([2,1],dtype=tf.float64)
+
+        x1 = np.asarray(1.0)
+        y1 = pbp(x1)
+        self.assertEqual(y1.dtype,tf.float64)
+
+        m,v = pbp.predict(x1)
+        pbp.fit(x1,y1)
 
 
 class TestPBPLayer(unittest.TestCase):
