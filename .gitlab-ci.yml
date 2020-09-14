@@ -116,3 +116,4 @@ pypi:
     - schedules
   needs:
     - README_MD
+    - coverage
