@@ -10,8 +10,8 @@ class TestB4TF(unittest.TestCase):
         pbp = _PBP([2,1])
 
     def test_import_models(self):
-        import b4tf.models
-        pbp = b4tf.models.PBP([2,1])
+        import b4tf.models as _models
+        pbp = _models.PBP([2,1])
 
 if __name__ == "__main__":
     unittest.main()
