@@ -37,9 +37,11 @@ class ReciprocalGammaInitializer:
         : tf.Tensor
             Initialized tensor
         """
+        g = 1.0/self.Gamma.sample(shape)
         if dtype:
-            self.Gamma.dtype = dtype
-        return 1.0/self.Gamma.sample(shape)
+            g = tf.cast(g,dtype=dtype)
+
+        return g
 
 
 def create_model(units,cls=tfp.layers.DenseReparameterization,
