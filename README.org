@@ -106,6 +106,14 @@ cd b4tf
 pip install .
 #+end_src
 
+* Implemented Algorithms
+
+Currently, b4tf implements following algorithms. We will implements
+more.
+
+- Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]])
+
+
 * Lisence
 b4tf is available under MIT lisence.
 
