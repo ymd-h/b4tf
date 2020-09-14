@@ -105,3 +105,8 @@ cd b4tf
 pip install .
 #+end_src
 
+* Lisence
+b4tf is available under MIT lisence.
+
+#+INCLUDE: "./LICENSE" src
+
