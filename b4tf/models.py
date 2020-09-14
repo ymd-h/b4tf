@@ -35,8 +35,8 @@ class PBPLayer(tf.keras.layers.Layer):
             raise ValueError('The last dimension of the inputs to `PBPLayer` '
                              'should be defined. Found `None`.')
         self.input_spec = tf.keras.layers.InputSpec(min_ndim=2, axes={-1: last_dim})
-        self.inv_sqrtV1 = tf.constant(1.0 / tf.math.sqrt(1.0*last_dim + 1),
-                                      dtype=self.dtype)
+        self.inv_sqrtV1 = tf.cast(1.0 / tf.math.sqrt(1.0*last_dim + 1),
+                                  dtype=self.dtype)
         self.inv_V1 = tf.math.square(self.inv_sqrtV1)
 
 
