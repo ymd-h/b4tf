@@ -61,7 +61,8 @@ class PBPLayer(tf.keras.layers.Layer):
                                       initializer=over_gamma,
                                       dtype=self.dtype,
                                       trainable=True)
-        self.Normal = tfp.distributions.Normal(loc=0.0, scale=1.0)
+        self.Normal=tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
+                                             scale=tf.constant(1.0,dtype=self.dtype))
         self.built = True
 
     @tf.function
@@ -265,11 +266,10 @@ class PBP:
             self.layers.append(l)
 
 
-        self.Normal = tfp.distributions.Normal(loc=0.0,scale=1.0)
-        self.Normal.dtype = self.dtype
+        self.Normal=tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
+                                             scale=tf.constant(1.0,dtype=self.dtype))
         self.Gamma = tfp.distributions.Gamma(concentration=self.alpha,
                                              rate=self.beta)
-        self.Gamma.dtype = self.dtype
 
     def _logZ(self,diff_square: tf.Tensor, v: tf.Tensor):
         return tf.reduce_sum(-0.5 * (diff_square / v) +
