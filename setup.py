@@ -28,4 +28,6 @@ setup(name="b4tf",
                      "Intended Audience :: Science/Research",
                      "License :: OSI Approved :: MIT License",
                      "Programming Language :: Python :: 3 :: Only",
-                     "Topic :: Scientific/Engineering :: Artificial Intelligence"])
+                     "Topic :: Scientific/Engineering :: Artificial Intelligence"],
+      long_description=long_description,
+      long_description_content_type=long_description_content_type)
