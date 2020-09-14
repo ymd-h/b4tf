@@ -1,7 +1,7 @@
 import os
 import warnings
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 description = "Bayian Neural Network for TensorFlow"
@@ -22,7 +22,7 @@ setup(name="b4tf",
       description=description,
       install_requires=["tensorflow>=2","tensorflow_probability"],
       url="https://gitlab.com/ymd_h/b4tf",
-      packages=find_packages("."),
+      packages=["b4tf"],
       classifiers = ["Development Status :: 3 - Alpha",
                      "Intended Audience :: Developers",
                      "Intended Audience :: Science/Research",
