@@ -1,5 +1,6 @@
 import unittest
 
+import numpy as np
 import tensorflow as tf
 from b4tf.models import PBP, PBPLayer, PBPReLULayer
 
@@ -50,6 +51,13 @@ class TestPBP(unittest.TestCase):
                           [2.0,3.0,4.0]])
         y2 = pbp(x2)
         self.assertEqual(y2.shape,(2,1))
+
+    def test_call_with_different_dtype(self):
+        pbp = PBP([2,2,1],input_shape=(2,))
+
+        x1 = np.arange(2)
+        y1 = pbp(x1)
+        self.assertEqual(y1.dtype,tf.float32)
 
 
 class TestPBPLayer(unittest.TestCase):
