@@ -109,7 +109,7 @@ pypi:
     - rm -rf dist
     - python3 setup.py clean
     - python3 setup.py sdist bdist_wheel
-    - twine upload dist/b4tf-*
+    - twine upload --verbose dist/b4tf-*
   only:
     - tags
   except:
