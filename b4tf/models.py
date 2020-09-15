@@ -384,7 +384,7 @@ class PBP:
 
 
         alpha1 = self.alpha + 1
-        v1 = v + safe_pos_div(self.beta, alpha)
+        v1 = v + safe_pos_div(self.beta, self.alpha)
         v2 = v + self.beta/alpha1
 
         logZ2_logZ1 = self._logZ1_minus_logZ2(diff_square,v1=v2,v2=v1)
@@ -401,7 +401,7 @@ class PBP:
                                       1e-6)
         self.beta.assign(self.beta/beta_denomi)
         alpha_denomi = tf.math.maximum(tf.math.exp(logZ_diff) *
-                                       safe_pos_div(alpha1, alpha)  - 1.0,
+                                       safe_pos_div(alpha1, self.alpha)  - 1.0,
                                        1e-6)
         self.alpha.assign(1.0/(alpha_denomi))
 
