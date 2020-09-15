@@ -43,6 +43,34 @@ class ReciprocalGammaInitializer:
 
         return g
 
+@tf.function
+def safe_pos_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
+    """
+    Non overflow division for positive tf.Tensor
+
+    Parameters
+    ----------
+    x : tf.Tensor
+        Numerator
+    y : tf.Tensor
+        Denominator
+    eps : tf.Tensor, optional
+        Small positive value. The default is 1e-6
+
+    Returns
+    -------
+    x/(y+eps) : tf.Tensor
+        Results
+
+    Notes
+    -----
+    User must guaruantee the following conditions
+    x >= 0
+    y >= 0
+    eps >= 0
+    """
+    return x/(y + eps)
+
 
 def create_model(units,cls=tfp.layers.DenseReparameterization,
                  input_shape=(1,),activation=tf.nn.leaky_relu,**kwargs):
