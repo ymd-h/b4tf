@@ -205,7 +205,7 @@ class PBPReLULayer(PBPLayer):
 
         _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va)))
         _alpha = safe_pos_div(ma, _sqrt_v)
-        _inv_alpha = safe_pos_div(tf.constant(1.0), _alpha)
+        _inv_alpha = safe_pos_div(tf.constant(1.0,dtype=_alpha.dtype), _alpha)
         _cdf_alpha = self.Normal.cdf(_alpha)
         _gamma = tf.where(_alpha < -30,
                           -_alpha + _inv_alpha * (-1 + 2*tf.math.square(_inv_alpha)),
