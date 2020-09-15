@@ -22,9 +22,9 @@ class TestPBP(unittest.TestCase):
         v = tf.constant(1.0)
         pi = tf.math.atan(1.0) * 4
 
-        v = pbp._logZ(diff2,v)
+        Z = pbp._logZ(diff2,v)
         e = -0.5*tf.math.log(2.0*pi*v)
-        np.testing.assert_allclose(tf.make_ndarray(v), tf.make_ndarray(e))
+        np.testing.assert_allclose(np.asarray(Z), np.asarray(e))
 
 
     def test_fit(self):
