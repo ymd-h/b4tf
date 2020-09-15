@@ -65,7 +65,6 @@ def safe_pos_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
     Notes
     -----
     User must guaruantee the following conditions
-    x >= 0
     y >= 0
     eps >= 0
     """
