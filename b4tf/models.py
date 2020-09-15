@@ -239,13 +239,13 @@ class PBP:
             Data type
         """
         self.dtype = tf.as_dtype(dtype)
-        self.alpha  = tf.Variable(1.0,trainable=True,dtype=self.dtype)
-        self.beta   = tf.Variable(0.0,trainable=True,dtype=self.dtype)
+        self.alpha = tf.Variable(1.0,trainable=True,dtype=self.dtype)
+        self.beta  = tf.Variable(0.0,trainable=True,dtype=self.dtype)
 
         pi = tf.math.atan(tf.constant(1.0,dtype=self.dtype)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
-        self.input_shape = input_shape
+        self.input_shape = tf.TensorShape(input_shape)
         self.call_rank = tf.rank(tf.constant(0,
                                              shape=self.input_shape,
                                              dtype=self.dtype)) + 1
@@ -276,6 +276,45 @@ class PBP:
                              self.log_inv_sqrt2pi - tf.math.log(v))
 
 
+    def _ensure_input(self,x):
+        """
+        Ensure input type and shape
+
+        Parameters
+        ----------
+        input : Any
+            Input values
+
+        Returns
+        -------
+        x : tf.Tensor
+            Input values with shape=(-1,*self.input_shape) and dtype=self.dtype
+        """
+        x = tf.constant(x,dtype=self.dtype)
+        if tf.rank(x) < self.call_rank:
+            x = tf.reshape(x,[-1,*self.input_shape.as_list()])
+        return x
+
+    def _ensure_output(self,y):
+        """
+        Ensure output type and shape
+
+        Parameters
+        ----------
+        y : Any
+            Output values
+
+        Returns
+        -------
+        y : tf.Tensor
+           Output values with shape=(-1,self.layers[-1].units) and dtype=self.dtype
+        """
+        y = tf.constant(y,dtype=self.dtype)
+        if tf.rank(y) < self.output_rank:
+            y = tf.reshape(y,[-1,self.layers[-1].units])
+        return y
+
+
     def fit(self,x,y):
         """
         Fit posterior distribution with observation
@@ -287,13 +326,8 @@ class PBP:
         y : array-like
             Observed output
         """
-        x = tf.constant(x,dtype=self.dtype)
-        while tf.rank(x) < self.call_rank:
-            x = tf.expand_dims(x,axis=0)
-
-        y = tf.constant(y,dtype=self.dtype)
-        while tf.rank(y) < self.output_rank:
-            y = tf.expand_dims(y,axis=0)
+        x = self._ensure_input(x)
+        y = self._ensure_output(y)
 
         self._fit(x,y)
 
@@ -341,9 +375,7 @@ class PBP:
         y : tf.Tensor
             Neural netork output
         """
-        x = tf.constant(x,dtype=self.dtype)
-        while tf.rank(x) < self.call_rank:
-            x = tf.expand_dims(x,axis=0)
+        x = self._ensure_input(x)
         return self._call(x)
 
     @tf.function
@@ -371,9 +403,7 @@ class PBP:
         v : tf.Tensor
             Variance
         """
-        x = tf.constant(x,dtype=self.dtype)
-        while tf.rank(x) < self.call_rank:
-            x = tf.expand_dims(x,axis=0)
+        x = self._ensure_input(x)
         m, v = self._predict(x)
 
         return m, v + self.beta/(self.alpha - 1)
