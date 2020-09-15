@@ -22,8 +22,9 @@ class TestPBP(unittest.TestCase):
         v = tf.constant(1.0)
         pi = tf.math.atan(1.0) * 4
 
-        self.assertTrue(tf.reduce_all(pbp._logZ(diff2,v) ==
-                                      -0.5*tf.math.log(2.0*pi*v)))
+        v = pbp._logZ(diff2,v)
+        e = -0.5*tf.math.log(2.0*pi*v)
+        self.assertTrue(tf.reduce_all((tf.math.divide_no_nan(v,e) - 1.0) < 1e-3))
 
 
     def test_fit(self):
