@@ -76,6 +76,11 @@ PBP:
   script:
     - coverage run -m xmlrunner test/test_pbp.py
 
+Issue:
+  <<: *py_setup
+  script:
+    - coverage run -m xmlrunner test/test_issue.py
+
 coverage:
   <<: *setup
   stage: test_coverage

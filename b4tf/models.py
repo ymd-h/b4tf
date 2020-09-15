@@ -82,13 +82,17 @@ class PBPLayer(tf.keras.layers.Layer):
 
         # Kernel
         self.kernel_m.assign_add(self.kernel_v * dlogZ_dkm)
-        self.kernel_v.assign_sub(tf.math.square(self.kernel_v) *
-                                 (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv))
+        new_kv = (self.kernel_v -
+                  (tf.math.square(self.kernel_v) *
+                   (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv)))
+        self.kernel_v.assign(tf.math.maximum(new_kv,tf.zeros_like(new_kv)))
 
         # Bias
         self.bias_m.assign_add(self.bias_v * dlogZ_dbm)
-        self.bias_v.assign_sub(tf.math.square(self.bias_v) *
-                               (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv))
+        new_bv = (self.bias_v -
+                  (tf.math.square(self.bias_v) *
+                   (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv)))
+        self.bias_v.assign(tf.math.maximum(new_bv,tf.zeros_like(new_bv)))
 
     @tf.function
     def _sample_weights(self):
@@ -111,12 +115,12 @@ class PBPLayer(tf.keras.layers.Layer):
         Parameters
         ----------
         x : tf.Tensor
-            Input. [batch, feature]
+            Input. [batch, prev_units]
 
         Returns
         -------
-        z : tf.Tensor
-            Output. [batch, feature]
+        y : tf.Tensor
+            Output. [batch, units]
         """
         W, b = self._sample_weights()
         return ((tf.tensordot(x,W,axes=[1,0]) + tf.expand_dims(b,axis=0))
@@ -134,16 +138,16 @@ class PBPLayer(tf.keras.layers.Layer):
         Parameters
         ----------
         m_prev : tf.Tensor
-            Previous Mean. [batch, features]
+            Previous Mean. [batch, prev_units]
         v_prev : tf.Tensor
-            Previous Variance. [batch, features]
+            Previous Variance. [batch, prev_units]
 
         Returns
         -------
         m : tf.Tensor
-            Mean. [batch, features]
+            Mean. [batch, units]
         v : tf.Tensor
-            Variance. [batch, features]
+            Variance. [batch, units]
         """
         m = ((tf.tensordot(m_prev,self.kernel_m,axes=[1,0]) +
               tf.expand_dims(self.bias_m,axis=0))
@@ -198,7 +202,7 @@ class PBPReLULayer(PBPLayer):
         """
         ma, va = super().predict(m_prev,v_prev)
 
-        _sqrt_v = tf.math.sqrt(va)
+        _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va)))
         _alpha = ma / _sqrt_v
         _inv_alpha = 1.0/_alpha
         _cdf_alpha = self.Normal.cdf(_alpha)
