@@ -449,7 +449,7 @@ class PBP:
         x = self._ensure_input(x)
         m, v = self._predict(x)
 
-        return m, v + self.beta/(self.alpha - 1)
+        return m, v + self.beta/((self.alpha - 1) + 1e-6)
 
     @tf.function
     def _predict(self,x: tf.Tensor):
