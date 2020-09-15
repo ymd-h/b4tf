@@ -24,7 +24,7 @@ class TestPBP(unittest.TestCase):
 
         Z = pbp._logZ(diff2,v)
         e = -0.5*tf.math.log(2.0*pi*v)
-        np.testing.assert_allclose(np.asarray(Z), np.asarray(e))
+        np.testing.assert_allclose(np.asarray(Z), np.asarray(e),rtol=1e-5)
 
 
     def test_fit(self):
