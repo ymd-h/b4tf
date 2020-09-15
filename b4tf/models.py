@@ -275,6 +275,7 @@ class PBP:
         self.Gamma = tfp.distributions.Gamma(concentration=self.alpha,
                                              rate=self.beta)
 
+    @tf.function
     def _logZ(self,diff_square: tf.Tensor, v: tf.Tensor):
         v0 = v + 1e-6
         return tf.reduce_sum(-0.5 * (diff_square / v0) +
