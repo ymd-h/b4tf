@@ -244,7 +244,7 @@ class PBP:
         """
         self.dtype = tf.as_dtype(dtype)
         self.alpha = tf.Variable(1.0,trainable=True,dtype=self.dtype)
-        self.beta  = tf.Variable(0.0,trainable=True,dtype=self.dtype)
+        self.beta  = tf.Variable(1e-6,trainable=True,dtype=self.dtype)
 
         pi = tf.math.atan(tf.constant(1.0,dtype=self.dtype)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
@@ -276,8 +276,9 @@ class PBP:
                                              rate=self.beta)
 
     def _logZ(self,diff_square: tf.Tensor, v: tf.Tensor):
-        return tf.reduce_sum(-0.5 * (diff_square / (v+1e-6)) +
-                             self.log_inv_sqrt2pi - tf.math.log(v))
+        v0 = v + 1e-6
+        return tf.reduce_sum(-0.5 * (diff_square / v0) +
+                             self.log_inv_sqrt2pi - tf.math.log(v0))
 
 
     def _ensure_input(self,x):
