@@ -24,7 +24,7 @@ class TestPBP(unittest.TestCase):
 
         v = pbp._logZ(diff2,v)
         e = -0.5*tf.math.log(2.0*pi*v)
-        self.assertTrue(tf.reduce_all((tf.math.divide_no_nan(v,e) - 1.0) < 1e-3))
+        np.testing.assert_allclose(tf.make_ndarray(v), tf.make_ndarray(e))
 
 
     def test_fit(self):
