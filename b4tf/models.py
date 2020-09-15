@@ -82,13 +82,17 @@ class PBPLayer(tf.keras.layers.Layer):
 
         # Kernel
         self.kernel_m.assign_add(self.kernel_v * dlogZ_dkm)
-        self.kernel_v.assign_sub(tf.math.square(self.kernel_v) *
-                                 (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv))
+        new_kv = (self.kernel_v -
+                  (tf.math.square(self.kernel_v) *
+                   (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv)))
+        self.kernel_v.assign(tf.math.maximum(new_kv,tf.zeros_like(new_kv)))
 
         # Bias
         self.bias_m.assign_add(self.bias_v * dlogZ_dbm)
-        self.bias_v.assign_sub(tf.math.square(self.bias_v) *
-                               (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv))
+        new_bv = (self.bias_v -
+                  (tf.math.square(self.bias_v) *
+                   (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv)))
+        self.bias_v.assign(tf.math.maximum(new_bv,tf.zeros_like(new_bv)))
 
     @tf.function
     def _sample_weights(self):
