@@ -68,7 +68,7 @@ def safe_pos_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
     y >= 0
     eps >= 0
     """
-    return x/(y + eps)
+    return x/(y + tf.cast(eps,dtype=y.dtype))
 
 
 def create_model(units,cls=tfp.layers.DenseReparameterization,
