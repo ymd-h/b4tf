@@ -245,7 +245,7 @@ class PBP:
         pi = tf.math.atan(tf.constant(1.0,dtype=self.dtype)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
 
-        self.input_shape = input_shape
+        self.input_shape = tf.TensorShape(input_shape)
         self.call_rank = tf.rank(tf.constant(0,
                                              shape=self.input_shape,
                                              dtype=self.dtype)) + 1
