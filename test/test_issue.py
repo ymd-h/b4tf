@@ -12,12 +12,6 @@ class TestIssue3(unittest.TestCase):
         pbp(x)
         pbp.predict(x)
 
-    def test_call_with_array_ndmin(self):
-        pbp = b4tf.models.PBP([10,10,1])
-        x = np.array(np.arange(100)/20,copy=False,ndmin=2)
-        pbp(x)
-        pbp.predict(x)
-
     def test_shape1_call0(self):
         pbp = b4tf.models.PBP([2,2,1])
         x = tf.constant(0.0)
