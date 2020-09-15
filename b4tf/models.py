@@ -239,8 +239,8 @@ class PBP:
             Data type
         """
         self.dtype = tf.as_dtype(dtype)
-        self.alpha  = tf.Variable(1.0,trainable=True,dtype=self.dtype)
-        self.beta   = tf.Variable(0.0,trainable=True,dtype=self.dtype)
+        self.alpha = tf.Variable(1.0,trainable=True,dtype=self.dtype)
+        self.beta  = tf.Variable(0.0,trainable=True,dtype=self.dtype)
 
         pi = tf.math.atan(tf.constant(1.0,dtype=self.dtype)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
@@ -276,6 +276,19 @@ class PBP:
                              self.log_inv_sqrt2pi - tf.math.log(v))
 
 
+    def _ensure_input(self,x):
+        x = tf.constant(x,dtype=self.dtype)
+        if tf.rank(x) < self.call_rank:
+            x = tf.expand_dims(x,axis=0)
+
+        return x
+
+    def _ensure_output(self,y):
+        y = tf.constant(y,dtype=self.dtype)
+        if tf.rank(y) < self.output_rank:
+            y = tf.expand_dims(y,axis=0)
+
+
     def fit(self,x,y):
         """
         Fit posterior distribution with observation
@@ -287,13 +300,8 @@ class PBP:
         y : array-like
             Observed output
         """
-        x = tf.constant(x,dtype=self.dtype)
-        while tf.rank(x) < self.call_rank:
-            x = tf.expand_dims(x,axis=0)
-
-        y = tf.constant(y,dtype=self.dtype)
-        while tf.rank(y) < self.output_rank:
-            y = tf.expand_dims(y,axis=0)
+        x = self._ensure_input(x)
+        y = self._ensure_output(y)
 
         self._fit(x,y)
 
@@ -341,9 +349,7 @@ class PBP:
         y : tf.Tensor
             Neural netork output
         """
-        x = tf.constant(x,dtype=self.dtype)
-        while tf.rank(x) < self.call_rank:
-            x = tf.expand_dims(x,axis=0)
+        x = self._ensure_input(x)
         return self._call(x)
 
     @tf.function
@@ -371,9 +377,7 @@ class PBP:
         v : tf.Tensor
             Variance
         """
-        x = tf.constant(x,dtype=self.dtype)
-        while tf.rank(x) < self.call_rank:
-            x = tf.expand_dims(x,axis=0)
+        x = self._ensure_input(x)
         m, v = self._predict(x)
 
         return m, v + self.beta/(self.alpha - 1)
