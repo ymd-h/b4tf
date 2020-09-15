@@ -111,12 +111,12 @@ class PBPLayer(tf.keras.layers.Layer):
         Parameters
         ----------
         x : tf.Tensor
-            Input. [batch, feature]
+            Input. [batch, prev_units]
 
         Returns
         -------
-        z : tf.Tensor
-            Output. [batch, feature]
+        y : tf.Tensor
+            Output. [batch, units]
         """
         W, b = self._sample_weights()
         return ((tf.tensordot(x,W,axes=[1,0]) + tf.expand_dims(b,axis=0))
@@ -134,16 +134,16 @@ class PBPLayer(tf.keras.layers.Layer):
         Parameters
         ----------
         m_prev : tf.Tensor
-            Previous Mean. [batch, features]
+            Previous Mean. [batch, prev_units]
         v_prev : tf.Tensor
-            Previous Variance. [batch, features]
+            Previous Variance. [batch, prev_units]
 
         Returns
         -------
         m : tf.Tensor
-            Mean. [batch, features]
+            Mean. [batch, units]
         v : tf.Tensor
-            Variance. [batch, features]
+            Variance. [batch, units]
         """
         m = ((tf.tensordot(m_prev,self.kernel_m,axes=[1,0]) +
               tf.expand_dims(self.bias_m,axis=0))
