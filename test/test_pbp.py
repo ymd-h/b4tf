@@ -102,6 +102,7 @@ class TestPBPLayer(unittest.TestCase):
         y = layer(tf.constant([[1.0,2.0,3.0],
                                [2.0,3.0,4.0]]))
         self.assertEqual(y.shape,(2,5))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(y)))
 
 
     def test_sample_weight(self):
@@ -111,6 +112,8 @@ class TestPBPLayer(unittest.TestCase):
 
         self.assertEqual(w.shape,(3,5))
         self.assertEqual(b.shape,(5,))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(w)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(b)))
 
     def test_predict(self):
         layer = self._class(5)
@@ -123,6 +126,8 @@ class TestPBPLayer(unittest.TestCase):
         m, v = layer.predict(m_prev,v_prev)
         self.assertEqual(m.shape,(2,5))
         self.assertEqual(v.shape,(2,5))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(m)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(v)))
 
     def test_predict_without_variance(self):
         layer = self._class(5)
@@ -134,6 +139,8 @@ class TestPBPLayer(unittest.TestCase):
         m, v = layer.predict(m_prev,v_prev)
         self.assertEqual(m.shape,(2,5))
         self.assertEqual(v.shape,(2,5))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(m)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(v)))
 
 
 class TestPBPReLULayer(unittest.TestCase):
@@ -145,6 +152,7 @@ class TestPBPReLULayer(unittest.TestCase):
         y = layer(tf.constant([[1.0,2.0,3.0],
                                [2.0,3.0,4.0]]))
         self.assertTrue(tf.reduce_all(y>=0.0))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(y)))
 
 if __name__ == "__main__":
     unittest.main()
