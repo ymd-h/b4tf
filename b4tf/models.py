@@ -198,7 +198,7 @@ class PBPReLULayer(PBPLayer):
         """
         ma, va = super().predict(m_prev,v_prev)
 
-        _sqrt_v = tf.math.sqrt(va)
+        _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va)))
         _alpha = ma / _sqrt_v
         _inv_alpha = 1.0/_alpha
         _cdf_alpha = self.Normal.cdf(_alpha)
