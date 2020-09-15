@@ -202,9 +202,9 @@ class PBPReLULayer(PBPLayer):
         """
         ma, va = super().predict(m_prev,v_prev)
 
-        _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va)))
+        _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va))) + 1e-6
         _alpha = ma / _sqrt_v
-        _inv_alpha = 1.0/_alpha
+        _inv_alpha = 1.0/(_alpha + 1e-6)
         _cdf_alpha = self.Normal.cdf(_alpha)
         _gamma = tf.where(_alpha < -30,
                           -_alpha + _inv_alpha * (-1 + 2*tf.math.square(_inv_alpha)),
@@ -276,7 +276,7 @@ class PBP:
                                              rate=self.beta)
 
     def _logZ(self,diff_square: tf.Tensor, v: tf.Tensor):
-        return tf.reduce_sum(-0.5 * (diff_square / v) +
+        return tf.reduce_sum(-0.5 * (diff_square / (v+1e-6)) +
                              self.log_inv_sqrt2pi - tf.math.log(v))
 
 
@@ -342,7 +342,7 @@ class PBP:
             tape.watch(trainables)
             m, v = self._predict(x)
 
-            v0 = v + self.beta/(self.alpha - 1)
+            v0 = v + self.beta/((self.alpha - 1)+1e-6)
             diff_square = tf.math.square(y - m)
             logZ0 = self._logZ(diff_square,v0)
 
@@ -351,8 +351,9 @@ class PBP:
             l.apply_gradient(g)
 
 
+        alpha0 = self.alpha + 1e-6
         alpha1 = self.alpha + 1
-        v1 = v + self.beta/self.alpha
+        v1 = v + self.beta/alpha0
         v2 = v + self.beta/alpha1
 
         logZ1 = self._logZ(diff_square,v1)
@@ -361,10 +362,14 @@ class PBP:
         logZ2_logZ1 = logZ2 - logZ1
         logZ1_logZ0 = logZ1 - logZ0
         # Must update beta first
-        self.beta.assign(self.beta/(tf.math.exp(logZ2_logZ1)*alpha1 -
-                                    tf.math.exp(logZ1_logZ0)*self.alpha))
-        self.alpha.assign(1.0/(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
-                               alpha1/self.alpha  - 1.0))
+        beta_denomi = tf.math.maximum(tf.math.exp(logZ2_logZ1)*alpha1 -
+                                      tf.math.exp(logZ1_logZ0)*self.alpha,
+                                      1e-6)
+        self.beta.assign(self.beta/beta_denomi)
+        alpha_denomi = tf.math.maximum(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
+                                       alpha1/alpha0  - 1.0,
+                                       1e-6)
+        self.alpha.assign(1.0/(alpha_denomi))
 
     def __call__(self,x):
         """
@@ -388,7 +393,7 @@ class PBP:
             x = l(x)
 
         return x + (self.Normal.sample(x.shape) /
-                    tf.math.sqrt(self.Gamma.sample(x.shape)))
+                    (tf.math.sqrt(self.Gamma.sample(x.shape))+1e-6))
 
 
     def predict(self,x):
