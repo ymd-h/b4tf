@@ -32,12 +32,16 @@ class TestPBP(unittest.TestCase):
         x = tf.constant([1.0,2.0])
         y = tf.constant(0.5)
         pbp.fit(x,y)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
 
 
         x2 = tf.constant([[1.0,2.0],
                           [2.0,3.0]])
         y2 = tf.constant([0.5,0.2])
         pbp.fit(x2,y2)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
 
 
     def test_call(self):
@@ -49,6 +53,8 @@ class TestPBP(unittest.TestCase):
 
         m1,v1 = pbp.predict(x1)
         pbp.fit(x1,y1)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
 
         x2 = tf.constant([[1.0,2.0,3.0],
                           [2.0,3.0,4.0]])
@@ -57,6 +63,8 @@ class TestPBP(unittest.TestCase):
 
         m2, v2 = pbp.predict(x2)
         pbp.fit(x2,y2)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
 
     def test_call_with_different_dtype(self):
         pbp = PBP([2,2,1],input_shape=(2,))
@@ -74,6 +82,8 @@ class TestPBP(unittest.TestCase):
 
         m,v = pbp.predict(x1)
         pbp.fit(x1,y1)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
 
 
 class TestPBPLayer(unittest.TestCase):
