@@ -281,6 +281,35 @@ class PBP:
         return tf.reduce_sum(-0.5 * (diff_square / v0) +
                              self.log_inv_sqrt2pi - 0.5*tf.math.log(v0))
 
+    @tf.function
+    def _logZ1_minus_logZ2(self,diff_square: tf.Tensor, v1: tf.Tensor, v2: tf.Tensor):
+        """
+        log Z1 - log Z2
+
+        Parameters
+        ----------
+        diff_square : tf.Tensor
+            (y - m)^2
+        v1 : tf.Tensor
+            Z1 = Z(diff_squzre,v1)
+        v2 : tf.Tensor
+            Z2 = Z(diff_square,v2)
+
+        Returns
+        -------
+        : tf.Tensor
+            log Z1 - log Z2
+
+
+        Notes
+        -----
+        diff_square >= 0
+        v1 >= 0
+        v2 >= 0
+        """
+        return tf.reduce_sum(-0.5 * diff_square * ((v2-v1)/(v1*v2 + 1e-6))
+                             -0.5 * tf.math.log((v1/(v2 + 1e-6)) + 1e-6))
+
 
     def _ensure_input(self,x):
         """
@@ -358,17 +387,20 @@ class PBP:
         v1 = v + self.beta/alpha0
         v2 = v + self.beta/alpha1
 
-        logZ1 = self._logZ(diff_square,v1)
-        logZ2 = self._logZ(diff_square,v2)
+        logZ2_logZ1 = self._logZ1_minus_logZ2(diff_square,v1=v2,v2=v1)
+        logZ1_logZ0 = self._logZ1_minus_logZ2(diff_square,v1=v1,v2=v0)
 
-        logZ2_logZ1 = logZ2 - logZ1
-        logZ1_logZ0 = logZ1 - logZ0
+        logZ_diff = logZ2_logZ1 - logZ1_logZ0
         # Must update beta first
-        beta_denomi = tf.math.maximum(tf.math.exp(logZ2_logZ1)*alpha1 -
-                                      tf.math.exp(logZ1_logZ0)*self.alpha,
+        # Extract larger exponential
+        Pos_where = tf.math.exp(logZ2_logZ1)*(alpha1 -
+                                              tf.math.exp(-logZ_diff)*self.alpha)
+        Neg_where = tf.math.exp(logZ1_logZ0)*(tf.math.exp(logZ_diff)*alpha1 -
+                                              self.alpha)
+        beta_denomi = tf.math.maximum(tf.where(logZ_diff >= 0, Pos_where, Neg_where),
                                       1e-6)
         self.beta.assign(self.beta/beta_denomi)
-        alpha_denomi = tf.math.maximum(tf.math.exp(logZ2_logZ1 - logZ1_logZ0) *
+        alpha_denomi = tf.math.maximum(tf.math.exp(logZ_diff) *
                                        alpha1/alpha0  - 1.0,
                                        1e-6)
         self.alpha.assign(1.0/(alpha_denomi))
