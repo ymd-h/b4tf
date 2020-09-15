@@ -50,8 +50,13 @@ class TestPBP(unittest.TestCase):
         x1 = tf.constant([1.0,2.0,3.0])
         y1 = pbp(x1)
         self.assertEqual(y1.shape,(1,1))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(y1)))
 
         m1,v1 = pbp.predict(x1)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(m1)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(v1)))
+        self.assertTrue(tf.reduce_all(v1 >= 0))
+
         pbp.fit(x1,y1)
         self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
@@ -60,8 +65,13 @@ class TestPBP(unittest.TestCase):
                           [2.0,3.0,4.0]])
         y2 = pbp(x2)
         self.assertEqual(y2.shape,(2,1))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(y2)))
 
         m2, v2 = pbp.predict(x2)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(m2)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(v2)))
+        self.assertTrue(tf.reduce_all(v2 >= 0))
+
         pbp.fit(x2,y2)
         self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
@@ -72,6 +82,7 @@ class TestPBP(unittest.TestCase):
         x1 = np.arange(2)
         y1 = pbp(x1)
         self.assertEqual(y1.dtype,tf.float32)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(y1)))
 
     def test_dtype(self):
         pbp = PBP([2,1],dtype=tf.float64)
@@ -79,8 +90,13 @@ class TestPBP(unittest.TestCase):
         x1 = np.asarray(1.0)
         y1 = pbp(x1)
         self.assertEqual(y1.dtype,tf.float64)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(y1)))
 
         m,v = pbp.predict(x1)
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(m)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(v)))
+        self.assertTrue(tf.reduce_all(v >= 0))
+
         pbp.fit(x1,y1)
         self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.alpha)))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(pbp.beta)))
@@ -138,6 +154,7 @@ class TestPBPLayer(unittest.TestCase):
         self.assertEqual(v.shape,(2,5))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(m)))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(v)))
+        self.assertTrue(tf.reduce_all(v >= 0))
 
     def test_predict_without_variance(self):
         layer = self._class(5)
@@ -151,6 +168,7 @@ class TestPBPLayer(unittest.TestCase):
         self.assertEqual(v.shape,(2,5))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(m)))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(v)))
+        self.assertTrue(tf.reduce_all(v >= 0))
 
 
 class TestPBPReLULayer(unittest.TestCase):
