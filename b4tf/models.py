@@ -6,7 +6,8 @@ from tensorflow.python.framework import tensor_shape
 
 import tensorflow_probability as tfp
 
-from b4tf.utils import ReciprocalGammaInitializer
+from b4tf.utils import (ReciprocalGammaInitializer,
+                        safe_pos_div)
 
 class PBPLayer(tf.keras.layers.Layer):
     """
@@ -202,13 +203,13 @@ class PBPReLULayer(PBPLayer):
         """
         ma, va = super().predict(m_prev,v_prev)
 
-        _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va))) + 1e-6
-        _alpha = ma / _sqrt_v
-        _inv_alpha = 1.0/(_alpha + 1e-6)
+        _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va)))
+        _alpha = safe_pos_div(ma, _sqrt_v)
+        _inv_alpha = safe_pos_div(tf.constant(1.0), _alpha)
         _cdf_alpha = self.Normal.cdf(_alpha)
         _gamma = tf.where(_alpha < -30,
                           -_alpha + _inv_alpha * (-1 + 2*tf.math.square(_inv_alpha)),
-                          self.Normal.prob(-_alpha)/_cdf_alpha)
+                          safe_pos_div(self.Normal.prob(-_alpha), _cdf_alpha))
         _vp = ma + _sqrt_v * _gamma
 
         mb = _cdf_alpha * _vp
@@ -307,8 +308,8 @@ class PBP:
         v1 >= 0
         v2 >= 0
         """
-        return tf.reduce_sum(-0.5 * diff_square * ((v2-v1)/(v1*v2 + 1e-6))
-                             -0.5 * tf.math.log((v1/(v2 + 1e-6)) + 1e-6))
+        return tf.reduce_sum(-0.5 * diff_square * safe_pos_div(v2-v1, v1*v2)
+                             -0.5 * tf.math.log(safe_pos_div(v1, v2) + 1e-6))
 
 
     def _ensure_input(self,x):
@@ -373,7 +374,7 @@ class PBP:
             tape.watch(trainables)
             m, v = self._predict(x)
 
-            v0 = v + self.beta/((self.alpha - 1)+1e-6)
+            v0 = v + safe_pos_div(self.beta, self.alpha - 1)
             diff_square = tf.math.square(y - m)
             logZ0 = self._logZ(diff_square,v0)
 
@@ -382,9 +383,8 @@ class PBP:
             l.apply_gradient(g)
 
 
-        alpha0 = self.alpha + 1e-6
         alpha1 = self.alpha + 1
-        v1 = v + self.beta/alpha0
+        v1 = v + safe_pos_div(self.beta, alpha)
         v2 = v + self.beta/alpha1
 
         logZ2_logZ1 = self._logZ1_minus_logZ2(diff_square,v1=v2,v2=v1)
@@ -401,7 +401,7 @@ class PBP:
                                       1e-6)
         self.beta.assign(self.beta/beta_denomi)
         alpha_denomi = tf.math.maximum(tf.math.exp(logZ_diff) *
-                                       alpha1/alpha0  - 1.0,
+                                       safe_pos_div(alpha1, alpha)  - 1.0,
                                        1e-6)
         self.alpha.assign(1.0/(alpha_denomi))
 
@@ -449,7 +449,7 @@ class PBP:
         x = self._ensure_input(x)
         m, v = self._predict(x)
 
-        return m, v + self.beta/((self.alpha - 1) + 1e-6)
+        return m, v + safe_pos_div(self.beta, self.alpha - 1)
 
     @tf.function
     def _predict(self,x: tf.Tensor):
