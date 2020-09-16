@@ -425,8 +425,8 @@ class PBP:
         for l in self.layers:
             x = l(x)
 
-        return x + (self.Normal.sample(x.shape) /
-                    (tf.math.sqrt(self.Gamma.sample(x.shape))+1e-6))
+        return x + safe_div(self.Normal.sample(x.shape),
+                            tf.math.sqrt(self.Gamma.sample(x.shape)))
 
 
     def predict(self,x):
