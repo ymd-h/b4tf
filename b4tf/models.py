@@ -7,7 +7,7 @@ from tensorflow.python.framework import tensor_shape
 import tensorflow_probability as tfp
 
 from b4tf.utils import (ReciprocalGammaInitializer,
-                        safe_div)
+                        safe_div, safe_exp)
 
 class PBPLayer(tf.keras.layers.Layer):
     """
@@ -391,19 +391,18 @@ class PBP:
         logZ1_logZ0 = self._logZ1_minus_logZ2(diff_square,v1=v1,v2=v0)
 
         logZ_diff = logZ2_logZ1 - logZ1_logZ0
+
         # Must update beta first
         # Extract larger exponential
-        Pos_where = tf.math.exp(logZ2_logZ1)*(alpha1 -
-                                              tf.math.exp(-logZ_diff)*self.alpha)
-        Neg_where = tf.math.exp(logZ1_logZ0)*(tf.math.exp(logZ_diff)*alpha1 -
-                                              self.alpha)
-        beta_denomi = tf.math.maximum(tf.where(logZ_diff >= 0, Pos_where, Neg_where),
-                                      1e-6)
-        self.beta.assign(self.beta/beta_denomi)
-        alpha_denomi = tf.math.maximum(tf.math.exp(logZ_diff) *
-                                       safe_div(alpha1, self.alpha)  - 1.0,
-                                       1e-6)
-        self.alpha.assign(1.0/(alpha_denomi))
+        Pos_where = safe_exp(logZ2_logZ1)*(alpha1 - safe_exp(-logZ_diff)*self.alpha)
+        Neg_where = safe_exp(logZ1_logZ0)*(safe_exp(logZ_diff)*alpha1 - self.alpha)
+
+        beta_denomi = tf.where(logZ_diff >= 0, Pos_where, Neg_where)
+        self.beta.assign(safe_div(self.beta, beta_denomi))
+
+        alpha_denomi = safe_exp(logZ_diff) * safe_div(alpha1, self.alpha)  - 1.0
+        self.alpha.assign(safe_div(tf.constant(1.0,dtype=alpha_denomi.dtype),
+                                   alpha_denomi))
 
     def __call__(self,x):
         """

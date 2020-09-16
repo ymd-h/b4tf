@@ -71,6 +71,22 @@ def safe_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
     return x/(tf.where(y >= 0, y + _eps, y - _eps))
 
 
+@tf.function
+def safe_exp(x: tf.Tensor, BIG: tf.Tensor = tf.constant(20)):
+    """
+    Non overflow exp(x)
+
+    Parameters
+    ----------
+    x : tf.Tensor
+        Input
+    BIG : tf.Tensor, optional
+        Maximum exponent. The default value is 20 (exp(x) <= 1e+20).
+    """
+    return tf.math.exp(tf.math.minimum(x,tf.cast(BIG,dtype=x.dtype)))
+
+
+
 def create_model(units,cls=tfp.layers.DenseReparameterization,
                  input_shape=(1,),activation=tf.nn.leaky_relu,**kwargs):
     """
