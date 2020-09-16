@@ -44,7 +44,7 @@ class ReciprocalGammaInitializer:
         return g
 
 @tf.function
-def safe_pos_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
+def safe_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
     """
     Non overflow division for positive tf.Tensor
 
@@ -65,10 +65,10 @@ def safe_pos_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
     Notes
     -----
     User must guaruantee the following conditions
-    y >= 0
     eps >= 0
     """
-    return x/(y + tf.cast(eps,dtype=y.dtype))
+    _eps = tf.cast(eps,dtype=y.dtype)
+    return x/(tf.where(y >= 0, y + _eps, y - _eps))
 
 
 def create_model(units,cls=tfp.layers.DenseReparameterization,
