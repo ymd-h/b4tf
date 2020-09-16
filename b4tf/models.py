@@ -97,15 +97,15 @@ class PBPLayer(tf.keras.layers.Layer):
 
     @tf.function
     def _sample_weights(self):
-        eps = self.Normal.sample(self.kernel_m.shape)
-        std = tf.math.sqrt(tf.math.maximum(self.kernel_v,
-                                           tf.zeros_like(self.kernel_v)))
-        W = self.kernel_m + std * eps
+        eps_k = self.Normal.sample(self.kernel_m.shape)
+        std_k = tf.math.sqrt(tf.math.maximum(self.kernel_v,
+                                             tf.zeros_like(self.kernel_v)))
+        W = self.kernel_m + std_k * eps_k
 
-        eps = self.Normal.sample(self.bias_m.shape)
-        std = tf.math.sqrt(tf.math.maximum(self.bias_v,
-                                           tf.zeros_like(self.bias_v)))
-        b = self.bias_m + std * eps
+        eps_b = self.Normal.sample(self.bias_m.shape)
+        std_b = tf.math.sqrt(tf.math.maximum(self.bias_v,
+                                             tf.zeros_like(self.bias_v)))
+        b = self.bias_m + std_b * eps_b
         return W, b
 
     @tf.function
