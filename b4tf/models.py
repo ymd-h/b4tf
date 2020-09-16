@@ -41,7 +41,7 @@ class PBPLayer(tf.keras.layers.Layer):
         self.inv_V1 = tf.math.square(self.inv_sqrtV1)
 
 
-        over_gamma = ReciprocalGammaInitializer(1.0,1e-6)
+        over_gamma = ReciprocalGammaInitializer(6.0,6.0)
         self.kernel_m = self.add_weight("kernel_mean",
                                         shape=[last_dim,self.units],
                                         initializer=tf.keras.initializers.HeNormal(),
