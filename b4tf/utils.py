@@ -86,6 +86,10 @@ def safe_exp(x: tf.Tensor, BIG: tf.Tensor = tf.constant(20)):
     return tf.math.exp(tf.math.minimum(x,tf.cast(BIG,dtype=x.dtype)))
 
 
+@tf.function
+def non_negative_constraint(x: tf.Tensor):
+    return tf.maximum(x,tf.zeros_like(x))
+
 
 def create_model(units,cls=tfp.layers.DenseReparameterization,
                  input_shape=(1,),activation=tf.nn.leaky_relu,**kwargs):

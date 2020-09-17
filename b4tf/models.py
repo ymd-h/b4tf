@@ -7,7 +7,7 @@ from tensorflow.python.framework import tensor_shape
 import tensorflow_probability as tfp
 
 from b4tf.utils import (ReciprocalGammaInitializer,
-                        safe_div, safe_exp)
+                        safe_div, safe_exp, non_negative_constraint)
 
 class PBPLayer(tf.keras.layers.Layer):
     """
@@ -50,6 +50,7 @@ class PBPLayer(tf.keras.layers.Layer):
         self.kernel_v = self.add_weight("kernel_variance",
                                         shape=[last_dim,self.units],
                                         initializer=over_gamma,
+                                        constraint=non_negative_constraint,
                                         dtype=self.dtype,
                                         trainable=True)
         self.bias_m = self.add_weight("bias_mean",
@@ -60,6 +61,7 @@ class PBPLayer(tf.keras.layers.Layer):
         self.bias_v = self.add_weight("bias_variance",
                                       shape=[self.units,],
                                       initializer=over_gamma,
+                                      constraint=non_negative_constraint,
                                       dtype=self.dtype,
                                       trainable=True)
         self.Normal=tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
@@ -83,28 +85,22 @@ class PBPLayer(tf.keras.layers.Layer):
 
         # Kernel
         self.kernel_m.assign_add(self.kernel_v * dlogZ_dkm)
-        new_kv = (self.kernel_v -
-                  (tf.math.square(self.kernel_v) *
-                   (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv)))
-        self.kernel_v.assign(tf.math.maximum(new_kv,tf.zeros_like(new_kv)))
+        self.kernel_v.assign_sub(tf.math.square(self.kernel_v) *
+                                 (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv))
 
         # Bias
         self.bias_m.assign_add(self.bias_v * dlogZ_dbm)
-        new_bv = (self.bias_v -
-                  (tf.math.square(self.bias_v) *
-                   (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv)))
-        self.bias_v.assign(tf.math.maximum(new_bv,tf.zeros_like(new_bv)))
+        self.bias_v.assign_sub(tf.math.square(self.bias_v) *
+                               (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv))
 
     @tf.function
     def _sample_weights(self):
         eps_k = self.Normal.sample(self.kernel_m.shape)
-        std_k = tf.math.sqrt(tf.math.maximum(self.kernel_v,
-                                             tf.zeros_like(self.kernel_v)))
+        std_k = tf.math.sqrt(tf.maximum(self.kernel_v, tf.zeros_like(self.kernel_v)))
         W = self.kernel_m + std_k * eps_k
 
         eps_b = self.Normal.sample(self.bias_m.shape)
-        std_b = tf.math.sqrt(tf.math.maximum(self.bias_v,
-                                             tf.zeros_like(self.bias_v)))
+        std_b = tf.math.sqrt(tf.maximum(self.bias_v, tf.zeros_like(self.bias_v)))
         b = self.bias_m + std_b * eps_b
         return W, b
 
@@ -203,7 +199,7 @@ class PBPReLULayer(PBPLayer):
         """
         ma, va = super().predict(m_prev,v_prev)
 
-        _sqrt_v = tf.math.sqrt(tf.math.maximum(va,tf.zeros_like(va)))
+        _sqrt_v = tf.math.sqrt(tf.maximum(va,tf.zeros_like(va)))
         _alpha = safe_div(ma, _sqrt_v)
         _inv_alpha = safe_div(tf.constant(1.0,dtype=_alpha.dtype), _alpha)
         _cdf_alpha = self.Normal.cdf(_alpha)
