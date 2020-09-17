@@ -240,8 +240,8 @@ class PBP:
             Data type
         """
         self.dtype = tf.as_dtype(dtype)
-        self.alpha = tf.Variable(1.0,trainable=True,dtype=self.dtype)
-        self.beta  = tf.Variable(1e-6,trainable=True,dtype=self.dtype)
+        self.alpha = tf.Variable(6.0,trainable=True,dtype=self.dtype)
+        self.beta  = tf.Variable(6.0,trainable=True,dtype=self.dtype)
 
         pi = tf.math.atan(tf.constant(1.0,dtype=self.dtype)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
