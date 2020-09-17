@@ -398,11 +398,14 @@ class PBP:
         Neg_where = safe_exp(logZ1_logZ0)*(safe_exp(logZ_diff)*alpha1 - self.alpha)
 
         beta_denomi = tf.where(logZ_diff >= 0, Pos_where, Neg_where)
-        self.beta.assign(safe_div(self.beta, beta_denomi))
+        self.beta.assign(safe_div(self.beta,
+                                  tf.maximum(beta_denomi,
+                                             tf.zeros_like(self.beta))))
 
-        alpha_denomi = safe_exp(logZ_diff) * safe_div(alpha1, self.alpha)  - 1.0
+        alpha_denomi = safe_exp(logZ_diff) * safe_div(alpha1, self.alpha) - 1.0
         self.alpha.assign(safe_div(tf.constant(1.0,dtype=alpha_denomi.dtype),
-                                   alpha_denomi))
+                                   tf.maximum(alpha_denomi,
+                                              tf.zeros_like(self.alpha))))
 
     def __call__(self,x):
         """
