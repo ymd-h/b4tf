@@ -266,6 +266,7 @@ class PBP:
             l.build(last_shape)
             self.layers.append(l)
 
+        self.trainables = [l.trainable_weights for l in self.layers]
 
         self.Normal=tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
                                              scale=tf.constant(1.0,dtype=self.dtype))
@@ -365,16 +366,15 @@ class PBP:
 
     @tf.function
     def _fit(self,x: tf.Tensor, y: tf.Tensor):
-        trainables = [l.trainable_weights for l in self.layers]
         with tf.GradientTape() as tape:
-            tape.watch(trainables)
+            tape.watch(self.trainables)
             m, v = self._predict(x)
 
             v0 = v + safe_div(self.beta, self.alpha - 1)
             diff_square = tf.math.square(y - m)
             logZ0 = self._logZ(diff_square,v0)
 
-        grad = tape.gradient(logZ0,trainables)
+        grad = tape.gradient(logZ0,self.trainables)
         for l, g in zip(self.layers, grad):
             l.apply_gradient(g)
 
