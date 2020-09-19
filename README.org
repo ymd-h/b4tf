@@ -111,7 +111,42 @@ pip install .
 Currently, b4tf implements following algorithms. We will implements
 more.
 
-- Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]])
+** Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]])
+Probabilistic Backpropagation uses a neural net with its weights and
+biases obeying Gaussian distributions. The means and variances of them
+are trained parameters. Additionally, obervations affected Gaussian
+distribution with its variance obeying reciprocal of Gamma
+distribution.
+
+y = N(f(x;W), sqrt(gamma^(-1)))
+
+#+begin_src python
+import b4tf
+
+x = # Observed Input
+y = # Observed Output
+
+
+# Create PBP with
+#   Input: (1,)  default
+#   Hidden Layers: 50 and 50
+#   Output: 1
+pbp = b4tf.models.PBP([50,50,1],input_shape=(1,))
+
+# Learn data
+# x, y should be normalized (mean=0,std=1) beforehand.
+pbp.fit(x,y)
+
+
+# Call deterministic
+#    Sample weights and biases from approximated posterior
+_y = pbp(x)
+
+
+# Predict output
+#    Outputs are mean and variance
+m, v = pbp.predict(x)
+#+end_src
 
 
 * Lisence
