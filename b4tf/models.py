@@ -348,7 +348,7 @@ class PBP:
         return y
 
 
-    def fit(self,x,y):
+    def fit(self,x,y,batch_size:int = 16):
         """
         Fit posterior distribution with observation
 
@@ -362,7 +362,10 @@ class PBP:
         x = self._ensure_input(x)
         y = self._ensure_output(y)
 
-        self._fit(x,y)
+        data = tf.data.Dataset.from_tensor_slices((x,y)).batch(batch_size)
+
+        for _x,_y in data:
+            self._fit(_x,_y)
 
     @tf.function
     def _fit(self,x: tf.Tensor, y: tf.Tensor):
