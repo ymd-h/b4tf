@@ -50,7 +50,6 @@ class PBPLayer(tf.keras.layers.Layer):
         self.kernel_v = self.add_weight("kernel_variance",
                                         shape=[last_dim,self.units],
                                         initializer=over_gamma,
-                                        constraint=non_negative_constraint,
                                         dtype=self.dtype,
                                         trainable=True)
         self.bias_m = self.add_weight("bias_mean",
@@ -61,7 +60,6 @@ class PBPLayer(tf.keras.layers.Layer):
         self.bias_v = self.add_weight("bias_variance",
                                       shape=[self.units,],
                                       initializer=over_gamma,
-                                      constraint=non_negative_constraint,
                                       dtype=self.dtype,
                                       trainable=True)
         self.Normal=tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
@@ -85,13 +83,15 @@ class PBPLayer(tf.keras.layers.Layer):
 
         # Kernel
         self.kernel_m.assign_add(self.kernel_v * dlogZ_dkm)
-        self.kernel_v.assign_sub(tf.math.square(self.kernel_v) *
-                                 (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv))
+        new_kv = self.kernel_v - (tf.math.square(self.kernel_v) *
+                                  (tf.math.square(dlogZ_dkm) - 2*dlogZ_dkv))
+        self.kernel_v.assign(non_negative_constraint(new_kv))
 
         # Bias
         self.bias_m.assign_add(self.bias_v * dlogZ_dbm)
-        self.bias_v.assign_sub(tf.math.square(self.bias_v) *
-                               (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv))
+        new_bv = self.bias_v - (tf.math.square(self.bias_v) *
+                                (tf.math.square(dlogZ_dbm) - 2*dlogZ_dbv))
+        self.bias_v.assign(non_negative_constraint(new_bv))
 
     @tf.function
     def _sample_weights(self):
