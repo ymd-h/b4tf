@@ -388,17 +388,18 @@ class PBP:
 
         logZ_diff = logZ2_logZ1 - logZ1_logZ0
 
+        Z0Z2_Z1Z1 = safe_exp(logZ_diff)
         # Must update beta first
         # Extract larger exponential
         Pos_where = safe_exp(logZ2_logZ1)*(alpha1 - safe_exp(-logZ_diff)*self.alpha)
-        Neg_where = safe_exp(logZ1_logZ0)*(safe_exp(logZ_diff)*alpha1 - self.alpha)
+        Neg_where = safe_exp(logZ1_logZ0)*(Z0Z2_Z1Z1*alpha1 - self.alpha)
 
         beta_denomi = tf.where(logZ_diff >= 0, Pos_where, Neg_where)
         self.beta.assign(safe_div(self.beta,
                                   tf.maximum(beta_denomi,
                                              tf.zeros_like(self.beta))))
 
-        alpha_denomi = safe_exp(logZ_diff) * safe_div(alpha1, self.alpha) - 1.0
+        alpha_denomi = Z0Z2_Z1Z1 * safe_div(alpha1, self.alpha) - 1.0
         self.alpha.assign(safe_div(tf.constant(1.0,dtype=alpha_denomi.dtype),
                                    tf.maximum(alpha_denomi,
                                               tf.zeros_like(self.alpha))))
