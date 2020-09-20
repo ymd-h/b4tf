@@ -14,6 +14,9 @@ RUN pip3 install -U pip setuptools \
 	tensorflow \
 	tensorflow_probability \
 	twine \
+	sphinx \
+	sphinx-automodapi \
+	sphinx_rtd_theme \
 	unittest-xml-reporting \
 	wheel
 
