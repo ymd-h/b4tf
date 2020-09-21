@@ -117,7 +117,12 @@ cd b4tf
 pip install .
 #+end_src
 
-* Implemented Algorithms
+* DONE Implemented Algorithms
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: algorithms
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_WEIGHT: 200
+:END:
 
 Currently, b4tf implements following algorithms. We will implements
 more.
