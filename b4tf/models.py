@@ -357,6 +357,12 @@ class PBP:
             Observed input
         y : array-like
             Observed output
+        batch_size : int, optional
+            Batch size. The default value is 16.
+
+        Warnings
+        --------
+        Large batch size might fail because of overflow and/or underflow.
         """
         x = self._ensure_input(x)
         y = self._ensure_output(y)
