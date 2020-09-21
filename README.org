@@ -84,7 +84,7 @@ b4tf is a Python module providing a set of bayesian neural network on
 :END:
 b4tf requires following softwares before installation
 
-- TensorFlow 2.x
+- [[https://www.tensorflow.org/][TensorFlow 2.x]]
 - [[https://www.tensorflow.org/probability][TnesorFlow Probability]]
 - Python 3.x
 
@@ -169,7 +169,7 @@ Any contribution are very welcome!
 ** Making Community Larger
 Bigger commumity makes development more active and improve b4tf.
 
-- Star this repository (and/or [[https://github.com/ymd-h/b4tf][GitHub Mirror]])
+- Star [[https://gitlab.com/ymd_h/b4tf][this GitLab repository]] (and/or [[https://github.com/ymd-h/b4tf][GitHub Mirror]])
 - Publish your code using b4tf
 - Share this repository to your friend and/or followers.
 
