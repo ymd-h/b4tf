@@ -198,6 +198,10 @@ Step by step instruction for beginners is described at [[https://ymd_h.gitlab.io
 
 
 * Lisence
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: misc
+:EXPORT_FILE_NAME: lisence
+:END:
 b4tf is available under MIT lisence.
 
 #+INCLUDE: "./LICENSE" src
