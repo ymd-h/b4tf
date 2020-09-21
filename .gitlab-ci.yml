@@ -9,6 +9,8 @@ stages:
   - build
   - test
   - test_coverage
+  - page_build
+  - page_deploy
   - upload
 
 
