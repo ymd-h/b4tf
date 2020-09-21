@@ -211,7 +211,7 @@ CLOSED: [2020-01-17 Fri 23:09]
 - [[https://pypi.org/project/b4tf/][b4tf on PyPI]]
 
 
-* Lisence
+* DONE Lisence
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: misc
 :EXPORT_FILE_NAME: lisence
