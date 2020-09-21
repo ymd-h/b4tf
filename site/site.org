@@ -58,9 +58,9 @@
 :END:
 
 
-* Features
+* Algorithms
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: features
+:EXPORT_HUGO_SECTION*: algorithms
 :END:
 
 
