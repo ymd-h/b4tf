@@ -124,7 +124,7 @@ pip install .
 :EXPORT_HUGO_WEIGHT: 200
 :END:
 
-Currently, b4tf implements following algorithms. We will implements
+Currently, b4tf implements following algorithms. We will implement
 more.
 
 - Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]], [[https://ymd_h.gitlab.io/b4tf/algorithms/pbp][Doc]], [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][API]])
