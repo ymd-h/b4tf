@@ -2,7 +2,6 @@ API reference for b4tf
 ==================
 
 .. automodapi:: b4tf
-   :no-inherited-members:
 
 
 Indices and tables

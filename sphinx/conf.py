@@ -27,6 +27,8 @@ autodoc_default_options = {
     'exclude-members': '__dict__, __weakref__, __module__, __new__, __pyx_vtable__, __reduce__, __setstate__'
 }
 
+automodsumm_inherited_members = False
+
 html_static_path = ['static']
 html_css_files = [
     'custom.css'
