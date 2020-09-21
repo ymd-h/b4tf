@@ -115,7 +115,7 @@ class PBPLayer(tf.keras.layers.Layer):
 
         Returns
         -------
-        y : tf.Tensor
+        z : tf.Tensor
             Output. [batch, units]
         """
         W, b = self._sample_weights()
@@ -167,12 +167,12 @@ class PBPReLULayer(PBPLayer):
         Parameters
         ----------
         x : tf.Tensor
-            Input. [batch, features]
+            Input. [batch, prev_units]
 
         Returns
         -------
         z : tf.Tensor
-            Output. [batch, features]
+            Output. [batch, units]
         """
         x = super().call(x)
         return tf.maximum(x,tf.zeros_like(x))
@@ -357,6 +357,12 @@ class PBP:
             Observed input
         y : array-like
             Observed output
+        batch_size : int, optional
+            Batch size. The default value is 16.
+
+        Warnings
+        --------
+        Large batch size might fail because of overflow and/or underflow.
         """
         x = self._ensure_input(x)
         y = self._ensure_output(y)
@@ -416,6 +422,7 @@ class PBP:
             Input
 
         Returns
+        -------
         y : tf.Tensor
             Neural netork output
         """
@@ -423,7 +430,7 @@ class PBP:
         return self._call(x)
 
     @tf.function
-    def _call(self,x:tf.Tensor):
+    def _call(self,x: tf.Tensor):
         for l in self.layers:
             x = l(x)
 

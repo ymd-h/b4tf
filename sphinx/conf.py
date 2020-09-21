@@ -2,8 +2,7 @@ project = "b4tf"
 author = "Hiroyuki Yamada"
 copyright = "2020, Hiroyuki Yamada"
 
-extensions = ['sphinx.ext.napoleon',
-              'sphinx_automodapi.automodapi', 'sphinx_automodapi.smart_resolver']
+extensions = ['sphinx.ext.napoleon']
 html_theme = "sphinx_rtd_theme"
 
 html_logo = "../site/static/images/logo.png"
@@ -20,14 +19,10 @@ autodoc_default_options = {
     'members': None,
     'member-order': 'bysource',
     'undoc-members': None,
-    'private-members': None,
-    'inherited-members': None,
-    'special-members': '__init__',
+    'special-members': '__init__, __call__',
     'show-inheritance': None,
     'exclude-members': '__dict__, __weakref__, __module__, __new__, __pyx_vtable__, __reduce__, __setstate__'
 }
-
-automodsumm_inherited_members = False
 
 html_static_path = ['static']
 html_css_files = [

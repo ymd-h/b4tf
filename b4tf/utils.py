@@ -59,13 +59,12 @@ def safe_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
 
     Returns
     -------
-    x/(y+eps) : tf.Tensor
+    sign(y) * x/(|y|+eps) : tf.Tensor
         Results
 
     Notes
     -----
-    User must guaruantee the following conditions
-    eps >= 0
+    User must guaruantee `eps >= 0`
     """
     _eps = tf.cast(eps,dtype=y.dtype)
     return x/(tf.where(y >= 0, y + _eps, y - _eps))
@@ -82,6 +81,11 @@ def safe_exp(x: tf.Tensor, BIG: tf.Tensor = tf.constant(20)):
         Input
     BIG : tf.Tensor, optional
         Maximum exponent. The default value is 20 (exp(x) <= 1e+20).
+
+    Returns
+    -------
+    exp(min(x,BIG)) : tf.Tensor
+        Results
     """
     return tf.math.exp(tf.math.minimum(x,tf.cast(BIG,dtype=x.dtype)))
 
