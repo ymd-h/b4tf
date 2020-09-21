@@ -430,7 +430,7 @@ class PBP:
         return self._call(x)
 
     @tf.function
-    def _call(self,x:tf.Tensor):
+    def _call(self,x: tf.Tensor):
         for l in self.layers:
             x = l(x)
 
