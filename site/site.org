@@ -70,18 +70,39 @@ CLOSED: [2020-09-22 Tue 06:07]
 :END:
 
 *** Overview
-Probabilistic Backpropagation uses a neural network with its weights and
-biases obeying Gaussian distributions, i.e.
+Probabilistic Backpropagation (PBP) is an algorithm to focus
+scalability. PBP uses a fully connected neural network with its
+weights and biases obeying Gaussian distributions, i.e.
 
-\( f(x; W) \) where \( W_{ij} \sim \mathcal{N}(m_{ij}, v_{ij}) \).
+\( f(\, \cdot\, ; W) \) where
+\( W_{ij}^{(l)} \sim \mathcal{N}(m_{ij}^{(l)}, v_{ij}^{(l)}) \).
 
-The means \( m_{ij} \) and variances \( v_{ij}\) of them are trained
-parameters. Additionally, obervations affected Gaussian noise with its
-variance obeying reciprocal of Gamma distribution, i.e.
+The means \( m_{ij}^{(l)} \) and variances \( v_{ij}^{(l)} \) of the
+network are trained parameters. Additionally, observations (\( x \)
+and \( y \)) affected Gaussian noise with its variance obeying
+reciprocal of Gamma distribution, i.e.
 
 \( y = \mathcal{N}(f(x;W), \gamma^{-1}) \) where
 \( \gamma \sim \mathrm{Gamma}(\alpha, \beta) \).
 
+The shape parameter \( \alpha \) and rate parameter \( \beta \) are
+trained parameters.
+
+PBP utilizes assumed density filtering (ADF), which does not require
+any expectations but requires partition function for normalization.
+
+ADF updates for Gaussian and Gamma distributions are followings;
+
+\begin{align}
+m^{\text{new}} &= m + v \frac{\partial \log Z}{\partial m} \\
+v^{\text{new}} &= v - v^2 \left \lbracket\left ( \frac{\partial \log Z}{\partial m} \right )^2 -2 \frac{\partial \log Z}{\partial v}\right \rbracket
+\end{align}
+
+One of the key concepts in PBP is propagation of means and variances
+at hidden layers from its input layer to its output layer in order to
+calculate the partition function. Each unit at hidden layers is
+assumed to follow Gaussian distribution. We also know the means and
+variances of the network weights and biases, so that
 
 
 *** Usage in b4tf
