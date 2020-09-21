@@ -63,13 +63,13 @@
 :EXPORT_HUGO_SECTION*: algorithms
 :END:
 
-* DONE Probabilistic Backpropagation
+** DONE Probabilistic Backpropagation
 CLOSED: [2020-09-22 Tue 06:07]
 :PROPERTIES:
 :EXPORT_FILE_NAME: pbp
 :END:
 
-** Overview
+*** Overview
 Probabilistic Backpropagation uses a neural net with its weights and
 biases obeying Gaussian distributions, i.e.
 
@@ -84,7 +84,7 @@ variance obeying reciprocal of Gamma distribution, i.e.
 
 
 
-** Usage in b4tf
+*** Usage in b4tf
 #+begin_src python
 import b4tf
 
@@ -113,7 +113,7 @@ _y = pbp(x)
 m, v = pbp.predict(x)
 #+end_src
 
-** References
+*** References
 - Paper :: [[https://arxiv.org/abs/1502.05336][J. M. Hernández-Lobato and R. P. Adams, "Probabilistic Backpropagation for Scalable Learning of Bayesian Neural Networks" (2015) arXiv:1502.05336]]
 - Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
 
