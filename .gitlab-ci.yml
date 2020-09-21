@@ -150,6 +150,7 @@ sphinx:
   stage: page_build
   script:
     - pip install $(echo dist/*.whl)
+    - sphinx-apidoc -F -e -o sphinx b4tf
     - sphinx-build -b html sphinx public/api
   artifacts:
     paths:
