@@ -19,8 +19,6 @@ autodoc_default_options = {
     'members': None,
     'member-order': 'bysource',
     'undoc-members': None,
-    'private-members': None,
-    'inherited-members': None,
     'special-members': '__init__',
     'show-inheritance': None,
     'exclude-members': '__dict__, __weakref__, __module__, __new__, __pyx_vtable__, __reduce__, __setstate__'
