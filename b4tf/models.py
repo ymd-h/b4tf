@@ -75,8 +75,7 @@ class PBPLayer(tf.keras.layers.Layer):
         ----------
         gradient : list
             List of gradients for weights and bias.
-            [d(logZ)/d(kernel_m), d(logZ)/d(kernel_v),
-             d(logZ)/d(bias_m)  , d(logZ)/d(bias_v)]
+            [d(logZ)/d(kernel_m), d(logZ)/d(kernel_v), d(logZ)/d(bias_m), d(logZ)/d(bias_v)]
         """
 
         dlogZ_dkm, dlogZ_dkv, dlogZ_dbm, dlogZ_dbv = gradient
