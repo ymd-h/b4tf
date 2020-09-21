@@ -58,10 +58,64 @@
 :END:
 
 
-* Algorithms
+* Implemented Algorithms
 :PROPERTIES:
 :EXPORT_HUGO_SECTION*: algorithms
 :END:
+
+* DONE Probabilistic Backpropagation
+CLOSED: [2020-09-22 Tue 06:07]
+:PROPERTIES:
+:EXPORT_FILE_NAME: pbp
+:END:
+
+** Overview
+Probabilistic Backpropagation uses a neural net with its weights and
+biases obeying Gaussian distributions, i.e.
+
+\( f(x; W) \) where \( W_{ij} \sim \mathcal{N}(m_{ij}, v_{ij}) \).
+
+The means \( m_{ij} \) and variances \( v_{ij}\) of them are trained
+parameters. Additionally, obervations affected Gaussian noise with its
+variance obeying reciprocal of Gamma distribution, i.e.
+
+\( y = \mathcal{N}(f(x;W), \gamma^{-1}) \) where
+\( \gamma \sim \mathrm{Gamma}(\alpha, \beta) \).
+
+
+
+** Usage in b4tf
+#+begin_src python
+import b4tf
+
+x = # Observed Input
+y = # Observed Output
+
+
+# Create PBP with
+#   Input: (1,)  default
+#   Hidden Layers: 50 and 50
+#   Output: 1
+pbp = b4tf.models.PBP([50,50,1],input_shape=(1,))
+
+# Learn data
+# x, y should be normalized (mean=0,std=1) beforehand.
+pbp.fit(x,y)
+
+
+# Call deterministic
+#    Sample weights and biases from approximated posterior
+_y = pbp(x)
+
+
+# Predict output
+#    Outputs are mean and variance
+m, v = pbp.predict(x)
+#+end_src
+
+** References
+- Paper :: [[https://arxiv.org/abs/1502.05336][J. M. Hernández-Lobato and R. P. Adams, "Probabilistic Backpropagation for Scalable Learning of Bayesian Neural Networks" (2015) arXiv:1502.05336]]
+- Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
 
 
 * Contributing
@@ -153,4 +207,3 @@ CLOSED: [2020-06-06 Sat 13:50]
 :EXPORT_HUGO_SECTION*: faq
 :EXPORT_HUGO_WEIGHT: 900
 :END:
-
