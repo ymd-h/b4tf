@@ -73,7 +73,12 @@ b4tf is a Python module providing a set of bayesian neural network on
 [[https://www.tensorflow.org/][TensorFlow]].
 
 
-* Installation
+* DONE Installation
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: installation
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_WEIGHT: 100
+:END:
 b4tf requires following softwares before installation
 
 - TensorFlow 2.x
