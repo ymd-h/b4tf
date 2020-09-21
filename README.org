@@ -3,7 +3,7 @@
 #+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+OPTIONS: timestamp:t title:t toc:nil todo:nil |:t
-#+title: Bayes Neural Net for TensorFlow (b4tf)
+#+title: Bayes Neural Network for TensorFlow (b4tf)
 #+date: <2020-07-18 Sat>
 #+author: Hiroyuki Yamada
 #+LANGUAGE: en
