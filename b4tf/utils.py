@@ -59,13 +59,12 @@ def safe_div(x: tf.Tensor,y: tf.Tensor, eps:tf.Tensor = tf.constant(1e-6)):
 
     Returns
     -------
-    x/(y+eps) : tf.Tensor
+    sign(y) * x/(|y|+eps) : tf.Tensor
         Results
 
     Notes
     -----
-    User must guaruantee the following conditions
-    eps >= 0
+    User must guaruantee `eps >= 0`
     """
     _eps = tf.cast(eps,dtype=y.dtype)
     return x/(tf.where(y >= 0, y + _eps, y - _eps))
