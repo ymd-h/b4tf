@@ -95,7 +95,9 @@ ADF updates for Gaussian and Gamma distributions are followings;
 
 \begin{align}
 m^{\text{new}} &= m + v \frac{\partial \log Z}{\partial m} \\
-v^{\text{new}} &= v - v^2 \left \lbracket\left ( \frac{\partial \log Z}{\partial m} \right )^2 -2 \frac{\partial \log Z}{\partial v}\right \rbracket
+v^{\text{new}} &= v - v^2 \left \lbracket\left ( \frac{\partial \log Z}{\partial m} \right )^2 -2 \frac{\partial \log Z}{\partial v}\right \rbracket \\
+\alpha^{\text{new}} &= \left \lbracket \frac{ZZ_2}{Z_1^2}\frac{\alpha +1}{\alpha}  - 1.0 \right \rbracket ^{-1}\\
+\beta^{\text{new}} &= \left \lbracket \frac{Z_2}{Z_1}\frac{\alpha+1}{\beta}  - \frac{Z_1}{Z}\frac{\alpha}{\beta} \right \rbracket ^{-1}
 \end{align}
 
 One of the key concepts in PBP is propagation of means and variances
