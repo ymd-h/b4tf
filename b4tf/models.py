@@ -422,6 +422,7 @@ class PBP:
             Input
 
         Returns
+        -------
         y : tf.Tensor
             Neural netork output
         """
