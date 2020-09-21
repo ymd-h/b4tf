@@ -18,7 +18,7 @@ else:
 
 setup(name="b4tf",
       author="Hiroyuki Yamada",
-      version="1.0.0",
+      version="1.0.1",
       description=description,
       install_requires=["tensorflow>=2","tensorflow_probability"],
       url="https://gitlab.com/ymd_h/b4tf",

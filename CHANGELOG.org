@@ -66,6 +66,9 @@
 :EXPORT_HUGO_SECTION: changelog
 :END:
 ** Unreleased
+** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.0.1][v1.0.1]]
+- Fix: b4tf/__init__.py
+
 ** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.0.0][v1.0.0]]
 - Release with PBP
 
