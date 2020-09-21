@@ -115,7 +115,7 @@ class PBPLayer(tf.keras.layers.Layer):
 
         Returns
         -------
-        y : tf.Tensor
+        z : tf.Tensor
             Output. [batch, units]
         """
         W, b = self._sample_weights()
