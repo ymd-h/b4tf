@@ -82,6 +82,11 @@ def safe_exp(x: tf.Tensor, BIG: tf.Tensor = tf.constant(20)):
         Input
     BIG : tf.Tensor, optional
         Maximum exponent. The default value is 20 (exp(x) <= 1e+20).
+
+    Returns
+    -------
+    exp(min(x,BIG)) : tf.Tensor
+        Results
     """
     return tf.math.exp(tf.math.minimum(x,tf.cast(BIG,dtype=x.dtype)))
 
