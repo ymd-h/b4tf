@@ -133,7 +133,6 @@ hugo:
   variables:
     <<: *global-variables
     GIT_SUBMODULE_STRATEGY: recursive
-  environment: production
   script:
     - hugo version
     - cd site
@@ -149,7 +148,6 @@ hugo:
 sphinx:
   image: *dev_image
   stage: page_build
-  environment: production
   script:
     - pip install $(echo dist/*.whl)
     - sphinx-build -b html sphinx public/api
@@ -179,7 +177,6 @@ pages:
 pypi:
   image: *dev_image
   stage: upload
-  environment: production
   script:
     - rm -rf dist
     - python3 setup.py clean
