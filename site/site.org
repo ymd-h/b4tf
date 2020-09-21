@@ -1,0 +1,156 @@
+#+OPTIONS: ':nil -:nil ^:{} num:t toc:nil
+#+AUTHOR: Hiroyuki Yamada
+#+CREATOR: Emacs 26.1 (Org mode 9.1.14 + ox-hugo)
+#+HUGO_WITH_LOCALE:
+#+HUGO_FRONT_MATTER_FORMAT: toml
+#+HUGO_LEVEL_OFFSET: 1
+#+HUGO_PRESERVE_FILLING:
+#+HUGO_DELETE_TRAILING_WS:
+#+HUGO_SECTION: .
+#+HUGO_BUNDLE:
+#+HUGO_BASE_DIR: ./
+#+HUGO_CODE_FENCE:
+#+HUGO_USE_CODE_FOR_KBD:
+#+HUGO_PREFER_HYPHEN_IN_TAGS:
+#+HUGO_ALLOW_SPACES_IN_TAGS:
+#+HUGO_AUTO_SET_LASTMOD:
+#+HUGO_CUSTOM_FRONT_MATTER:
+#+HUGO_BLACKFRIDAY:
+#+HUGO_FRONT_MATTER_KEY_REPLACE:
+#+HUGO_DATE_FORMAT: %Y-%m-%dT%T+09:00
+#+HUGO_PAIRED_SHORTCODES:
+#+HUGO_PANDOC_CITATIONS:
+#+BIBLIOGRAPHY:
+#+HUGO_ALIASES:
+#+HUGO_AUDIO:
+#+DATE: <2019-02-10 Sun>
+#+DESCRIPTION:
+#+HUGO_DRAFT:
+#+HUGO_EXPIRYDATE:
+#+HUGO_HEADLESS:
+#+HUGO_IMAGES:
+#+HUGO_ISCJKLANGUAGE:
+#+KEYWORDS:
+#+HUGO_LAYOUT:
+#+HUGO_LASTMOD:
+#+HUGO_LINKTITLE:
+#+HUGO_LOCALE:
+#+HUGO_MARKUP:
+#+HUGO_MENU:
+#+HUGO_MENU_OVERRIDE:
+#+HUGO_OUTPUTS:
+#+HUGO_PUBLISHDATE:
+#+HUGO_SERIES:
+#+HUGO_SLUG:
+#+HUGO_TAGS:
+#+HUGO_CATEGORIES:
+#+HUGO_RESOURCES:
+#+HUGO_TYPE:
+#+HUGO_URL:
+#+HUGO_VIDEOS:
+#+HUGO_WEIGHT: auto
+
+#+STARTUP: showall logdone
+
+* Installation
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: installation
+:END:
+
+
+* Features
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: features
+:END:
+
+
+* Contributing
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: contributing
+:END:
+
+** DONE Step by Step Merge Request
+CLOSED: [2020-01-17 Fri 23:09]
+:PROPERTIES:
+:EXPORT_FILE_NAME: merge_request
+:END:
+
+The first step of coding contribution is to fork b4tf on GitLab.com.
+
+The detail steps for fork is described at [[https://docs.gitlab.com/ee/gitlab-basics/fork-project.html][official document]].
+
+After fork b4tf on the web, you can clone repository to your local
+machine and set original b4tf as "upstream" by
+
+#+begin_src shell
+git clone https://gitlab.com/<Your GitLab Account>/b4tf.git
+cd b4tf
+git remote add upstream https://gitlab.com/ymd_h/b4tf.git
+#+end_src
+
+To make "master" branch clean, you need to create new branch before you edit.
+
+#+begin_src shell
+git checkout -b <New Branch Name> master
+#+end_src
+
+This process is necessay because "master" and other original branches
+might progress during your working.
+
+
+From here, you can edit codes and make commit as usual.
+
+
+After finish your work, you must recheck original b4tf and ensure
+there is no cnflict.
+
+#+begin_src shell
+git pull upstream master
+git checkout <Your Branch Name>
+git merge master # Fix confliction here!
+#+end_src
+
+
+If everything is fine, you push to your b4tf.
+
+#+begin_src shell
+git push origin <Your Branch Name>
+#+end_src
+
+Merge request can be created from the web, the detail is described at
+[[https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html][official document]].
+
+
+There is [[https://stackoverflow.com/a/14681796][a good explanation]] for making good Pull Request (merge
+request equivalent on GitHub.com)
+
+* DONE Examples
+CLOSED: [2020-02-15 Sat 09:23]
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: examples
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_WEIGHT: 800
+:END:
+
+
+* DONE Misc
+CLOSED: [2020-01-17 Fri 22:31]
+:PROPERTIES:
+:EXPORT_HUGO_SECTION*: misc
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_WEIGHT: 999
+:END:
+
+In this section, b4tf related miscellaneous information are described.
+
+- [[https://ymd_h.gitlab.io/b4tf/misc/links/][Links]]
+- [[https://ymd_h.gitlab.io/b4tf/misc/lisence/][License]]
+
+* DONE FAQ
+CLOSED: [2020-06-06 Sat 13:50]
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_SECTION*: faq
+:EXPORT_HUGO_WEIGHT: 900
+:END:
+
