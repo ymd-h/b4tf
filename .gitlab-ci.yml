@@ -73,6 +73,11 @@ wheel_build:
     paths:
       - dist/*.whl
 
+b4tf:
+  <<: *py_setup
+  script:
+    - coverage run -m xmlrunner test/test_b4tf.py
+
 PBP:
   <<: *py_setup
   script:
