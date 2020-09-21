@@ -70,7 +70,7 @@ CLOSED: [2020-09-22 Tue 06:07]
 :END:
 
 *** Overview
-Probabilistic Backpropagation uses a neural net with its weights and
+Probabilistic Backpropagation uses a neural network with its weights and
 biases obeying Gaussian distributions, i.e.
 
 \( f(x; W) \) where \( W_{ij} \sim \mathcal{N}(m_{ij}, v_{ij}) \).
