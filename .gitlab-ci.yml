@@ -9,6 +9,8 @@ stages:
   - build
   - test
   - test_coverage
+  - page_build
+  - page_deploy
   - upload
 
 
@@ -95,6 +97,20 @@ coverage:
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
 
+emacs:
+  image: iquiw/alpine-emacs
+  stage: build
+  script:
+    - emacs --batch README.org -l site/init.el --eval '(org-hugo-export-wim-to-md :all-subtrees nil t)'
+    - emacs --batch CHANGELOG.org -l site/init.el --eval '(org-hugo-export-wim-to-md :all-subtrees nil t)'
+    - cd site
+    - emacs --batch site.org -l init.el --eval '(org-hugo-export-wim-to-md :all-subtrees nil t)'
+  artifacts:
+    paths:
+      - site/content
+  except:
+    - schedules
+
 README_MD:
   image: iquiw/alpine-emacs
   stage: build
@@ -103,6 +119,55 @@ README_MD:
   artifacts:
     paths:
       - README.md
+  except:
+    - schedules
+
+hugo:
+  image: registry.gitlab.com/pages/hugo:latest
+  stage: page_build
+  variables:
+    <<: *global-variables
+    GIT_SUBMODULE_STRATEGY: recursive
+  environment: production
+  script:
+    - hugo version
+    - cd site
+    - hugo -c content -v
+  artifacts:
+    paths:
+      - public
+  needs:
+    - emacs
+  except:
+    - schedules
+
+sphinx:
+  image: *dev_image
+  stage: page_build
+  environment: production
+  script:
+    - pip install $(echo dist/*.whl)
+    - sphinx-build -b html sphinx public/api
+  artifacts:
+    paths:
+      - sphinx/*.rst
+      - public
+  needs:
+    - wheel_build
+  except:
+    - schedules
+
+pages:
+  image: alpine
+  stage: page_deploy
+  environment: production
+  script:
+    - echo ""
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
   except:
     - schedules
 

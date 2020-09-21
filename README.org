@@ -68,12 +68,20 @@
 [[https://ymd_h.gitlab.io/b4tf/coverage/][https://gitlab.com/ymd_h/b4tf/badges/master/coverage.svg]]
 
 
-* Overview
+* DONE Overview
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
 b4tf is a Python module providing a set of bayesian neural network on
 [[https://www.tensorflow.org/][TensorFlow]].
 
 
-* Installation
+* DONE Installation
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: installation
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_WEIGHT: 100
+:END:
 b4tf requires following softwares before installation
 
 - TensorFlow 2.x
@@ -148,8 +156,66 @@ _y = pbp(x)
 m, v = pbp.predict(x)
 #+end_src
 
+* DONE Contributing to b4tf
+CLOSED: [2020-01-17 Fri 23:09]
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: contributing
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_WEIGHT: 300
+:END:
 
-* Lisence
+Any contribution are very welcome!
+
+** Making Community Larger
+Bigger commumity makes development more active and improve b4tf.
+
+- Star this repository (and/or [[https://github.com/ymd-h/b4tf][GitHub Mirror]])
+- Publish your code using b4tf
+- Share this repository to your friend and/or followers.
+
+
+** Report Issue
+When you have any problems or requests, you can check [[https://gitlab.com/ymd_h/b4tf/issues][issues on GitLab.com]].
+If you still cannot find any information, you can open your own issue.
+
+** Merge Request (Pull Request)
+
+b4tf follows local rules:
+- Branch Name
+  - "HotFix_***" for bug fix
+  - "Feature_***" for new feature implementation
+- docstring
+  - Must for external API
+  - [[https://numpydoc.readthedocs.io/en/latest/format.html][Numpy Style]]
+- Unit Test
+  - Put test code under "test/" directory
+  - Can test by =python -m unittest <Your Test Code>= command
+  - Continuous Integration on GitLab CI configured by ~.gitlab-ci.yaml~
+- Open an issue and associate it to Merge Request
+
+Step by step instruction for beginners is described at [[https://ymd_h.gitlab.io/b4tf/contributing/merge_request][here]].
+
+* DONE Links
+CLOSED: [2020-01-17 Fri 23:09]
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: misc
+:EXPORT_FILE_NAME: links
+:END:
+
+** b4tf sites
+- [[https://ymd_h.gitlab.io/b4tf/][Project Site]]
+  - [[https://ymd_h.gitlab.io/b4tf/api/][Class Reference]]
+  - [[https://ymd_h.gitlab.io/b4tf/coverage/][Unit Test Coverage]]
+- [[https://gitlab.com/ymd_h/b4tf][Main Repository]]
+- [[https://github.com/ymd-h/b4tf][GitHub Mirror]]
+- [[https://pypi.org/project/b4tf/][b4tf on PyPI]]
+
+
+* DONE Lisence
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: misc
+:EXPORT_FILE_NAME: lisence
+:END:
 b4tf is available under MIT lisence.
 
 #+INCLUDE: "./LICENSE" src
