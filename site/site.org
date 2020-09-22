@@ -248,13 +248,26 @@ Merge request can be created from the web, the detail is described at
 There is [[https://stackoverflow.com/a/14681796][a good explanation]] for making good Pull Request (merge
 request equivalent on GitHub.com)
 
-* DONE Examples
-CLOSED: [2020-02-15 Sat 09:23]
+* Bayes Neural Network
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: examples
+:EXPORT_HUGO_SECTION*: bnn
 :EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_WEIGHT: 800
 :END:
+
+** DONE Bayes Neural Network
+CLOSED: [2020-09-22 Tue 16:16]
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+
+** DONE Assumed Density Filtering
+CLOSED: [2020-09-22 Tue 16:18]
+:PROPERTIES:
+:EXPORT_FILE_NAME: adf
+:END:
+
+
 
 
 * DONE Misc
