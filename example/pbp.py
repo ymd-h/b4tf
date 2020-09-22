@@ -44,5 +44,5 @@ plt.xlabel("data id")
 plt.ylabel("target")
 plt.legend()
 
-plt.savefig(os.path.join(os.path.dirname(__file__),"results.png"))
+plt.savefig(os.path.join(os.path.dirname(__file__),"pbp_results.png"))
 
