@@ -185,6 +185,8 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][AP
 *** Example
 #+INCLUDE: "../example/pbp.py" src python
 
+[[/b4tf/site/static/images/pbp_results.png]]
+
 *** References
 - Paper :: [[https://arxiv.org/abs/1502.05336][J. M. Hernández-Lobato and R. P. Adams, "Probabilistic Backpropagation for Scalable Learning of Bayesian Neural Networks" (2015) arXiv:1502.05336]]
 - Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
