@@ -103,11 +103,12 @@ where \( Z_1 = \mathcal{Z}(\alpha+1,\beta)\) and
 
 One of the key concepts in PBP is propagation of means \( m^{z_l} \)
 and variances \( v^{z_l} \) at hidden layers from its input layer to
-its output layer in order to calculate the partition function. Each
-unit at hidden layers is assumed to follow Gaussian distribution. We
-also know the means and variances of the network weights and biases,
-so that we can calculate means and variances of hidden layers from
-previous layers.
+its output layer in order to calculate the partition function
+\(\mathcal{Z}(\thinspace \cdot \thinspace , thinspace \cdot \thinspace )\).
+Each unit at hidden layers is assumed to follow Gaussian
+distribution. We also know the means and variances of the network
+weights and biases, so that we can calculate means and variances of
+hidden layers from previous layers.
 
 \begin{align}
 m^{a_l} =& \frac{M_l m^{z_{l-1}}}{\sqrt{V_{l-1}+1}}\\
