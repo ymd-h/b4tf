@@ -179,6 +179,10 @@ _y = pbp(x)
 m, v = pbp.predict(x)
 #+end_src
 
+
+*** Example
+#+INCLUDE: "../example/pbp.py" src
+
 *** References
 - Paper :: [[https://arxiv.org/abs/1502.05336][J. M. Hernández-Lobato and R. P. Adams, "Probabilistic Backpropagation for Scalable Learning of Bayesian Neural Networks" (2015) arXiv:1502.05336]]
 - Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
