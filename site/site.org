@@ -98,11 +98,20 @@ v^{\text{new}} &= v - v^2 \left [ \left ( \frac{\partial \log Z}{\partial m} \ri
 \beta^{\text{new}} &= \left [ \frac{Z_2}{Z_1}\frac{\alpha+1}{\beta}  - \frac{Z_1}{Z}\frac{\alpha}{\beta} \right ] ^{-1}
 \end{align}
 
+where \( Z_1 = \mathcal{Z}(\alpha+1,\beta)\) and
+\( Z_2 = \mathcal{Z}(\alpha+2,\beta) \)
+
 One of the key concepts in PBP is propagation of means and variances
 at hidden layers from its input layer to its output layer in order to
 calculate the partition function. Each unit at hidden layers is
 assumed to follow Gaussian distribution. We also know the means and
-variances of the network weights and biases, so that
+variances of the network weights and biases, so that we can calculate
+means and variances of hidden layers from previous layers.
+
+\begin{align}
+m^{a_l} =& \frac{M_l m^{z_{l-1}}}{\sqrt{V_{l-1}+1}}\\
+v^{a_l} =& \frac{\left [ (M_l \circ M_l) v^{z_{l-1}} + V_l (m^{z_{l-1}} \circ m^{z_{l-1}}) + V_l v^{z_{l-1}} \right ]}{V_{l-1}+1}
+\end{align}
 
 
 *** Usage in b4tf
