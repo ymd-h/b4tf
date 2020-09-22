@@ -88,7 +88,6 @@ trained parameters.
 
 PBP utilizes assumed density filtering (ADF), which does not require
 any expectations but requires partition function for normalization.
-
 ADF updates for Gaussian and Gamma distributions are followings;
 
 \begin{align}
