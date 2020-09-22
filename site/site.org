@@ -99,7 +99,7 @@ v^{\text{new}} &= v - v^2 \left [ \left ( \frac{\partial \log Z}{\partial m} \ri
 \end{align}
 
 where \( Z_1 = \mathcal{Z}(\alpha+1,\beta)\) and
-\( Z_2 = \mathcal{Z}(\alpha+2,\beta) \)
+\( Z_2 = \mathcal{Z}(\alpha+2,\beta) \) when \( Z = \mathcal{Z}(\alpha,\beta)\).
 
 One of the key concepts in PBP is propagation of means and variances
 at hidden layers from its input layer to its output layer in order to
