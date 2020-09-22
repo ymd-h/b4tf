@@ -74,14 +74,14 @@ Probabilistic Backpropagation (PBP) is an algorithm to focus
 scalability. PBP uses a fully connected neural network with its
 weights and biases obeying Gaussian distributions, i.e.
 
-\[ f(\thinspace \cdot \thinspace ; W) \text{where} W_{ij}^{(l)} \sim \mathcal{N}(m_{ij}^{(l)}, v_{ij}^{(l)}) \text{.}\]
+\[ f(\thinspace \cdot \thinspace ; W)\quad \text{where}\quad W_{ij}^{(l)} \sim \mathcal{N}(m_{ij}^{(l)}, v_{ij}^{(l)}) \text{.}\]
 
 The means \( m_{ij}^{(l)} \) and variances \( v_{ij}^{(l)} \) of the
 network are trained parameters. Additionally, observations (\( x \)
 and \( y \)) affected Gaussian noise with its variance obeying
 reciprocal of Gamma distribution, i.e.
 
-\[ y = \mathcal{N}(f(x;W), \gamma^{-1}) \text{where} \gamma \sim \mathrm{Gamma}(\alpha, \beta) \text{.}\]
+\[ y = \mathcal{N}(f(x;W), \gamma^{-1})\quad \text{where}\quad \gamma \sim \mathrm{Gamma}(\alpha, \beta) \text{.}\]
 
 The shape parameter \( \alpha \) and rate parameter \( \beta \) are
 trained parameters.
