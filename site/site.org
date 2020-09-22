@@ -87,8 +87,10 @@ The shape parameter \( \alpha \) and rate parameter \( \beta \) are
 trained parameters.
 
 PBP utilizes assumed density filtering (ADF), which does not require
-any expectations but requires partition function for normalization.
-ADF updates for Gaussian and Gamma distributions are followings;
+any expectations but requires partition function
+\(\mathcal{Z}(\thinspace \cdot \thinspace , \thinspace \cdot \thinspace )\)
+for normalization.  ADF updates for Gaussian and Gamma distributions
+are followings;
 
 \begin{align}
 m^{\text{new}} &= m + v \frac{\partial \log Z}{\partial m} \\
@@ -102,13 +104,11 @@ where \( Z_1 = \mathcal{Z}(\alpha+1,\beta)\) and
 
 One of the key concepts in PBP is propagation of means \( m^{z_l} \)
 and variances \( v^{z_l} \) at hidden layers from its input layer to
-its output layer in order to calculate the partition function
-\(\mathcal{Z}(\thinspace \cdot \thinspace , \thinspace \cdot \thinspace )\).
-Each unit at hidden layers is assumed to follow Gaussian
-distribution. We also know the means \( M_l \) and variances \( V_l \)
-of the network weights and biases, so that we can calculate means
-\( m^{a_l} \) and variances \( v^{a_l} \) of affined calculation from
-previous layers.
+its output layer in order to calculate the partition function.  Each
+unit at hidden layers is assumed to follow Gaussian distribution. We
+also know the means \( M_l \) and variances \( V_l \) of the network
+weights and biases, so that we can calculate means \( m^{a_l} \) and
+variances \( v^{a_l} \) of affined calculation from previous layers.
 
 \begin{align}
 m^{a_l} =& \frac{M_l m^{z_{l-1}}}{\sqrt{N_{l-1}+1}}\\
