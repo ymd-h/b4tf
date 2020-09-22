@@ -124,10 +124,8 @@ follows;
 \begin{align}
 \alpha _i =& \frac{m_i ^{a_l}}{\sqrt{v _i ^{a_l}}} \\
 \gamma _i =&
-\begin{cases}
-\frac{\phi (-\alpha _i)}{\Phi (\alpha )} \\
-- \alpha _i - \alpha _i ^{-1} + 2\alpha ^{-3}\ \text{for}\ \alpha _i < -30
-\end{cases} \\
+\frac{\phi (-\alpha _i)}{\Phi (\alpha )} \ \text{for}\ \alpha \geq -30 \\
+=& - \alpha _i - \alpha _i ^{-1} + 2\alpha ^{-3}\ \text{for}\ \alpha _i < -30 \\
 v _i ^{\prime} =& m_i ^{a_l} + \sqrt{v _i ^{a_l}} \gamma _i \\
 m_i ^{b_l} &= \Phi (\alpha _i)v_i ^{\prime} \\
 v_i ^{b_l} &= m_i^{b_l}v_i^{\prime}\Phi (-\alpha _i) + \Phi (\alpha _i)v_i^{a_l}(1-\gamma _i(\gamma _i + \alpha _i))
