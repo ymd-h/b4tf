@@ -114,6 +114,8 @@ previous layers.
 m^{a_l} =& \frac{M_l m^{z_{l-1}}}{\sqrt{N_{l-1}+1}}\\
 v^{a_l} =& \frac{\left [ (M_l \circ M_l) v^{z_{l-1}} + V_l (m^{z_{l-1}} \circ m^{z_{l-1}}) + V_l v^{z_{l-1}} \right ]}{N_{l-1}+1}
 \end{align}
+\( \circ \) denotes element-wise multiplication.
+
 
 
 *** Usage in b4tf
