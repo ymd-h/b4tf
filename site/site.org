@@ -116,7 +116,29 @@ v^{a_l} =& \frac{\left [ (M_l \circ M_l) v^{z_{l-1}} + V_l (m^{z_{l-1}} \circ m^
 \end{align}
 \( \circ \) denotes element-wise multiplication.
 
+PBP uses ReLU as activation at hidden layers, the means \( m^{b_l} \)
+and variances \( v^{b_l} \) of activated units are caculated as
+follows;
 
+\begin{align}
+\alpha _i =& \frac{m_i ^{a_l}}{\sqrt{v _i ^{a_l}}} \\
+\gamma _i =&
+\begin{cases}
+\frac{\phi (-\alpha _i)}{\Phi (\alpha )} \\
+- \alpha _i - \alpha _i ^{-1} + 2\alpha ^{-3}\ \text{for}\ \alpha _i < -30
+\end{cases} \\
+v _i ^{\prime} =& m_i ^{a_l} + \sqrt{v _i ^{a_l}} \gamma _i \\
+m_i ^{b_l} &= \Phi (\alpha _i)v_i ^{\prime} \\
+v_i ^{b_l} &= m_i^{b_l}v_i^{\prime}\Phi (-\alpha _i) + \Phi (\alpha _i)v_i^{a_l}(1-\gamma _i(\gamma _i + \alpha _i))
+\end{align}
+
+Finally, means and variances of the hidden layers is calculated by
+following concatenation;
+
+\begin{align}
+m ^{z_l} =& [m ^{b_l}; 1]\\
+v ^{z_l} =& [v ^{b_l}; 0]
+\end{align}
 
 *** Usage in b4tf
 #+begin_src python
