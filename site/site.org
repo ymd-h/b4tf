@@ -108,7 +108,7 @@ its output layer in order to calculate the partition function.  Each
 unit at hidden layers is assumed to follow Gaussian distribution. We
 also know the means \( M_l \) and variances \( V_l \) of the network
 weights and biases, so that we can calculate means \( m^{a_l} \) and
-variances \( v^{a_l} \) of affined calculation from previous layers.
+variances \( v^{a_l} \) of affine transformation from previous layers.
 
 \begin{align}
 m^{a_l} =& \frac{M_l m^{z_{l-1}}}{\sqrt{N_{l-1}+1}}\\
