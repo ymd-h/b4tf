@@ -78,8 +78,8 @@ weights and biases obeying Gaussian distributions, i.e.
 
 The means \( m_{ij}^{(l)} \) and variances \( v_{ij}^{(l)} \) of the
 network are trained parameters. Additionally, observations (\( x \)
-and \( y \)) are affected by Gaussian noise whose reciprocal of variance
-obeys Gamma distribution, i.e.
+and \( y \)) are affected by Gaussian noise the reciprocal of whose
+variance obeys Gamma distribution, i.e.
 
 \[ y = \mathcal{N}(f(x;W), \gamma^{-1})\quad \text{where}\quad \gamma \sim \mathrm{Gamma}(\alpha, \beta) \text{.}\]
 
