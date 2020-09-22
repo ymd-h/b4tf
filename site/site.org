@@ -146,9 +146,9 @@ v ^{z_l} =& [v ^{b_l}; 0]
 \end{align}
 
 By approximating Student's t-distribution by Gaussian distribution of
-the same mean and variance, the partition function is
+the same mean and variance, the partition function become
 
-\[ \mathcal{Z} \approx \mathcal{N}(y_n \mid m^{z_L}, \frac{\beta}{\alpha -1} + v^{z_L}) \]
+\[ \mathcal{Z} \approx \mathcal{N}(y_n \mid m^{z_L}, \frac{\beta}{\alpha -1} + v^{z_L}) \text{.}\]
 
 *** Usage in b4tf
 #+begin_src python
