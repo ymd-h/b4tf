@@ -58,10 +58,138 @@
 :END:
 
 
-* Features
+* Implemented Algorithms
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: features
+:EXPORT_HUGO_SECTION*: algorithms
 :END:
+
+** DONE Probabilistic Backpropagation
+CLOSED: [2020-09-22 Tue 06:07]
+:PROPERTIES:
+:EXPORT_FILE_NAME: pbp
+:END:
+
+*** Overview
+Probabilistic Backpropagation (PBP) is an algorithm to focus
+scalability. PBP uses a fully connected neural network with its
+weights and biases obeying Gaussian distributions, i.e.
+
+\[ f(\thinspace \cdot \thinspace ; W)\quad \text{where}\quad W_{ij}^{(l)} \sim \mathcal{N}(m_{ij}^{(l)}, v_{ij}^{(l)}) \text{.}\]
+
+The means \( m_{ij}^{(l)} \) and variances \( v_{ij}^{(l)} \) of the
+network are trained parameters. Additionally, observations (\( x \)
+and \( y \)) are affected by Gaussian noise the reciprocal of whose
+variance obeys Gamma distribution, i.e.
+
+\[ y = \mathcal{N}(f(x;W), \gamma^{-1})\quad \text{where}\quad \gamma \sim \mathrm{Gamma}(\alpha, \beta) \text{.}\]
+
+The shape parameter \( \alpha \) and rate parameter \( \beta \) are
+trained parameters.
+
+PBP utilizes assumed density filtering (ADF), which does not require
+any expectations but requires partition function
+\(\mathcal{Z}(\thinspace \cdot \thinspace , \thinspace \cdot \thinspace )\)
+for normalization.  ADF updates for Gaussian and Gamma distributions
+are followings;
+
+\begin{align}
+m^{\text{new}} &= m + v \frac{\partial \log Z}{\partial m} \\
+v^{\text{new}} &= v - v^2 \left [ \left ( \frac{\partial \log Z}{\partial m} \right )^2 -2 \frac{\partial \log Z}{\partial v}\right ] \\
+\alpha^{\text{new}} &= \left [ \frac{ZZ_2}{Z_1^2}\frac{\alpha +1}{\alpha}  - 1.0 \right ] ^{-1}\\
+\beta^{\text{new}} &= \left [ \frac{Z_2}{Z_1}\frac{\alpha+1}{\beta}  - \frac{Z_1}{Z}\frac{\alpha}{\beta} \right ] ^{-1}
+\end{align}
+
+where \( Z_1 = \mathcal{Z}(\alpha+1,\beta)\) and
+\( Z_2 = \mathcal{Z}(\alpha+2,\beta) \) when \( Z = \mathcal{Z}(\alpha,\beta)\).
+
+One of the key concepts in PBP is propagation of means \( m^{z_l} \)
+and variances \( v^{z_l} \) at hidden layers from its input layer to
+its output layer in order to calculate the partition function.  Each
+unit at hidden layers is assumed to follow Gaussian distribution. We
+also know the means \( M_l \) and variances \( V_l \) of the network
+weights and biases, so that we can calculate means \( m^{a_l} \) and
+variances \( v^{a_l} \) of affine transformation from the previous
+layer.
+
+\begin{align}
+m^{a_l} =& \frac{M_l m^{z_{l-1}}}{\sqrt{N_{l-1}+1}}\\
+v^{a_l} =& \frac{\left [ (M_l \circ M_l) v^{z_{l-1}} + V_l (m^{z_{l-1}} \circ m^{z_{l-1}}) + V_l v^{z_{l-1}} \right ]}{N_{l-1}+1}
+\end{align}
+
+where the operation \( \circ \) denotes element-wise multiplication
+and \( N_l \) is the number of units.
+
+PBP uses ReLU as activation at hidden layers, the means \( m^{b_l} \)
+and variances \( v^{b_l} \) of activated units are caculated as
+follows;
+
+\begin{align}
+\alpha _i =& \frac{m_i ^{a_l}}{\sqrt{v _i ^{a_l}}} & \\
+\gamma _i =&
+\frac{\phi (-\alpha _i)}{\Phi (\alpha _i)} & \text{for}\ \alpha _i \geq -30 \\
+=& - \alpha _i - \alpha _i ^{-1} + 2\alpha _i ^{-3} & \text{for}\ \alpha _i < -30 \\
+v _i ^{\prime} =& m_i ^{a_l} + \sqrt{v _i ^{a_l}} \gamma _i & \\
+m_i ^{b_l} =& \Phi (\alpha _i)v_i ^{\prime} & \\
+v_i ^{b_l} =& m_i^{b_l}v_i^{\prime}\Phi (-\alpha _i) + \Phi (\alpha _i)v_i^{a_l}(1-\gamma _i(\gamma _i + \alpha _i)) &
+\end{align}
+
+where \( \phi (\thinspace \cdot \thinspace ) \) and
+\( \Phi (\thinspace \cdot \thinspace ) \) are probability density function (pdf) and
+cumulative distribution function (cdf) of Gaussian distribution, respectively.
+
+Finally, means and variances of the hidden layers is calculated by
+following concatenation;
+
+\begin{align}
+m ^{z_l} =& [m ^{b_l}; 1]\\
+v ^{z_l} =& [v ^{b_l}; 0]
+\end{align}
+
+By approximating Student's t-distribution by Gaussian distribution of
+the same mean and variance, the partition function become
+
+\[ \mathcal{Z} \approx \mathcal{N}(y_n \mid m^{z_L}, \frac{\beta}{\alpha -1} + v^{z_L}) \text{.}\]
+
+*** Usage in b4tf
+#+begin_src python
+import b4tf
+
+x = # Observed Input
+y = # Observed Output
+
+
+# Create PBP with
+#   Input: (1,)  default
+#   Hidden Layers: 50 and 50
+#   Output: 1
+pbp = b4tf.models.PBP([50,50,1],input_shape=(1,))
+
+# Learn data
+# x, y should be normalized (mean=0,std=1) beforehand.
+pbp.fit(x,y)
+
+
+# Call deterministic
+#    Sample weights and biases from approximated posterior
+_y = pbp(x)
+
+
+# Predict output
+#    Outputs are mean and variance
+m, v = pbp.predict(x)
+#+end_src
+
+See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][API reference]].
+
+
+*** Example
+#+INCLUDE: "../example/pbp.py" src python
+
+[[/b4tf/site/static/images/pbp_results.png]]
+
+*** References
+- Paper :: [[https://arxiv.org/abs/1502.05336][J. M. Hernández-Lobato and R. P. Adams, "Probabilistic Backpropagation for Scalable Learning of Bayesian Neural Networks" (2015) arXiv:1502.05336]]
+- Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
 
 
 * Contributing
@@ -124,13 +252,25 @@ Merge request can be created from the web, the detail is described at
 There is [[https://stackoverflow.com/a/14681796][a good explanation]] for making good Pull Request (merge
 request equivalent on GitHub.com)
 
-* DONE Examples
-CLOSED: [2020-02-15 Sat 09:23]
+* Bayes Neural Network
 :PROPERTIES:
-:EXPORT_HUGO_SECTION*: examples
-:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_SECTION*: bnn
 :EXPORT_HUGO_WEIGHT: 800
 :END:
+
+** DONE Bayes Neural Network
+CLOSED: [2020-09-22 Tue 16:16]
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+
+** DONE Assumed Density Filtering
+CLOSED: [2020-09-22 Tue 16:18]
+:PROPERTIES:
+:EXPORT_FILE_NAME: adf
+:END:
+
+
 
 
 * DONE Misc
@@ -153,4 +293,3 @@ CLOSED: [2020-06-06 Sat 13:50]
 :EXPORT_HUGO_SECTION*: faq
 :EXPORT_HUGO_WEIGHT: 900
 :END:
-

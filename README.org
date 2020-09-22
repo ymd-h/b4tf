@@ -3,7 +3,7 @@
 #+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+OPTIONS: timestamp:t title:t toc:nil todo:nil |:t
-#+title: Bayes Neural Net for TensorFlow (b4tf)
+#+title: Bayes Neural Network for TensorFlow (b4tf)
 #+date: <2020-07-18 Sat>
 #+author: Hiroyuki Yamada
 #+LANGUAGE: en
@@ -117,47 +117,18 @@ cd b4tf
 pip install .
 #+end_src
 
-* Implemented Algorithms
+* DONE Implemented Algorithms
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: algorithms
+:EXPORT_FILE_NAME: _index
+:EXPORT_HUGO_WEIGHT: 200
+:END:
 
-Currently, b4tf implements following algorithms. We will implements
+Currently, b4tf implements following algorithms. We will implement
 more.
 
-** Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]])
-Probabilistic Backpropagation uses a neural net with its weights and
-biases obeying Gaussian distributions. The means and variances of them
-are trained parameters. Additionally, obervations affected Gaussian
-distribution with its variance obeying reciprocal of Gamma
-distribution.
+- Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]], [[https://ymd_h.gitlab.io/b4tf/algorithms/pbp][Doc]], [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][API]])
 
-y = N(f(x;W), sqrt(gamma^(-1)))
-
-#+begin_src python
-import b4tf
-
-x = # Observed Input
-y = # Observed Output
-
-
-# Create PBP with
-#   Input: (1,)  default
-#   Hidden Layers: 50 and 50
-#   Output: 1
-pbp = b4tf.models.PBP([50,50,1],input_shape=(1,))
-
-# Learn data
-# x, y should be normalized (mean=0,std=1) beforehand.
-pbp.fit(x,y)
-
-
-# Call deterministic
-#    Sample weights and biases from approximated posterior
-_y = pbp(x)
-
-
-# Predict output
-#    Outputs are mean and variance
-m, v = pbp.predict(x)
-#+end_src
 
 * DONE Contributing to b4tf
 CLOSED: [2020-01-17 Fri 23:09]
