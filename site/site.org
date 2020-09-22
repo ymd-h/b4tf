@@ -179,6 +179,8 @@ _y = pbp(x)
 m, v = pbp.predict(x)
 #+end_src
 
+See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][API reference]].
+
 
 *** Example
 #+INCLUDE: "../example/pbp.py" src python
