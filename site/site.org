@@ -253,7 +253,6 @@ request equivalent on GitHub.com)
 * Bayes Neural Network
 :PROPERTIES:
 :EXPORT_HUGO_SECTION*: bnn
-:EXPORT_FILE_NAME: _index
 :EXPORT_HUGO_WEIGHT: 800
 :END:
 
