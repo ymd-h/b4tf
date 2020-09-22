@@ -115,7 +115,7 @@ layer.
 m^{a_l} =& \frac{M_l m^{z_{l-1}}}{\sqrt{N_{l-1}+1}}\\
 v^{a_l} =& \frac{\left [ (M_l \circ M_l) v^{z_{l-1}} + V_l (m^{z_{l-1}} \circ m^{z_{l-1}}) + V_l v^{z_{l-1}} \right ]}{N_{l-1}+1}
 \end{align}
-\( \circ \) denotes element-wise multiplication.
+The operation \( \circ \) denotes element-wise multiplication.
 
 PBP uses ReLU as activation at hidden layers, the means \( m^{b_l} \)
 and variances \( v^{b_l} \) of activated units are caculated as
