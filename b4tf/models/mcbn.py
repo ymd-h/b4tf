@@ -2,6 +2,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 
 
+__all__ = ["MCBN", "MCBNLayer"]
 
 class MCBNLayer(tf.keras.layers.BatchNormalization):
     """
