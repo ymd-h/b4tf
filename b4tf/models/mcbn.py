@@ -8,7 +8,7 @@ class MCBNLayer(tf.keras.layers.BatchNormalization):
     """
     Monte Carlo Batch Normalization Layer
     """
-
+    pass
 
 
 class MCBN:
