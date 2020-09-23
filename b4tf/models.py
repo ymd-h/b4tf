@@ -9,6 +9,9 @@ import tensorflow_probability as tfp
 from b4tf.utils import (ReciprocalGammaInitializer,
                         safe_div, safe_exp, non_negative_constraint)
 
+
+__all__ = ["PBP", "PBPLayer", "PBPReLULayer"]
+
 class PBPLayer(tf.keras.layers.Layer):
     """
     Layer for Probabilistic Backpropagation
