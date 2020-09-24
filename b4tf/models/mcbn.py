@@ -54,6 +54,8 @@ class MCBN(ModelBase):
         self.noise_variance = noise_variance * tf.eye(self.network.layers[-1].units)
 
     def fit(self,x,y,*args,**kwargs):
+        x = self._ensure_input(x)
+        y = self._ensure_output(y)
         if self.train_data is None:
             self.train_data = tf.data.Dataset.from_tensor_slices(x)
         else:
@@ -81,7 +83,7 @@ class MCBN(ModelBase):
         cov : tf.Tensor
             Covariance of prediction. [batch size, output units, output units]
         """
-        x = tf.constant(x)
+        x = self._ensure_input(x)
         batch_size = tf.constant(batch_size)
         n_batches = tf.constant(n_batches)
 
