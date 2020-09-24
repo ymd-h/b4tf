@@ -51,7 +51,7 @@ class MCBN:
             raise ValueError(f"`network` must has "
                              "`tf.keras.layers.BatchNormalization`")
 
-        self.noise_variance = noise_variance * tf.eye(self.netork.layers[-1].units)
+        self.noise_variance = noise_variance * tf.eye(self.network.layers[-1].units)
 
     def fit(self,x,y,*args,**kwargs):
         if self.train_data is None:
