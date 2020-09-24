@@ -34,7 +34,6 @@ class MCBN:
             If network has no `tf.keras.layers.BatchNormalization`
         """
         self.network = network
-        self.noise_variance = tf.constant(noise_variance)
         self.train_data = None
 
         has_BN = False
@@ -47,6 +46,7 @@ class MCBN:
             raise ValueError(f"`network` must has "
                              "`tf.keras.layers.BatchNormalization`")
 
+        self.noise_variance = noise_variance * tf.eye(self.netork.layers[-1].units)
 
     def fit(self,x,y,*args,**kwargs):
         if self.train_data is None:
@@ -72,9 +72,9 @@ class MCBN:
         Returns
         -------
         m : tf.Tensor
-            Mean of prediction
+            Mean of prediction. [batch size, output units]
         cov : tf.Tensor
-            Covariance of prediction
+            Covariance of prediction. [batch size, output units, output units]
         """
         x = tf.constant(x)
         batch_size = tf.constant(batch_size)
@@ -85,8 +85,8 @@ class MCBN:
 
     @tf.function
     def _predict(self, x: tf.Tensor, batch_size: tf.Tensor, n_batches: tf.Tensor):
-        sum  = tf.constant(0.0)
-        sum2 = tf.constant(0.0)
+        sum  = 0.0
+        sum2 = 0.0
         for B in self._mini_bathes(batch_size, n_batches):
             for L in self.network.layers:
                 if not isinstance(L, BN_class):
@@ -110,13 +110,13 @@ class MCBN:
                         x += self.beta
                         B += self.beta
 
-            sum  += x
-            sum2 += tf.square(x)
+            sum  = sum  + x
+            sum2 = sum2 + tf.expand_dims(x,1) * tf.expand_dims(x,2)
 
-        m = sum / n_batches
-        v = (sum2 / n_batches) - tf.square(m)
+        m =  sum  / n_batches
+        v = (sum2 / n_batches) - tf.expand_dims(m,1) * tf.expand_dims(x,2)
 
-        return m, v
+        return m, v + tf.expand_dims(self.noise_variance,0)
 
 
     @tf.function
