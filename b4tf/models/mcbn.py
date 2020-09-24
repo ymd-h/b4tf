@@ -34,6 +34,7 @@ class MCBN:
             If network has no `tf.keras.layers.BatchNormalization`
         """
         self.network = network
+        self.dtype = self.network.layers[0].dtype
         self.train_data = None
 
         has_BN = False
