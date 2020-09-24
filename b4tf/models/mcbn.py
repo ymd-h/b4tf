@@ -17,14 +17,16 @@ class MCBN:
     """
     BN_class = tf.keras.layers.BatchNormalization
 
-    def __init__(self,network: tf.keras.Model):
+    def __init__(self,network: tf.keras.Model, noise_variance: float):
         """
         Initialize MCBN
 
         Parameters
         ----------
         network : tf.keras.Model
-           Network using batch normalization
+            Network using batch normalization
+        noise_variance : float
+            Variance of observation noise. (Hyper parameter)
 
         Raises
         ------
@@ -32,6 +34,7 @@ class MCBN:
             If network has no `tf.keras.layers.BatchNormalization`
         """
         self.network = network
+        self.noise_variance = tf.constant(noise_variance)
         self.train_data = None
 
         has_BN = False
