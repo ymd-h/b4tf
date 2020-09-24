@@ -3,11 +3,12 @@ from typing import Iterable
 import tensorflow as tf
 import tensorflow_probability as tfp
 
+from .base import ModelBase
 
 __all__ = ["MCBN"]
 
 
-class MCBN:
+class MCBN(ModelBase):
     """
     Monte Carlo Batch Normalization
 
@@ -36,9 +37,8 @@ class MCBN:
         ValueError
             If network has no `tf.keras.layers.BatchNormalization`
         """
+        super().__init__(self.network.layers[0],dtype,input_shape)
         self.network = network
-        self.dtype = self.network.layers[0].dtype
-        self.input_shape = tf.TensorShape(input_shape)
         self.train_data = None
 
         has_BN = False
