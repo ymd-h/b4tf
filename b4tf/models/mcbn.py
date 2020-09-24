@@ -38,7 +38,7 @@ class MCBN:
 
         has_BN = False
         for l in self.network.layers:
-            if isinstance(l,BN_class):
+            if isinstance(l,self.BN_class):
                 has_BN = True
                 break
 
@@ -89,7 +89,7 @@ class MCBN:
         sum2 = 0.0
         for B in self._mini_bathes(batch_size, n_batches):
             for L in self.network.layers:
-                if not isinstance(L, BN_class):
+                if not isinstance(L, self.BN_class):
                     x = L(x)
                     B = L(B)
                 else:
