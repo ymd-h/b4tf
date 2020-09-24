@@ -3,6 +3,14 @@ import tensorflow as tf
 __all__ = ["ModelBase"]
 
 class ModelBase:
+    def __init__(self,dtype,input_shape):
+        self.dtype = tf.as_dtype(dtype)
+        self.input_shape = tf.TensorShape(input_shape)
+        self.call_rank = tf.rank(tf.constant(0,
+                                             shape=self.input_shape,
+                                             dtype=self.dtype)) + 1
+        self.output_rank = 2
+
     def _ensure_input(self,x):
         """
         Ensure input type and shape

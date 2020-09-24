@@ -242,18 +242,12 @@ class PBP(ModelBase):
         dtype : tf.dtypes.DType or np.dtype or str
             Data type
         """
-        self.dtype = tf.as_dtype(dtype)
+        super().__init__(dtype,input_shape)
         self.alpha = tf.Variable(6.0,trainable=True,dtype=self.dtype)
         self.beta  = tf.Variable(6.0,trainable=True,dtype=self.dtype)
 
         pi = tf.math.atan(tf.constant(1.0,dtype=self.dtype)) * 4
         self.log_inv_sqrt2pi = -0.5*tf.math.log(2.0*pi)
-
-        self.input_shape = tf.TensorShape(input_shape)
-        self.call_rank = tf.rank(tf.constant(0,
-                                             shape=self.input_shape,
-                                             dtype=self.dtype)) + 1
-        self.output_rank = units[-1] + 1
 
         last_shape = self.input_shape
         self.layers = []
