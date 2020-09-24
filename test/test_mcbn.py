@@ -3,6 +3,9 @@ import unittest
 import tensorflow as tf
 import tensorflow_probability as tfp
 
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+
 from b4tf.models import MCBN
 
 
@@ -13,7 +16,7 @@ class TestMCBN(unittest.TestCase):
         """
 
         with self.assertRaises(ValueError):
-            MCBN(tf.keras.Sequential([tf.keras.Dense(5,input_shape=(2,))]), 0.05)
+            MCBN(Sequential([Dense(5,input_shape=(2,))]), 0.05)
 
 
 
