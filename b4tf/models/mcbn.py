@@ -1,3 +1,5 @@
+from typing import Iterable
+
 import tensorflow as tf
 import tensorflow_probability as tfp
 
@@ -17,7 +19,8 @@ class MCBN:
     """
     BN_class = tf.keras.layers.BatchNormalization
 
-    def __init__(self,network: tf.keras.Model, noise_variance: float):
+    def __init__(self,network: tf.keras.Model, noise_variance: float,
+                 input_shape: Iterable[int]=(1,)):
         """
         Initialize MCBN
 
@@ -35,6 +38,7 @@ class MCBN:
         """
         self.network = network
         self.dtype = self.network.layers[0].dtype
+        self.input_shape = tf.TensorShape(input_shape)
         self.train_data = None
 
         has_BN = False
