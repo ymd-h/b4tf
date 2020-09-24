@@ -58,7 +58,7 @@ class MCBN:
 
     def predict(self, x, batch_size: int=32, n_batches: int=100):
         """
-        Predict Mean and Variance
+        Predict Mean and Covariance
 
         Parameters
         ----------
@@ -73,8 +73,8 @@ class MCBN:
         -------
         m : tf.Tensor
             Mean of prediction
-        v : tf.Tensor
-            Variance of prediction
+        cov : tf.Tensor
+            Covariance of prediction
         """
         x = tf.constant(x)
         batch_size = tf.constant(batch_size)
