@@ -93,8 +93,8 @@ class MCBN(ModelBase):
             Covariance of prediction. [batch size, output units, output units]
         """
         x = self._ensure_input(x)
-        batch_size = tf.constant(batch_size)
-        n_batches = tf.constant(n_batches)
+        batch_size = tf.constant(batch_size,dtype=tf.int64)
+        n_batches = tf.constant(n_batches,dtype=tf.int64)
 
         return self._predict(x,batch_size,n_batches)
 
