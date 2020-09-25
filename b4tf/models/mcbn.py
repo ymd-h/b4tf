@@ -36,8 +36,11 @@ class MCBN(ModelBase):
         ------
         ValueError
             If network has no `tf.keras.layers.BatchNormalization`
+        ValueError
+            If `noise_variance` is negative value
         """
-        super().__init__(network.layers[0],dtype,input_shape)
+        super().__init__(network.layers[0].dtype,
+                         input_shape,network.layers[-1].units)
         self.network = network
         self.train_data = None
 

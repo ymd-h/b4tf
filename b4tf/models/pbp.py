@@ -242,7 +242,7 @@ class PBP(ModelBase):
         dtype : tf.dtypes.DType or np.dtype or str
             Data type
         """
-        super().__init__(dtype,input_shape)
+        super().__init__(dtype,input_shape,units[-1])
         self.alpha = tf.Variable(6.0,trainable=True,dtype=self.dtype)
         self.beta  = tf.Variable(6.0,trainable=True,dtype=self.dtype)
 
