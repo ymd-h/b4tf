@@ -103,11 +103,13 @@ class MCBN(ModelBase):
     def _predict(self, x: tf.Tensor, batch_size: tf.Tensor, n_batches: tf.Tensor):
         sum  = 0.0
         sum2 = 0.0
+
         for B in self._mini_bathes(batch_size, n_batches):
+            x_ = tf.identity(x)
             for L in self.network.layers:
                 if not isinstance(L, self.BN_class):
-                    x = L(x)
-                    B = L(B)
+                    x_ = L(x_,training=False)
+                    B  = L(B,training=False)
                 else:
                     mL = tf.reduce_mean(B, axis=0, keepdims=True)
                     vL = (tf.reduce_mean(tf.square(B), axis=0, keepdims=True)
@@ -115,22 +117,23 @@ class MCBN(ModelBase):
 
                     norm = tf.sqrt(1.0/(vL + 1e-12))
 
-                    x = (x - mL) * norm
-                    B = (B - mL) * norm
+                    x_ = (x_ - mL) * norm
+                    B  = (B  - mL) * norm
 
                     if L.scale:
-                        x = self.gamma * x
-                        B = self.gamma * B
+                        x_ = L.gamma * x_
+                        B  = L.gamma * B
 
                     if L.center:
-                        x += self.beta
-                        B += self.beta
+                        x_ += L.beta
+                        B  += L.beta
 
-            sum  = sum  + x
-            sum2 = sum2 + tf.expand_dims(x,1) * tf.expand_dims(x,2)
+            sum  = sum  + x_
+            sum2 = sum2 + tf.expand_dims(x_,1) * tf.expand_dims(x_,2)
 
-        m =  sum  / n_batches
-        v = (sum2 / n_batches) - tf.expand_dims(m,1) * tf.expand_dims(x,2)
+        inv_batch = 1.0 / tf.cast(n_batches,sum.dtype)
+        m = sum  * inv_batch
+        v = sum2 * inv_batch - tf.expand_dims(m,1) * tf.expand_dims(m,2)
 
         return m, v + tf.expand_dims(self.noise_variance,0)
 
