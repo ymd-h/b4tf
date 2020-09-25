@@ -47,5 +47,5 @@ class ModelBase:
         """
         y = tf.constant(y,dtype=self.dtype)
         if tf.rank(y) < self.output_rank:
-            y = tf.reshape(y,[-1,self.layers[-1].units])
+            y = tf.reshape(y,[-1,self.output_dim])
         return y
