@@ -192,6 +192,22 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][AP
 - Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
 
 
+** TODO Monte Carlo Batch Normalization
+:PROPERTIES:
+:EXPORT_FILE_NAME: mcbn
+:END:
+
+*** Overview
+
+*** Usage in b4tf
+
+*** Example
+#+INCLUDE: "../example/mcbn.py" src python
+
+
+*** References
+- Paper :: [[https://arxiv.org/abs/1802.06455][M. Teye et al., "Bayesian Uncertainty Estimation for Batch Normalized Deep Networks" (2018) arXiv:1802.06455]]
+
 * Contributing
 :PROPERTIES:
 :EXPORT_HUGO_SECTION*: contributing
