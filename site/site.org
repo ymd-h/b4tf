@@ -200,6 +200,48 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][AP
 *** Overview
 
 *** Usage in b4tf
+#+begin_src python
+import b4tf
+
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense, BatchNormalization
+
+x = # Observed Input
+y = # Observed Output
+
+
+# Create MCBN with
+#   Input: (1,)  default
+#   Hidden Layers: 50 and 50
+#   Output: 1
+#   Observation Gaussian Noise Variance: 1.5
+#
+#   Warning: Network must have tf.keras.layers.BatchNormalization
+mcbn = b4tf.models.MCBN(Sequential([Dense(50,activation="relu",input_shape=(1,)),
+                                    BatchNormalization(),
+                                    Dense(50,activation="relu"),
+                                    BatchNormalization(),
+                                    Dense(1)]),
+                        noise_variance=1.5,
+                        input_shape=(1,))
+
+# Compile MCBN. Allarguments are passed to tf.keras.Model.compile
+mcbn.compile("adam","mean_squared_error")
+
+
+# Learn data
+# Fitted data "x" is also stored for prediction
+mcbn.fit(x,y)
+
+
+# Predict output
+#    Outputs: Mean and Covariance
+#    Mini Batch Size taken from Training Data: 32
+#    Number of Mini Batches taken from Training Data: 200
+m, cov = mcbn.predict(x,batch_size=32,n_batches=200)
+#+end_src
+
+See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.MCBN][API reference]].
 
 *** Example
 #+INCLUDE: "../example/mcbn.py" src python
