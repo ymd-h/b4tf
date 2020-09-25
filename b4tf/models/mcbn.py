@@ -54,7 +54,13 @@ class MCBN(ModelBase):
             raise ValueError(f"`network` must has "
                              "`tf.keras.layers.BatchNormalization`")
 
+        if noise_variance < 0.0:
+            raise ValueError("`noise_variance` must be positive.")
         self.noise_variance = noise_variance * tf.eye(self.network.layers[-1].units)
+
+
+    def compile(self,*args,**kwargs):
+        return self.network.compile(*args,**kwargs)
 
     def fit(self,x,y,*args,**kwargs):
         x = self._ensure_input(x)
