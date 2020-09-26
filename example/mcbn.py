@@ -5,7 +5,7 @@ import numpy as np
 
 import tensorflow as tf
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense, BatchNormalization
+from tensorflow.keras.layers import Activation, Dense, BatchNormalization
 from tensorflow.keras.callbacks import EarlyStopping
 
 import b4tf
@@ -40,12 +40,15 @@ x_  = normalize(x ,x_mean,x_std)
 y_  = normalize(y ,y_mean,y_std)
 
 
-mcbn = b4tf.models.MCBN(Sequential([Dense(30,activation="relu",input_shape=(1,)),
+mcbn = b4tf.models.MCBN(Sequential([Dense(30,use_bias=False,input_shape=(1,)),
                                     BatchNormalization(),
-                                    Dense(30,activation="relu"),
+                                    Activation("relu"),
+                                    Dense(30,use_bias=False),
                                     BatchNormalization(),
-                                    Dense(30,activation="relu"),
+                                    Activation("relu"),
+                                    Dense(30,use_bias=False),
                                     BatchNormalization(),
+                                    Activation("relu"),
                                     Dense(1)]),
                         eps**2,
                         input_shape=(1,))
