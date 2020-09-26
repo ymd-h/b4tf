@@ -238,7 +238,7 @@ mcbn = b4tf.models.MCBN(Sequential([Dense(50,use_bias=False,input_shape=(1,)),
                         noise_variance=1.5,
                         input_shape=(1,))
 
-# Compile MCBN. Allarguments are passed to tf.keras.Model.compile
+# Compile MCBN. All arguments are passed to tf.keras.Model.compile
 mcbn.compile("adam","mean_squared_error")
 
 
