@@ -192,7 +192,8 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][AP
 - Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
 
 
-** TODO Monte Carlo Batch Normalization
+** DONE Monte Carlo Batch Normalization
+CLOSED: [2020-09-26 Sat 14:00]
 :PROPERTIES:
 :EXPORT_FILE_NAME: mcbn
 :END:
