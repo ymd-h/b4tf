@@ -198,13 +198,23 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][AP
 :END:
 
 *** Overview
+Batch Normalization is a regularization technique which eliminates
+internal covariate shift by normalizing (, rescaling, and shifting)
+the distribution of inputs of non-linear activation function.
+
+\[ \hat{h}^u = \gamma ^u \times \frac{h^u - E[h^u]}{\sqrt{\mathrm{Var}[h^u]}} + \beta ^u \]
+
+In Monte Carlo Batch Normalization (MCBN), these distributions of
+means and variances of mini batches are considered as parameter
+posterior distributions of Bayes inference.
+
 
 *** Usage in b4tf
 #+begin_src python
 import b4tf
 
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense, BatchNormalization
+from tensorflow.keras.layers import Activation, Dense, BatchNormalization
 
 x = # Observed Input
 y = # Observed Output
@@ -217,9 +227,11 @@ y = # Observed Output
 #   Observation Gaussian Noise Variance: 1.5
 #
 #   Warning: Network must have tf.keras.layers.BatchNormalization
-mcbn = b4tf.models.MCBN(Sequential([Dense(50,activation="relu",input_shape=(1,)),
+mcbn = b4tf.models.MCBN(Sequential([Dense(50,use_bias=False,input_shape=(1,)),
                                     BatchNormalization(),
-                                    Dense(50,activation="relu"),
+                                    Activation("relu"),
+                                    Dense(50,use_bias=False),
+                                    Activation("relu"),
                                     BatchNormalization(),
                                     Dense(1)]),
                         noise_variance=1.5,
