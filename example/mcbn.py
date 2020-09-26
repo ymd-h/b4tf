@@ -58,7 +58,7 @@ mcbn.fit(x_,y_,epochs=500,batch_size=64,
          validation_split=0.05,
          callbacks=[EarlyStopping(patience=20,restore_best_weights=True)])
 
-m, cov = mcbn.predict(id_,n_batches=500)
+m, cov = mcbn.predict(id_,batch_size=64,n_batches=500)
 m, cov = tf.squeeze(m), tf.squeeze(cov)
 
 

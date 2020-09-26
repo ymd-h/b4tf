@@ -44,14 +44,6 @@ class TestMCBN(unittest.TestCase):
         self.assertIsInstance(cov,tf.Tensor)
         self.assertEqual(cov.shape,(1,1,1))
 
-
-        m, cov = mcbn.predict(x_,batch_size=16)
-        self.assertIsInstance(m,tf.Tensor)
-        self.assertEqual(m.shape,(1,1))
-        self.assertIsInstance(cov,tf.Tensor)
-        self.assertEqual(cov.shape,(1,1,1))
-
-
         m, cov = mcbn.predict(x_,n_batches=2)
         self.assertIsInstance(m,tf.Tensor)
         self.assertEqual(m.shape,(1,1))
@@ -101,14 +93,6 @@ class TestMCBN(unittest.TestCase):
         self.assertEqual(m.shape,(4,3))
         self.assertIsInstance(cov,tf.Tensor)
         self.assertEqual(cov.shape,(4,3,3))
-
-
-        m, cov = mcbn.predict(x_,batch_size=16)
-        self.assertIsInstance(m,tf.Tensor)
-        self.assertEqual(m.shape,(4,3))
-        self.assertIsInstance(cov,tf.Tensor)
-        self.assertEqual(cov.shape,(4,3,3))
-
 
         m, cov = mcbn.predict(x_,n_batches=10)
         self.assertIsInstance(m,tf.Tensor)

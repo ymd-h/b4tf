@@ -43,6 +43,7 @@ class MCBN(ModelBase):
                          input_shape,network.layers[-1].units)
         self.network = network
         self.train_data = None
+        self.batch_size = None
 
         has_BN = False
         for l in self.network.layers:
@@ -62,7 +63,7 @@ class MCBN(ModelBase):
     def compile(self,*args,**kwargs):
         return self.network.compile(*args,**kwargs)
 
-    def fit(self,x,y,*args,**kwargs):
+    def fit(self,x,y,batch_size=32,*args,**kwargs):
         x = self._ensure_input(x)
         y = self._ensure_output(y)
         if self.train_data is None:
@@ -70,9 +71,14 @@ class MCBN(ModelBase):
         else:
             self.train_data.concatenate(tf.data.Dataset.from_tensor_slices(x))
 
+        if self.batch_size and self.batch_size != batch_size:
+            raise ValueError("Batch Size is inconsistent with the previous training")
+
+        self.batch_size = batch_size
+        kwargs["batch_size"] = batch_size
         return self.network.fit(x,y,*args,**kwargs)
 
-    def predict(self, x, batch_size: int=32, n_batches: int=100):
+    def predict(self, x, n_batches: int=100):
         """
         Predict Mean and Covariance
 
@@ -80,8 +86,6 @@ class MCBN(ModelBase):
         ----------
         x : array-like
             Input Values
-        batch_size : int, optional
-            Mini batch size. The default value is 32
         n_batches : int, optional
             Number of batches to calculate mean and variance. The default is 100
 
@@ -93,7 +97,7 @@ class MCBN(ModelBase):
             Covariance of prediction. [batch size, output units, output units]
         """
         x = self._ensure_input(x)
-        batch_size = tf.constant(batch_size,dtype=tf.int64)
+        batch_size = tf.constant(self.batch_size,dtype=tf.int64)
         n_batches = tf.constant(n_batches,dtype=tf.int64)
 
         return self._predict(x,batch_size,n_batches)
