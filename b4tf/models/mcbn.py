@@ -76,6 +76,11 @@ class MCBN(ModelBase):
 
 
     def compile(self,*args,**kwargs):
+        """
+        Compile network
+
+        Any arguments to be passed to tf.keras.Model.compile
+        """
         return self.network.compile(*args,**kwargs)
 
     def fit(self,x,y,batch_size=32,*args,**kwargs):
