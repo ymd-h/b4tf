@@ -30,7 +30,6 @@ stages:
     - g++ --version
     - python3 --version
     - pip3 install $(echo dist/*.whl)
-    - rm -rf b4tf
   except:
     - schedules
   artifacts:
