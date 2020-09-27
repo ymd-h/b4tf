@@ -1,5 +1,7 @@
 from typing import Iterable, Union
 
+import numpy as np
+
 import tensorflow as tf
 import tensorflow_probability as tfp
 
@@ -23,7 +25,7 @@ class MCBN(ModelBase):
     def __init__(self,units: Iterable[int],
                  noise_variance: float,*,
                  input_shape: Iterable[int]=(1,),
-                 dtypee: Union[tf.dtypes.Dtype,npdtype,str]=tf.float32):
+                 dtypee: Union[tf.dtypes.Dtype,np.dtype,str]=tf.float32):
         """
         Initialize MCBN
 
