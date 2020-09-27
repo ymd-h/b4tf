@@ -25,7 +25,7 @@ class MCBN(ModelBase):
     def __init__(self,units: Iterable[int],
                  noise_variance: float,*,
                  input_shape: Iterable[int]=(1,),
-                 dtypee: Union[tf.dtypes.DType,np.dtype,str]=tf.float32):
+                 dtype: Union[tf.dtypes.DType,np.dtype,str]=tf.float32):
         """
         Initialize MCBN
 
