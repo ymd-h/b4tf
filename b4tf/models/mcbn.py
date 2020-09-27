@@ -83,7 +83,28 @@ class MCBN(ModelBase):
         """
         return self.network.compile(*args,**kwargs)
 
-    def fit(self,x,y,batch_size=32,*args,**kwargs):
+    def fit(self,x,y,batch_size: int=32,*args,**kwargs):
+        """
+        Fit network
+
+        Parameters
+        ----------
+        x : array-like
+            Network input values
+        y : array-like
+            Network output values
+        batch_size : int, optional
+            Mini batch size
+        *args
+            Arguments to be passed to tf.keras.Model.fit
+        **kwargs
+            Keyword arguments to be passed to tf.keras.Model.fit
+
+        Raises
+        ------
+        ValueError
+            If batch_size is different from that of the previous fit.
+        """
         x = self._ensure_input(x)
         y = self._ensure_output(y)
         if self.train_data is None:
