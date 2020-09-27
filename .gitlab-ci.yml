@@ -83,6 +83,11 @@ PBP:
   script:
     - coverage run -m xmlrunner test/test_pbp.py
 
+MCBN:
+  <<: *py_setup
+  script:
+    - coverage run -m xmlrunner test/test_mcbn.py
+
 Issue:
   <<: *py_setup
   script:
