@@ -57,7 +57,7 @@ class MCBN(ModelBase):
 
         # Hidden Layers
         for u in units[1:-1]:
-            layers.extend([D(units[i], dtype=self.dtype,
+            layers.extend([D(u, dtype=self.dtype,
                              kernel_regularizer='l2', use_bias=False),
                            B(),
                            A("relu")])
