@@ -94,7 +94,7 @@ class MCBN(ModelBase):
         y : array-like
             Network output values
         batch_size : int, optional
-            Mini batch size
+            Mini batch size. The default size is 32.
         *args
             Arguments to be passed to tf.keras.Model.fit
         **kwargs
