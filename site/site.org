@@ -226,17 +226,7 @@ y = # Observed Output
 #   Hidden Layers: 50 and 50
 #   Output: 1
 #   Observation Gaussian Noise Variance: 1.5
-#
-#   Warning: Network must have tf.keras.layers.BatchNormalization
-mcbn = b4tf.models.MCBN(Sequential([Dense(50,use_bias=False,input_shape=(1,)),
-                                    BatchNormalization(),
-                                    Activation("relu"),
-                                    Dense(50,use_bias=False),
-                                    Activation("relu"),
-                                    BatchNormalization(),
-                                    Dense(1)]),
-                        noise_variance=1.5,
-                        input_shape=(1,))
+mcbn = b4tf.models.MCBN([50,50,1], noise_variance=1.5, input_shape=(1,))
 
 # Compile MCBN. All arguments are passed to tf.keras.Model.compile
 mcbn.compile("adam","mean_squared_error")
