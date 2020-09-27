@@ -40,23 +40,10 @@ x_  = normalize(x ,x_mean,x_std)
 y_  = normalize(y ,y_mean,y_std)
 
 
-mcbn = b4tf.models.MCBN(Sequential([Dense(30,use_bias=False,input_shape=(1,)),
-                                    BatchNormalization(),
-                                    Activation("relu"),
-                                    Dense(30,use_bias=False),
-                                    BatchNormalization(),
-                                    Activation("relu"),
-                                    Dense(30,use_bias=False),
-                                    BatchNormalization(),
-                                    Activation("relu"),
-                                    Dense(1)]),
-                        eps**2,
-                        input_shape=(1,))
+mcbn = b4tf.models.MCBN([30,30,30,1], eps**2, input_shape=(1,))
 mcbn.compile("adam","mean_squared_error")
 
-mcbn.fit(x_,y_,epochs=500,batch_size=64,
-         validation_split=0.05,
-         callbacks=[EarlyStopping(patience=20,restore_best_weights=True)])
+mcbn.fit(x_,y_, epochs=500, batch_size=64, validation_split=0.05)
 
 m, cov = mcbn.predict(id_,n_batches=500)
 m, cov = tf.squeeze(m), tf.squeeze(cov)
