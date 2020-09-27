@@ -18,7 +18,7 @@ class MCBN(ModelBase):
     ----------
     M. Teye et al.,
     "Bayesian Uncertainty Estimation for Batch Normalized Deep Networks",
-    aeXiv 1802.06455, 2018
+    arXiv 1802.06455, 2018
     """
     BN_class = tf.keras.layers.BatchNormalization
 
