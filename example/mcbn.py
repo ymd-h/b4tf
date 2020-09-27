@@ -4,9 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import tensorflow as tf
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Activation, Dense, BatchNormalization
-from tensorflow.keras.callbacks import EarlyStopping
+
 
 import b4tf
 

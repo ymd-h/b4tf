@@ -214,9 +214,6 @@ posterior distributions of Bayes inference.
 #+begin_src python
 import b4tf
 
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Activation, Dense, BatchNormalization
-
 x = # Observed Input
 y = # Observed Output
 

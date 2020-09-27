@@ -3,9 +3,6 @@ import unittest
 import tensorflow as tf
 import tensorflow_probability as tfp
 
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense, BatchNormalization
-
 from b4tf.models import MCBN
 
 
