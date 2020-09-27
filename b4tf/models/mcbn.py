@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 
 import tensorflow as tf
 import tensorflow_probability as tfp
