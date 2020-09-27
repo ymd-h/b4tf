@@ -20,40 +20,53 @@ class MCBN(ModelBase):
     """
     BN_class = tf.keras.layers.BatchNormalization
 
-    def __init__(self,network: tf.keras.Model, noise_variance: float,
-                 input_shape: Iterable[int]=(1,)):
+    def __init__(self,units: Iterable[int],
+                 noise_variance: float,*,
+                 input_shape: Iterable[int]=(1,),
+                 dtypee: Union[tf.dtypes.Dtype,npdtype,str]=tf.float32):
         """
         Initialize MCBN
 
         Parameters
         ----------
-        network : tf.keras.Model
-            Network using batch normalization
+        units : Iterable[int]
+            Number of units at hidden layers and output layer.
         noise_variance : float
             Variance of observation noise. (Hyper parameter)
 
         Raises
         ------
         ValueError
-            If network has no `tf.keras.layers.BatchNormalization`
-        ValueError
             If `noise_variance` is negative value
         """
-        super().__init__(network.layers[0].dtype,
-                         input_shape,network.layers[-1].units)
-        self.network = network
+        super().__init__(dtype, input_shape,units[-1])
+
+        S = tf.keras.Sequential
+        D = tf.keras.layers.Dense
+        B = tf.keras.layers.BatchNormalization
+        A = tf.keras.layers.Activation
+
+        # Input Layer
+        layers = [D(units[0], dtype=self.dtype,
+                    kernel_regularizer='l2', use_bias=False,
+                    input_shape = self.input_shape),
+                  B(),
+                  A("relu")]
+
+        # Hidden Layers
+        for u in units[1:-1]:
+            layers.extend([D(units[i], dtype=self.dtype,
+                             kernel_regularizer='l2', use_bias=False),
+                           B(),
+                           A("relu")])
+
+        # Output Layer
+        layers.append(D(units[-1], dtype=self.dtype))
+
+        self.network = S(layers)
+
         self.train_data = None
         self.batch_size = None
-
-        has_BN = False
-        for l in self.network.layers:
-            if isinstance(l,self.BN_class):
-                has_BN = True
-                break
-
-        if not has_BN:
-            raise ValueError(f"`network` must has "
-                             "`tf.keras.layers.BatchNormalization`")
 
         if noise_variance < 0.0:
             raise ValueError("`noise_variance` must be positive.")
