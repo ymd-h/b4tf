@@ -12,24 +12,14 @@ from b4tf.models import MCBN
 class TestMCBN(unittest.TestCase):
     def test_raise_init(self):
         """
-        Raise ValueError without having tf.keras.layers.BatchNormalization
+        Raise ValueError with negative noise
         """
-
         with self.assertRaises(ValueError):
-            MCBN(Sequential([Dense(5,input_shape=(2,))]), 0.05)
-
-        with self.assertRaises(ValueError):
-            MCBN(Sequential([Dense(5,input_shape=(2,)),
-                             BatchNormalization(),
-                             Dense(2)]),
-                 -0.05)
+            MCBN([5,1], -0.05)
 
 
     def test_fit_predict(self):
-        mcbn = MCBN(Sequential([Dense(5,input_shape=(2,),activation="relu"),
-                                BatchNormalization(),
-                                Dense(1)],),
-                    0.5,input_shape=(2,))
+        mcbn = MCBN([5,1], 0.5,input_shape=(2,))
         mcbn.compile("adam","mean_squared_error")
 
         x = tf.constant([2.0,1.0])
@@ -52,10 +42,7 @@ class TestMCBN(unittest.TestCase):
 
 
     def test_fit_batch(self):
-        mcbn = MCBN(Sequential([Dense(5,input_shape=(2,),activation="relu"),
-                                BatchNormalization(),
-                                Dense(3)],),
-                    0.5,input_shape=(2,))
+        mcbn = MCBN([5,3], 0.5,input_shape=(2,))
         mcbn.compile("adam","mean_squared_error")
 
         x = tf.constant([[2.0,1.0],
@@ -69,10 +56,7 @@ class TestMCBN(unittest.TestCase):
 
 
     def test_predict_batch(self):
-        mcbn = MCBN(Sequential([Dense(5,input_shape=(2,),activation="relu"),
-                                BatchNormalization(),
-                                Dense(3)],),
-                    0.5,input_shape=(2,))
+        mcbn = MCBN([5,3], 0.5,input_shape=(2,))
         mcbn.compile("adam","mean_squared_error")
 
         x = tf.constant([[2.0,1.0],
