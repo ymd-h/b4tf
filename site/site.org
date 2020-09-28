@@ -234,7 +234,7 @@ E _{p^{\ast}} [y] & \approx \frac{1}{T}\sum _{i=1}^{T}f_{\hat{\omega}_i}(x) \\
 
 where \( \frac{1}{\tau} \) is a observation noise variance for
 regression, \( \hat{\omega}_i \) is a set of parameters calculated
-with i-th mini batch, and \( T \) is the number of mini batches to use
+with \( i\text{-th} \) mini batch, and \( T \) is the number of mini batches to use
 inference.
 
 
