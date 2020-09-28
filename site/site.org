@@ -258,13 +258,14 @@ mcbn.compile("adam","mean_squared_error")
 
 
 # Learn data
+#    Mini Batch Size taken from Training Data: 32
+#
 # Fitted data "x" is also stored for prediction
 mcbn.fit(x,y,batch_size=32)
 
 
 # Predict output
 #    Outputs: Mean and Covariance
-#    Mini Batch Size taken from Training Data: 32
 #    Number of Mini Batches taken from Training Data: 200
 m, cov = mcbn.predict(x,n_batches=200)
 #+end_src
