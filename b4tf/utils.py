@@ -133,7 +133,7 @@ def multivariate_normal_fn(loc,relative=0.01):
     loc : array-like
         Mean for normal function
     relative : float
-        Standard deviation = |loc * relative|
+        Standard deviation = abs(loc * relative)
 
     Returns
     -------
