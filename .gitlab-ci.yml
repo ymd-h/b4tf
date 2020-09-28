@@ -156,7 +156,7 @@ sphinx:
   script:
     - pip install $(echo dist/*.whl)
     - sphinx-apidoc -F -e -o sphinx b4tf
-    - sphinx-build -b html sphinx public/api
+    - sphinx-build -b html -W --keep-going sphinx public/api
   artifacts:
     paths:
       - sphinx/*.rst
