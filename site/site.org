@@ -232,7 +232,7 @@ E _{p^{\ast}} [y] & \approx \frac{1}{T}\sum _{i=1}^{T}f_{\hat{\omega}_i}(x) \\
 \mathrm{Cov} _{p^{\ast}} [y] & \approx \frac{1}{\tau}I + \frac{1}{T} \sum _{i=1}^{T}f_{\hat{\omega}_i}(x)^{T}f_{\hat{\omega}_i}(x) - E _{p^{\ast}} [y]^{T}E _{p^{\ast}} [y]
 \end{align}
 
-where \( \frac{1}{\tau} \) is a observation noise variance for
+where \( \frac{1}{\tau} \) is observation noise variance for
 regression, \( \hat{\omega}_i \) is a set of parameters calculated
 with \( i\text{-th} \) mini batch, and \( T \) is the number of mini batches to use
 inference.
