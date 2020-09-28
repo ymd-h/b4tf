@@ -211,11 +211,11 @@ size) sample means and variances instead of the population means and
 variances, the means and variances are distributed around the "true"
 values.
 
-In Monte Carlo Batch Normalization (MCBN), these distributions of
-means and variances of mini batches are considered as parameter
-posterior distributions of Bayes inference. By considering central
-limit theorem (CLT), the distributions approximately follow Gaussian
-distributions at sufficient large number.
+In Monte Carlo Batch Normalization (MCBN), these distributions are
+considered as parameter posterior distributions for Bayes
+inference. By considering central limit theorem (CLT), the
+distributions approximately follow Gaussian distributions at
+sufficient large number.
 
 This MCBN method can be applied to any neural network using Batch
 Normalization. The network can be trained as usual Batch Normalization
