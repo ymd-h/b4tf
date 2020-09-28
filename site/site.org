@@ -206,7 +206,10 @@ the distribution of inputs of non-linear activation function.
 \[ \hat{h}^u = \gamma ^u \times \frac{h^u - E[h^u]}{\sqrt{\mathrm{Var}[h^u]}} + \beta ^u \]
 
 where \( E[h^u] \) and \( \mathrm{Var}[h^u] \) are mean and variance
-over a mini batch at certain unit, respectively.
+over a mini batch at certain unit, respectively. Since we use (small
+size) sample means and variances instead of the population means and
+variances, the means and variances are distributed around the "true"
+values.
 
 In Monte Carlo Batch Normalization (MCBN), these distributions of
 means and variances of mini batches are considered as parameter
