@@ -276,7 +276,7 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.MCBN][A
 #+INCLUDE: "../example/mcbn.py" src python
 
 
-[[/b4tf/images/mcbn_results.png]]
+[[/b4tf/images/mcbn_result.png]]
 
 *** References
 - Paper :: [[https://arxiv.org/abs/1802.06455][M. Teye et al., "Bayesian Uncertainty Estimation for Batch Normalized Deep Networks" (2018) arXiv:1802.06455]]
