@@ -83,6 +83,11 @@ PBP:
   script:
     - coverage run -m xmlrunner test/test_pbp.py
 
+MCBN:
+  <<: *py_setup
+  script:
+    - coverage run -m xmlrunner test/test_mcbn.py
+
 Issue:
   <<: *py_setup
   script:
@@ -151,7 +156,7 @@ sphinx:
   script:
     - pip install $(echo dist/*.whl)
     - sphinx-apidoc -F -e -o sphinx b4tf
-    - sphinx-build -b html sphinx public/api
+    - sphinx-build -b html -W --keep-going sphinx public/api
   artifacts:
     paths:
       - sphinx/*.rst

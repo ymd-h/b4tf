@@ -192,6 +192,95 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][AP
 - Code :: [[https://github.com/HIPS/Probabilistic-Backpropagation][HIPS/Probabilistic-Backpropagation]]
 
 
+** DONE Monte Carlo Batch Normalization
+CLOSED: [2020-09-26 Sat 14:00]
+:PROPERTIES:
+:EXPORT_FILE_NAME: mcbn
+:END:
+
+*** Overview
+Batch Normalization is a regularization technique which eliminates
+internal covariate shift by normalizing (, rescaling, and shifting)
+the distribution of inputs of non-linear activation function.
+
+\[ \hat{h}^u = \gamma ^u \times \frac{h^u - E[h^u]}{\sqrt{\mathrm{Var}[h^u]}} + \beta ^u \]
+
+where \( E[h^u] \) and \( \mathrm{Var}[h^u] \) are mean and variance
+over a mini batch at certain unit, respectively. Since we use (small
+size) sample means and variances instead of the population means and
+variances, the means and variances are distributed around the "true"
+values.
+
+In Monte Carlo Batch Normalization (MCBN), these distributions are
+considered as parameter posterior distributions for Bayes
+inference. By considering central limit theorem (CLT), the
+distributions approximately follow Gaussian distributions at
+sufficient large number.
+
+This MCBN method can be applied to any neural network using Batch
+Normalization. The network can be trained as usual Batch Normalization
+network. For inference (prediction), we stochastically sample mini
+batches with the same batch size from *the training data* and
+calculate means and variances at the Batch Normalization units.
+
+Means \( E _{p^{\ast}} [y] \) and covariances
+\(\mathrm{Cov}_{p^{\ast}}[y]\) of the total netowork prediction are
+following;
+
+\begin{align}
+E _{p^{\ast}} [y] & \approx \frac{1}{T}\sum _{i=1}^{T}f_{\hat{\omega}_i}(x) \\
+\mathrm{Cov} _{p^{\ast}} [y] & \approx \frac{1}{\tau}I + \frac{1}{T} \sum _{i=1}^{T}f_{\hat{\omega}_i}(x)^{T}f_{\hat{\omega}_i}(x) - E _{p^{\ast}} [y]^{T}E _{p^{\ast}} [y]
+\end{align}
+
+where \( \frac{1}{\tau} \) is observation noise variance for
+regression, \( \hat{\omega}_i \) is a set of parameters calculated
+with \( i\text{-th} \) mini batch, and \( T \) is the number of mini batches to use
+inference.
+
+
+*** Usage in b4tf
+#+begin_src python
+import b4tf
+
+x = # Observed Input
+y = # Observed Output
+
+
+# Create MCBN with
+#   Input: (1,)  default
+#   Hidden Layers: 50 and 50
+#   Output: 1
+#   Observation Gaussian Noise Variance: 1.5
+mcbn = b4tf.models.MCBN([50,50,1], noise_variance=1.5, input_shape=(1,))
+
+# Compile MCBN. All arguments are passed to tf.keras.Model.compile
+mcbn.compile("adam","mean_squared_error")
+
+
+# Learn data
+#    Mini Batch Size taken from Training Data: 32
+#
+# Fitted data "x" is also stored for prediction
+mcbn.fit(x,y,batch_size=32)
+
+
+# Predict output
+#    Outputs: Mean and Covariance
+#    Number of Mini Batches taken from Training Data: 200
+m, cov = mcbn.predict(x,n_batches=200)
+#+end_src
+
+See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.MCBN][API reference]].
+
+*** Example
+#+INCLUDE: "../example/mcbn.py" src python
+
+
+[[/b4tf/images/mcbn_results.png]]
+
+*** References
+- Paper :: [[https://arxiv.org/abs/1802.06455][M. Teye et al., "Bayesian Uncertainty Estimation for Batch Normalized Deep Networks" (2018) arXiv:1802.06455]]
+
 * Contributing
 :PROPERTIES:
 :EXPORT_HUGO_SECTION*: contributing

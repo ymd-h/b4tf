@@ -123,7 +123,7 @@ def create_model(units,cls=tfp.layers.DenseReparameterization,
 
 
 def multivariate_normal_fn(loc,relative=0.01):
-    """
+    r"""
     Create a function for multivariate normal N(loc, abs(loc)*relative)
 
     This function can be used like `tfp.layers.util.default_multivariate_normal_fn`
@@ -133,7 +133,7 @@ def multivariate_normal_fn(loc,relative=0.01):
     loc : array-like
         Mean for normal function
     relative : float
-        Standard deviation = |loc * relative|
+        Standard deviation = abs(loc * relative)
 
     Returns
     -------
