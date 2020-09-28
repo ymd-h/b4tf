@@ -205,9 +205,28 @@ the distribution of inputs of non-linear activation function.
 
 \[ \hat{h}^u = \gamma ^u \times \frac{h^u - E[h^u]}{\sqrt{\mathrm{Var}[h^u]}} + \beta ^u \]
 
+where \( E[h^u] \) and \( \mathrm{Var}[h^u] \) are mean and variance
+over a mini batch at certain unit, respectively.
+
 In Monte Carlo Batch Normalization (MCBN), these distributions of
 means and variances of mini batches are considered as parameter
-posterior distributions of Bayes inference.
+posterior distributions of Bayes inference. By considering central
+limit theorem (CLT), the distributions approximately follow Gaussian
+distributions at sufficient large number.
+
+This MCBN can be applied to any neural network using Batch
+Normalization. The network can be trained as usual Batch Normalization
+network. For inference (prediction), we stochastically sample mini
+batches with the same batch size from *the training data* and
+calculate means and variances at the Batch Normalization units.
+
+Means and covariances of the total netowork prediction are following;
+
+\begin{align}
+E _{p} [y] & \approx \frac{1}{T}\sum _{i=1}^{T}f_{\hat{\omega}_i}(x) \\
+\mathrm{Cov} _{p} [y] & \approx \frac{1}{\tau}I + \frac{1}{T} \sum _{i=1}^{T}f_{\hat{\omega}_i}(x)^{T}f_{\hat{\omega}_i}(x) - E _{p} [y]^{T}E _{p} [y]
+\end{align}
+
 
 
 *** Usage in b4tf
