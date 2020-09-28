@@ -217,7 +217,7 @@ posterior distributions of Bayes inference. By considering central
 limit theorem (CLT), the distributions approximately follow Gaussian
 distributions at sufficient large number.
 
-This MCBN can be applied to any neural network using Batch
+This MCBN method can be applied to any neural network using Batch
 Normalization. The network can be trained as usual Batch Normalization
 network. For inference (prediction), we stochastically sample mini
 batches with the same batch size from *the training data* and
