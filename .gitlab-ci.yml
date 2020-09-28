@@ -196,3 +196,4 @@ pypi:
   needs:
     - README_MD
     - coverage
+  environment: pypi
