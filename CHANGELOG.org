@@ -66,6 +66,8 @@
 :EXPORT_HUGO_SECTION: changelog
 :END:
 ** Unreleased
+** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.0][v1.1.0]]
+- Add: [[https://ymd_h.gitlab.io/b4tf/algorithms/mcbn/][Monte Carlo BAtch Normalization (MCBN)]]
 ** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.0.1][v1.0.1]]
 - Fix: b4tf/__init__.py
 
