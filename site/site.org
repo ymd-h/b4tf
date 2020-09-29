@@ -59,7 +59,7 @@ CLOSED: [2020-09-29 Tue 07:21]
 :END:
 
 
-[[/ymd_h/b4tf/site/static/images/logo.png]]
+[[/b4tf/images/logo.png]]
 
 
 b4tf is a Python library providing a set of bayesian neural network
