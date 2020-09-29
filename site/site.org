@@ -376,6 +376,19 @@ CLOSED: [2020-09-22 Tue 16:16]
 :EXPORT_FILE_NAME: _index
 :END:
 
+Here, we try to describe more general documentation for Bayes Neural
+Network, some of which might not be covered by b4tf.
+
+
+*** From the Perspective of Bayes
+- Constant Learning Rate SGD as Bayes
+- [[https://ymd_h.gitlab.io/b4tf/bnn/mcdo/][Dropout as Bayes]]
+- [[https://ymd_h.gitlab.io/b4tf/algorithms/mcbn/][Batch Normalization for Bayes]] (Part of User Guide)
+
+*** Bayes Techniques
+- Assumed Density Filtering
+
+
 ** DONE Assumed Density Filtering
 CLOSED: [2020-09-22 Tue 16:18]
 :PROPERTIES:
