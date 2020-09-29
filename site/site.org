@@ -382,6 +382,27 @@ CLOSED: [2020-09-22 Tue 16:18]
 :EXPORT_FILE_NAME: adf
 :END:
 
+** DONE Dropout as Bayes
+CLOSED: [2020-09-29 Tue 12:01]
+:PROPERTIES:
+:EXPORT_FILE_NAME: mcdo
+:END:
+
+Dropout is a well known regularization technique to stabilize training
+of deep neural network by stochastically masking units.
+
+From the view point of Bayesian, such stochastic masking is a Bernoulli
+distribution as a part of posterior distribution.
+
+Not only masking at training phase but also at inference phase, we can
+estimate the uncertainty of the prediction.
+
+Gal [1] described the equivalence of dropout training and ELBO
+maximization as approximate Bayes.
+
+
+*** References
+1. [[http://mlg.eng.cam.ac.uk/yarin/blog_2248.html][Y. Gal, "Uncertainty in Deep Learning", Ph.D thesis, University of Cambridge, 2016]]
 
 
 
