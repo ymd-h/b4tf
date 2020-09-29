@@ -71,7 +71,7 @@
 [[./site/static/images/logo.png]]
 
 
-* DONE Overview
+* Overview
 :PROPERTIES:
 :EXPORT_FILE_NAME: _index
 :END:

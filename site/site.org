@@ -52,6 +52,29 @@
 
 #+STARTUP: showall logdone
 
+* DONE b4tf
+CLOSED: [2020-09-29 Tue 07:21]
+:PROPERTIES:
+:EXPORT_FILE_NAME: _index
+:END:
+
+
+[[/ymd_h/b4tf/site/static/images/logo.png]]
+
+
+b4tf is a Python library providing a set of bayesian neural network
+based on [[https://www.tensorflow.org/][TensorFlow]].
+
+** b4tf User Guide
+1. [[https://ymd_h.gitlab.io/b4tf/installation/][Installation]]
+2. [[https://ymd_h.gitlab.io/b4tf/algorithms/][Implemented Algorithms]]
+3. [[https://ymd_h.gitlab.io/b4tf/api/][API Class References]]
+4. [[https://ymd_h.gitlab.io/b4tf/faq/][FAQ]]
+5. [[https://ymd_h.gitlab.io/b4tf/misc/][Misc]]
+
+
+
+
 * Installation
 :PROPERTIES:
 :EXPORT_HUGO_SECTION*: installation
