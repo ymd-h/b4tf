@@ -63,7 +63,16 @@ CLOSED: [2020-09-29 Tue 07:21]
 
 
 b4tf is a Python library providing a set of bayesian neural network
-based on [[https://www.tensorflow.org/][TensorFlow]].
+algorithms based on [[https://www.tensorflow.org/][TensorFlow]]. Bayesian neural network can estimate
+the uncertainty of its prediction, which allows human to judge how
+trustful the prediction is. Also some machine learning techniques can
+be interpreted in the framework of bayesian.
+
+b4tf is still under development and we'd welcome your feedback. Please
+look at [[https://ymd_h.gitlab.io/b4tf/contributing/][contribution guide]].
+
+Here, we provide user guide and more general documentation for
+bayesian neural network.
 
 ** b4tf User Guide
 1. [[https://ymd_h.gitlab.io/b4tf/installation/][Installation]]
@@ -73,6 +82,9 @@ based on [[https://www.tensorflow.org/][TensorFlow]].
 5. [[https://ymd_h.gitlab.io/b4tf/misc/][Misc]]
 
 
+** [[https://ymd_h.gitlab.io/b4tf/bnn/][Baysian Neural Network]]
+1. [[https://ymd_h.gitlab.io/b4tf/bnn/#from-the-perspective-of-bayes][From the Perspective of Bayes]]
+2. [[https://ymd_h.gitlab.io/b4tf/bnn/#bayes-techniques][Bayes Techniques]]
 
 
 * Installation
