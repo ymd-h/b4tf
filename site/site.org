@@ -393,7 +393,7 @@ Network, some of which might not be covered by b4tf.
 
 
 *** From the Perspective of Bayes
-- Constant Learning Rate SGD as Bayes
+- [[https://ymd_h.gitlab.io/b4tf/bnn/sgd/][Constant Learning Rate SGD as Bayes]]
 - [[https://ymd_h.gitlab.io/b4tf/bnn/mcdo/][Dropout as Bayes]]
 - [[https://ymd_h.gitlab.io/b4tf/algorithms/mcbn/][Batch Normalization for Bayes]] (Part of User Guide)
 
@@ -401,11 +401,32 @@ Network, some of which might not be covered by b4tf.
 - Assumed Density Filtering
 
 
-** DONE Assumed Density Filtering
-CLOSED: [2020-09-22 Tue 16:18]
+** DONE Constant Learning Rate SGD as Bayes
+CLOSED: [2020-09-30 Wed 07:04]
 :PROPERTIES:
-:EXPORT_FILE_NAME: adf
+:EXPORT_FILE_NAME: sgd
 :END:
+
+Since machine learning uses large size of training data set,
+Stochastic Gradient Decent (SGD) is widely used in order to speed up
+training and to reduce required memory size. Unlike Gradient Decent
+for full dataset, gradients based on mini batches are fluctuated
+around the "true" gradient. Usually we adjust learning rate
+dynamically and try to stop the parameter update around the optimal
+point.
+
+On the other hand, SGD with constant learning rate doesn't stop at the
+optimal point but goes back and forth around there. S. Mandt et al [1]
+interpreted this distribution as Markov chain with a stationary
+distribution in the framework of approximate Bayes. The authors also
+derived the best learning rate which minimized KL divergence between
+the stationary distribution and the posterior distribution.
+
+
+*** References
+1. [[https://arxiv.org/abs/1704.04289][S. Mandt et al., "Stochastic Gradient Descent as Approximate Bayesian Inference" (2017) arXiv:1704.04289]]
+2. [[https://arxiv.org/abs/1710.06451][S. L. Smith and Q. L. Le, "A Bayesian Perspective on Generalization and Stochastic Gradient Descent" (2017) arXiv:1710.06451]]
+
 
 ** DONE Dropout as Bayes
 CLOSED: [2020-09-29 Tue 12:01]
