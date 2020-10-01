@@ -419,8 +419,23 @@ On the other hand, SGD with constant learning rate doesn't stop at the
 optimal point but goes back and forth around there. S. Mandt et al [1]
 interpreted this distribution as Markov chain with a stationary
 distribution in the framework of approximate Bayes. The authors also
-derived the best learning rate which minimized KL divergence between
-the stationary distribution and the posterior distribution.
+derived the best learning rate \( \epsilon ^{\ast} \), diagonal
+preconditioning matrix \( H ^{\ast} _{\text{diag}} \), and full
+preconditioning matrix \( H ^{\ast} \) which minimized KL divergence
+between the stationary distribution and the posterior distribution.
+
+\begin{align}
+\epsilon ^{\ast} &= 2\frac{M}{N}\frac{D}{\mathrm{Tr}(BB^T)} \\
+(H ^{\ast} _{\text{diag}})_{ij} &=  2\frac{M}{N}\frac{1}{(BB^T)_{ij}} \\
+H ^{\ast} } &= 2\frac{M}{N}\left ( BB^T \right )^{-1}
+\end{align}
+
+where \( D \) is the dimension of learning parameter \( \theta \),
+\(M\) and \( N \) are mini batch size and total data size,
+respectively, and \( BB^T \) is a SGD noise covariance. These three
+can be used as a (kind of) learning rate of SGD, and it is user choice
+depending on the trade-off of efficiency and accuracy.
+
 
 
 *** References
