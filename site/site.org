@@ -427,7 +427,7 @@ between the stationary distribution and the posterior distribution.
 \begin{align}
 \epsilon ^{\ast} &= 2\frac{M}{N}\frac{D}{\mathrm{Tr}(BB^T)} \\
 (H ^{\ast} _{\text{diag}})_{ij} &=  2\frac{M}{N}\frac{1}{(BB^T)_{ij}} \\
-H ^{\ast} } &= 2\frac{M}{N}\left ( BB^T \right )^{-1}
+H ^{\ast} &= 2\frac{M}{N}\left ( BB^T \right )^{-1}
 \end{align}
 
 where \( D \) is the dimension of learning parameter \( \theta \),
