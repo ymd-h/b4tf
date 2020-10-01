@@ -450,16 +450,12 @@ CLOSED: [2020-09-29 Tue 12:01]
 :END:
 
 Dropout is a well known regularization technique to stabilize training
-of deep neural network by stochastically masking units.
-
-From the view point of Bayesian, such stochastic masking is a Bernoulli
-distribution as a part of posterior distribution.
-
-Not only masking at training phase but also at inference phase, we can
-estimate the uncertainty of the prediction.
-
-Gal [1] described the equivalence of dropout training and ELBO
-maximization as approximate Bayes.
+of deep neural network by stochastically masking units. From the view
+point of Bayesian, such stochastic masking is a Bernoulli distribution
+as a part of posterior distribution. Not only masking at training
+phase but also at inference phase, we can estimate the uncertainty of
+the prediction. Gal [1] described the equivalence of dropout training
+and ELBO maximization as approximate Bayes.
 
 
 *** References
