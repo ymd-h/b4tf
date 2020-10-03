@@ -416,7 +416,7 @@ dynamically and try to stop the parameter update around the optimal
 point.
 
 On the other hand, SGD with constant learning rate doesn't stop at the
-optimal point but goes back and forth around there. S. Mandt et al [1]
+optimal point but goes back and forth around there. S. Mandt et al.[1]
 interpreted this distribution as Markov chain with a stationary
 distribution in the framework of approximate Bayes. The authors also
 derived the best learning rate \( \epsilon ^{\ast} \), diagonal
