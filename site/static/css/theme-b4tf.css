@@ -109,3 +109,7 @@ a:hover {
 #body .tags a.tag-link:before {
     border-right-color: var(--MENU-HEADER-BG-color);
 }
+
+#body ol > li > a {
+    vertical-align: text-top;
+}
