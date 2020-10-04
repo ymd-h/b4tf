@@ -124,8 +124,8 @@ pip install .
 Currently, b4tf implements following algorithms. We will implement
 more.
 
-- Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]], [[https://ymd_h.gitlab.io/b4tf/algorithms/pbp][Doc]], [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.PBP][API]])
-- Monte Carlo Batch Normalization (MCBN) ([[https://arxiv.org/abs/1802.06455][Paper]], [[https://ymd_h.gitlab.io/b4tf/algorithms/mcbn/][Doc]], [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.MCBN][API]])
+- Probabilistic Backpropagation (PBP) ([[https://arxiv.org/abs/1502.05336][Paper]], [[https://ymd_h.gitlab.io/b4tf/algorithms/pbp][Doc]], [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.pbp.html#b4tf.models.pbp.PBP][API]])
+- Monte Carlo Batch Normalization (MCBN) ([[https://arxiv.org/abs/1802.06455][Paper]], [[https://ymd_h.gitlab.io/b4tf/algorithms/mcbn/][Doc]], [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.mcbn.html#b4tf.models.mcbn.MCBN][API]])
 
 
 * DONE Contributing to b4tf
