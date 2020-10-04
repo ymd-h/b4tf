@@ -316,6 +316,21 @@ See also [[https://ymd_h.gitlab.io/b4tf/api/b4tf.models.html#b4tf.models.MCBN][A
 *** References
 - Paper :: [[https://arxiv.org/abs/1802.06455][M. Teye et al., "Bayesian Uncertainty Estimation for Batch Normalized Deep Networks" (2018) arXiv:1802.06455]]
 
+** DONE Multiplicative Normalization Flows
+CLOSED: [2020-10-04 Sun 22:22]
+:PROPERTIES:
+:EXPORT_FILE_NAME: mnfs
+:END:
+
+
+*** Overview
+
+*** Usage in b4tf
+
+*** Example
+
+*** References
+
 * Contributing
 :PROPERTIES:
 :EXPORT_HUGO_SECTION*: contributing
