@@ -257,11 +257,11 @@ class PBP(ModelBase):
             l.build(last_shape)
             self.layers.append(l)
             last_shape = u
-        else:
-            # Output Layer's Activation is Linear
-            l = PBPLayer(units[-1],dtype=self.dtype)
-            l.build(last_shape)
-            self.layers.append(l)
+
+        # Output Layer's Activation is Linear
+        l = PBPLayer(units[-1],dtype=self.dtype)
+        l.build(last_shape)
+        self.layers.append(l)
 
         self.trainables = [l.trainable_weights for l in self.layers]
 
