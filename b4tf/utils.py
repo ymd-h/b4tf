@@ -171,7 +171,6 @@ def BNN_like(NN,cls=tfp.layers.DenseReparameterization,copy_weight=False,**kwarg
     inputs = tf.keras.Input(shape=(tf.shape(NN.layers[0].kernel)[0],))
     x = inputs
 
-    N = len(NN.layers)
     for i, L in enumerate(NN.layers):
         layer_kwargs = { **kwargs }
 

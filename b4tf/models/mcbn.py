@@ -3,7 +3,6 @@ from typing import Iterable, Union
 import numpy as np
 
 import tensorflow as tf
-import tensorflow_probability as tfp
 
 from .base import ModelBase
 
@@ -185,13 +184,12 @@ class MCBN(ModelBase):
 
     @tf.function
     def _mini_bathes(self, batch_size: tf.Tensor, n_batches: tf.Tensor):
-        n = self.train_data.cardinality()
+        buffer_size = self.train_data.cardinality()
 
-        if n < 0: # -1: INFINITE_CARDINALITY, -2: UNKNOWN_CARDINALITY
-            n = 1024
+        if buffer_size < 0: # -1: INFINITE_CARDINALITY, -2: UNKNOWN_CARDINALITY
+            buffer_size = tf.constant(1024,dtype=buffer_size.dtype)
 
-        _dataset = self.train_data.shuffle(len(self.train_data),
-                                           reshuffle_each_iteration=True)
+        _dataset = self.train_data.shuffle(buffer_size, reshuffle_each_iteration=True)
         _dataset = _dataset.repeat().batch(batch_size, drop_remainder=True)
 
         return _dataset.take(n_batches)
