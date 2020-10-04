@@ -187,7 +187,7 @@ class MCBN(ModelBase):
         buffer_size = self.train_data.cardinality()
 
         if buffer_size < 0: # -1: INFINITE_CARDINALITY, -2: UNKNOWN_CARDINALITY
-            buffer_size = 1024
+            buffer_size = tf.constant(1024,dtype=buffer_size.dtype)
 
         _dataset = self.train_data.shuffle(buffer_size, reshuffle_each_iteration=True)
         _dataset = _dataset.repeat().batch(batch_size, drop_remainder=True)
