@@ -69,7 +69,7 @@
 ** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.2][v1.1.2]]
 - Fix: Training data shuffle inside MCBN.predict
 - Fix: Remove unused import statement
-** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.1][v1.1.1]] (Merge Miss, Same with v1.1.1)
+** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.1][v1.1.1]] (Merge Miss, Same with v1.1.0)
 - +Fix: Training data shuffle inside MCBN.predict+
 - +Fix: Remove unused import statement+
 ** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.0][v1.1.0]]
