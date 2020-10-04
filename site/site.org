@@ -330,6 +330,7 @@ CLOSED: [2020-10-04 Sun 22:22]
 *** Example
 
 *** References
+- Paper :: [[https://arxiv.org/abs/1703.01961][C. Louizis and M. Welling, "Multiplicative Normalizing Flows for Variational Bayesian Neural Networks" (2017) arXiv:1703.01961]]
 
 * Contributing
 :PROPERTIES:
