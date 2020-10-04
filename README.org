@@ -71,10 +71,7 @@
 [[./site/static/images/logo.png]]
 
 
-* DONE Overview
-:PROPERTIES:
-:EXPORT_FILE_NAME: _index
-:END:
+* Overview
 b4tf is a Python module providing a set of bayesian neural network on
 [[https://www.tensorflow.org/][TensorFlow]].
 
