@@ -436,7 +436,8 @@ respectively, and \( BB^T \) is a SGD noise covariance. These three
 can be used as a (kind of) learning rate of SGD, and it is user choice
 depending on the trade-off of efficiency and accuracy.
 
-
+S. L. Smith et al.[2] extended this bayesian perspective up to
+learning phase.
 
 *** References
 1. [[https://arxiv.org/abs/1704.04289][S. Mandt et al., "Stochastic Gradient Descent as Approximate Bayesian Inference" (2017) arXiv:1704.04289]]
@@ -462,6 +463,12 @@ and ELBO maximization as approximate Bayes.
 1. [[http://mlg.eng.cam.ac.uk/yarin/blog_2248.html][Y. Gal, "Uncertainty in Deep Learning", Ph.D thesis, University of Cambridge, 2016]]
 
 
+
+** DONE Assumed Density Filtering
+CLOSED: [2020-09-22 Tue 16:18]
+:PROPERTIES:
+:EXPORT_FILE_NAME: adf
+:END:
 
 * DONE Misc
 CLOSED: [2020-01-17 Fri 22:31]
