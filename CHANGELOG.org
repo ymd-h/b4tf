@@ -66,9 +66,12 @@
 :EXPORT_HUGO_SECTION: changelog
 :END:
 ** Unreleased
-** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.1][v1.1.1]]
+** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.2][v1.1.2]]
 - Fix: Training data shuffle inside MCBN.predict
 - Fix: Remove unused import statement
+** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.1][v1.1.1]] (Merge Miss, Same with v1.1.1)
+- +Fix: Training data shuffle inside MCBN.predict+
+- +Fix: Remove unused import statement+
 ** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.1.0][v1.1.0]]
 - Add: [[https://ymd_h.gitlab.io/b4tf/algorithms/mcbn/][Monte Carlo Batch Normalization (MCBN)]]
 ** [[https://gitlab.com/ymd_h/b4tf/-/tree/v1.0.1][v1.0.1]]
