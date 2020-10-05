@@ -415,6 +415,7 @@ Network, some of which might not be covered by b4tf.
 
 *** Bayes Techniques
 - Assumed Density Filtering
+- [[https://ymd_h.gitlab.io/b4tf/bnn/nf/][Normalizing Flow]]
 
 
 ** DONE Constant Learning Rate SGD as Bayes
@@ -485,6 +486,25 @@ CLOSED: [2020-09-22 Tue 16:18]
 :PROPERTIES:
 :EXPORT_FILE_NAME: adf
 :END:
+
+** DONE Normalizing Flow
+CLOSED: [2020-10-05 Mon 21:28]
+:PROPERTIES:
+:EXPORT_FILE_NAME: nf
+:END:
+
+*** Overview
+Normalization Flow (NF) produces flexible posterior distributions from
+simple latent distribution by iterative and invertible conversions.
+
+\begin{align}
+z_0 &\sim q(z_0\mid x) \\
+z_t &= f_t (x_{t-1},t) \forall t = 1 \dots T
+\end{align}
+
+
+*** References
+1. [[https://arxiv.org/abs/1505.05770][D. J. Rezende and S. Mohamed, "Variational Inference with Normalizing Flows" (2015) arXiv:1505.05770]]
 
 * DONE Misc
 CLOSED: [2020-01-17 Fri 22:31]
