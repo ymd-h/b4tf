@@ -494,17 +494,38 @@ CLOSED: [2020-10-05 Mon 21:28]
 :END:
 
 *** Overview
-Normalization Flow (NF) produces flexible posterior distributions from
-simple latent distribution by iterative and invertible conversions.
+Normalization Flow (NF), proposed by D. J. Rezende and S. Mohamed[1],
+produces flexible posterior distributions from simple latent
+distribution by iterative and invertible conversions as follows;
 
 \begin{align}
 z_0 &\sim q(z_0\mid x) \\
 z_t &= f_t (x_{t-1},t) \forall t = 1 \dots T
 \end{align}
 
+The density function \(q_T(z_T)\) can be written like
+
+\[ \ln q_T (z_T) = \ln q_0(z_0) - \sum _{t=1}^{T} \ln \left \mid \mathrm{det}\frac{\partial f_t}{\partial z_{t-1}} \right \mid \]
+
+One of the advantages of NF is that we can calculate expectation
+without knowing explicit form of \( q_T(z_T) \);
+
+\[ E_{q_T}(h(z_T)) = E_{q_0}(h(f_T \circ f_{T-1} \circ \dots \circ f_1(z_0))) \]
+
+The authors also provides two computationally cheap "flows",
+aka. "planar flow" and "radial flow".
+
+\begin{align}
+f(z) = z + u h(w^Tz + b) & \text{planar flow} \\
+f(z) = z + \beta h(\alpha, r)(z-z_0) & \text{radial flow}
+\end{align}
+
+D. P. Kingma et al.[2] proposed Inverse Autoregressive Flow (IAF)
 
 *** References
 1. [[https://arxiv.org/abs/1505.05770][D. J. Rezende and S. Mohamed, "Variational Inference with Normalizing Flows" (2015) arXiv:1505.05770]]
+2. [[https://arxiv.org/abs/1606.04934][D. P. Kingma et al., "Improved Variational Inference with Inverse Autoregressive Flow" (2016) arXiv:1606.04934]]
+
 
 * DONE Misc
 CLOSED: [2020-01-17 Fri 22:31]
