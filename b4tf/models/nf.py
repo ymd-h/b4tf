@@ -46,7 +46,16 @@ class DenseNF(tf.keras.layers.Layer):
                                         initializer=over_gamma,
                                         dtype=self.dtype,
                                         trainable=True)
-
+        self.bias_m = self.add_weight("bias_mean",
+                                      shape=[self.units,],
+                                      initializer=tf.keras.initializers.HeNormal(),
+                                      dtype=self.dtype,
+                                      trainable=True)
+        self.bias_v = self.add_weight("bias_variance",
+                                      shape=[self.units,],
+                                      initializer=over_gamma,
+                                      dtype=self.dtype,
+                                      trainable=True)
         self.built = True
 
 
