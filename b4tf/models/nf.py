@@ -118,3 +118,25 @@ class MNF(ModelBase):
     @tf.function
     def _fit(self,x: tf.Tensor, y: tf.Tensor):
         pass
+
+
+    def __call__(self,x):
+        """
+        Calculate deterministic output
+
+        Parameters
+        ----------
+        x : array-like
+            Input
+
+        Returns
+        -------
+        y : tf.Tensor
+            Neural netork output
+        """
+        x = self._ensure_input(x)
+        return self._call(x)
+
+    @tf.function
+    def _call(self,x: tf.Tensor):
+        pass
