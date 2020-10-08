@@ -91,3 +91,30 @@ class MNF(ModelBase):
         l = DenseNF(units[-1],dtype=self.dtype)
         l.build(last_shape)
         self.layers.append(l)
+
+
+    def fit(self,x,y,batch_size:int = 16):
+        """
+        Fit posterior distribution with observation
+
+        Parameters
+        ----------
+        x : array-like
+            Observed input
+        y : array-like
+            Observed output
+        batch_size : int, optional
+            Batch size. The default value is 16.
+        """
+        x = self._ensure_input(x)
+        y = self._ensure_output(y)
+
+        data = tf.data.Dataset.from_tensor_slices((x,y)).batch(batch_size)
+
+        for _x,_y in data:
+            self._fit(_x,_y)
+
+
+    @tf.function
+    def _fit(self,x: tf.Tensor, y: tf.Tensor):
+        pass
