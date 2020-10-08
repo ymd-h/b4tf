@@ -331,6 +331,7 @@ CLOSED: [2020-10-04 Sun 22:22]
 
 *** References
 - Paper :: [[https://arxiv.org/abs/1703.01961][C. Louizis and M. Welling, "Multiplicative Normalizing Flows for Variational Bayesian Neural Networks" (2017) arXiv:1703.01961]]
+- Code :: [[https://github.com/AMLab-Amsterdam/MNF_VBNN][AMLab-Amsterdam/MNF_VBNN (Archived)]]
 
 * Contributing
 :PROPERTIES:
