@@ -89,6 +89,8 @@ class DenseNF(tf.keras.layers.Layer):
     Layer for Normalizing Flow
     """
     def __init__(self,units: int,
+                 n_flows: int=2,
+                 flow_units: Iterable[int]=(50,),
                  dtype=tf.float32,
                  *args,**kwargs):
         """
@@ -98,11 +100,17 @@ class DenseNF(tf.keras.layers.Layer):
         ----------
         units : int
             Number of units in layer. (Output shape)
+        n_flows : int, optional
+            Number of flows. The default value is `2`
+        flow_units : Iterable[int], optional
+            Hidden and Output units in `f` mapping
         dtype : tf.dtypes.DType
             Data type
         """
         super().__init__(dtype=tf.as_dtype(dtype),*args,**kwargs)
         self.units = units
+        self.n_flows = n_flows
+        self.flow_units = flow_units
 
     def build(self,input_shape):
         input_shape = tensor_shape.TensorShape(input_shape)
@@ -133,7 +141,27 @@ class DenseNF(tf.keras.layers.Layer):
                                       initializer=over_gamma,
                                       dtype=self.dtype,
                                       trainable=True)
+
+        self.N =  tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
+                                           scale=tf.constant(1.0,dtype=self.dtype))
+        self.q0 = lambda: self.N.sample(shape=(self.units,input_shape))
+        self.NFs = [MaskedRealMVPFlow(self.flow_units,
+                                      input_shape=(self.units,input_shape),
+                                      dtype=self.dtype)
+                    for _ in range(self.n_flows)]
         self.built = True
+
+    @tf.function
+    def call(self,x: tf.Tensor):
+        z = self.q0()
+        LogDet = tf.constant(0.0,dtype=self.dtype)
+        for nf in self.NFs:
+            z,ld = nf(z)
+            LogDet += ld
+
+        Mh = tf.tensordot((x * z[...,:-1]),self.kernel_m,axes=[-1,0]) + self.bias_m
+        Vh = tf.tensordot((x*x),self.kernel_v,axes=[-1,0]) + self.bias_v
+        return Mh + tf.sqrt(Vh) * self.N.sample(shape=Mh.shape)
 
 
 class MNF(ModelBase):
@@ -148,7 +176,9 @@ class MNF(ModelBase):
     """
     def __init__(self,units: Iterable[int],*,
                  input_shape: Iterable[int]=(1,),
-                 dtype: Union[tf.dtypes.DType,np.dtype,str]=tf.float32):
+                 dtype: Union[tf.dtypes.DType,np.dtype,str]=tf.float32,
+                 n_flows: int=2,
+                 flow_units: Iterable[int]=(50,)):
         """
         Initialize MNF model
 
@@ -160,6 +190,10 @@ class MNF(ModelBase):
             Input shape for PBP model. The default value is `(1,)`
         dtype : tf.dtypes.DType or np.dtype or str
             Data type
+        n_flows : int, optional
+            Number of flows. The default value is `2`
+        flow_units : Iterable[int], optional
+            Hidden and Output units at normalizing flows. The default value is `(50,)`
         """
         super().__init__(dtype,input_shape,units[-1])
 
@@ -167,7 +201,7 @@ class MNF(ModelBase):
         self.layers = []
         for u in units[:-1]:
             # Hidden Layer's Activation is ReLU
-            l = DenseNF(u,dtype=self.dtype)
+            l = DenseNF(u,n_flows,flow_units,dtype=self.dtype)
             l.build(last_shape)
             self.layers.append(l)
             self.layers.append(tf.keras.layers.Activation("relu"))
