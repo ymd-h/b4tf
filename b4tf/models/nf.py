@@ -159,8 +159,8 @@ class DenseNF(tf.keras.layers.Layer):
             z,ld = nf(z)
             LogDet += ld
 
-        Mh = tf.tensordot((x * z[...,:-1]),self.kernel_m,axes=[-1,0]) + self.bias_m
-        Vh = tf.tensordot((x*x),self.kernel_v,axes=[-1,0]) + self.bias_v
+        Mh = tf.tensordot((x * z),self.kernel_m,axes=[-1,0]) + self.bias_m
+        Vh = tf.tensordot((x * x),self.kernel_v,axes=[-1,0]) + self.bias_v
         return Mh + tf.sqrt(Vh) * self.N.sample(shape=Mh.shape)
 
 
