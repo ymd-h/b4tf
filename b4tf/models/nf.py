@@ -5,7 +5,84 @@ from tensorflow.python.framework import tensor_shape
 
 from .base import ModelBase
 
-__all__ = ["DenseNF","MNF"]
+__all__ = ["MaskedRealNVPFlow","DenseNF","MNF"]
+
+
+class MaskedRealNVPFlow(ModelBase):
+    """
+    Masked Real NVP flow
+    """
+    def __init__(self,units :Iterable[int], *,
+                 input_shape: Iterable[int]=(1,),
+                 dtype: Union[tf.dtypes.DType,np.dtype,str]=tf.float32):
+        """
+        Initialize Masked Real NVP
+
+        Parameters
+        ----------
+        units : Iterable[int]
+            Numbers of hidden units and outputs
+        input_shape : Iterable[int], optional
+            Input shape for PBP model. The default value is `(1,)`
+        dtype : tf.dtypes.DType or np.dtype or str
+            Data type
+        """
+        super().__init__(dtype,input_shape,units[-1])
+        self.bernoulli = tfp.distributions.Bernoulli(probs=0.5,dtype=self.dtype)
+
+        last_shape = self.input_shape
+        self._f = []
+        for u in units:
+            # Hidden Layer's Activation is tanh
+            l = tf.keras.layers.Dense(u,dtype=self.dtype,activation="tanh")
+            l.build(last_shape)
+            self._f.append(l)
+            last_shape = u
+
+        self._g = tf.keras.layers.Dense(self.input_shape)
+        self._g.build(u)
+
+        self._k = tf.keras.layers.Dense(self.input_shape,activation="sigmoid")
+        self._k.build(u)
+
+
+    def __call__(self,z):
+        """
+        Calculate deterministic output
+
+        Parameters
+        ----------
+        z : array-like
+            Samples from distribution
+
+        Returns
+        -------
+        z1 : tf.Tensor
+            Samples from converted distribution
+        LogDet : tf.Tensor
+            Log determinant of Jaccobian
+        """
+        z = tf.constant(z,dtype=self.dtype)
+        return self._call(z)
+
+
+    @tf.function
+    def _call(self, z: tf.Tensof):
+        m = self.bernoulli.sample(shape=z.shape)
+        h0 = m * z
+        not_m = 1 - m
+
+        h = h0
+        for _f in self._f:
+            h = _f(h) # tanh is included
+
+        mu = self._g(h)
+        sigma = self._k(h) # sigmoid is included
+
+        z1 = h0 + not_m * (z * sigma + (1-sigma) * mu)
+        LogDet = tf.reduce_sum(not_m * tf.math.log(sigma))
+        return z1, LogDet
+
 
 class DenseNF(tf.keras.layers.Layer):
     """
