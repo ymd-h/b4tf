@@ -152,7 +152,7 @@ class DenseNF(tf.keras.layers.Layer):
         self.built = True
 
     @tf.function
-    def call(self,x: tf.Tensor):
+    def call(self,x: tf.Tensor, training: tf.Tensor = tf.constant(True)):
         """
         Calculate feed forward
 
@@ -160,6 +160,8 @@ class DenseNF(tf.keras.layers.Layer):
         ----------
         x : tf.Tensor
             Input values. [batch size, previous units size]
+        training : tf.Tensor, optional
+            If true (default), save loss, too.
 
         Returns
         -------
@@ -174,7 +176,14 @@ class DenseNF(tf.keras.layers.Layer):
             z,ld = nf(z)
             LogDet += ld
 
-        self.add_loss([log_q0, LogDet])
+        if training:
+            KL = 0.5 * tf.reduce_sum(tf.math.log(self.kernel_v) + self.kernel_v +
+                                     tf.math.log(self.bias_v)   + self.bias_v
+                                     - tf.tensordot(z*z,
+                                                    tf.square(self.kernel_m),
+                                                    axes=[-1,0])
+                                     + 1)
+            self.add_loss([KL, log_q0, LogDet])
 
         z = tf.expand_dims(z, axis=0) # [1, previous units size]
         Mh = (tf.tensordot((x * z), self.kernel_m, axes=[-1,0]) +
