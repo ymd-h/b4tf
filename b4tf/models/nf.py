@@ -144,9 +144,9 @@ class DenseNF(tf.keras.layers.Layer):
 
         self.N =  tfp.distributions.Normal(loc=tf.constant(0.0,dtype=self.dtype),
                                            scale=tf.constant(1.0,dtype=self.dtype))
-        self.q0 = lambda: self.N.sample(shape=(self.units,input_shape))
+        self.q0 = lambda: self.N.sample(shape=input_shape)
         self.NFs = [MaskedRealMVPFlow(self.flow_units,
-                                      input_shape=(self.units,input_shape),
+                                      input_shape=input_shape,
                                       dtype=self.dtype)
                     for _ in range(self.n_flows)]
         self.built = True
