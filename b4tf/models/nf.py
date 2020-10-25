@@ -1,5 +1,6 @@
 from typing import Iterable, Union
 
+import numpy as np
 import tensorflow as tf
 from tensorflow.python.framework import tensor_shape
 
