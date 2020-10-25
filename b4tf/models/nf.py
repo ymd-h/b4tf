@@ -153,14 +153,30 @@ class DenseNF(tf.keras.layers.Layer):
 
     @tf.function
     def call(self,x: tf.Tensor):
-        z = self.q0()
+        """
+        Calculate feed forward
+
+        Parameters
+        ----------
+        x : tf.Tensor
+            Input values. [batch size, previous units size]
+
+        Returns
+        -------
+        y : tf.Tensor
+            Stochastic output values. [batch size, units size]
+        """
+        z = self.q0() #  [previous units size,]
         LogDet = tf.constant(0.0,dtype=self.dtype)
         for nf in self.NFs:
             z,ld = nf(z)
             LogDet += ld
 
-        Mh = tf.tensordot((x * z),self.kernel_m,axes=[-1,0]) + self.bias_m
-        Vh = tf.tensordot((x * x),self.kernel_v,axes=[-1,0]) + self.bias_v
+        z = tf.expand_dims(z, axis=0) # [1, previous units size]
+        Mh = (tf.tensordot((x * z), self.kernel_m, axes=[-1,0]) +
+              tf.expand_dims(self.bias_m, axis=0))
+        Vh = (tf.tensordot((x * x), self.kernel_v, axes=[-1,0]) +
+              tf.expand_dims(self.bias_v, axis=0))
         return Mh + tf.sqrt(Vh) * self.N.sample(shape=Mh.shape)
 
 
