@@ -167,10 +167,14 @@ class DenseNF(tf.keras.layers.Layer):
             Stochastic output values. [batch size, units size]
         """
         z = self.q0() #  [previous units size,]
+        log_q0 = self.N.log_prob(z)
+
         LogDet = tf.constant(0.0,dtype=self.dtype)
         for nf in self.NFs:
             z,ld = nf(z)
             LogDet += ld
+
+        self.add_loss([log_q0, LogDet])
 
         z = tf.expand_dims(z, axis=0) # [1, previous units size]
         Mh = (tf.tensordot((x * z), self.kernel_m, axes=[-1,0]) +
