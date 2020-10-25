@@ -68,7 +68,7 @@ class MaskedRealNVPFlow(ModelBase):
 
 
     @tf.function
-    def _call(self, z: tf.Tensof):
+    def _call(self, z: tf.Tensor):
         m = self.bernoulli.sample(shape=z.shape)
         h0 = m * z
         not_m = 1 - m
