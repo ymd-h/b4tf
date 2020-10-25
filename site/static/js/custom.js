@@ -1,7 +1,7 @@
 (function(){
     const path = location.pathname
 
-    var gl = $.get("https://gitlab.com/api/v4/projects/ymd_h%2Fcpprb");
+    var gl = $.get("https://gitlab.com/api/v4/projects/ymd_h%2Fb4tf");
 
     $(document).ready(function(){
 	if(gl){
