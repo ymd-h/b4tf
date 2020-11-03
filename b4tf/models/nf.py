@@ -194,7 +194,7 @@ class DenseNF(tf.keras.layers.Layer):
                 zb, ld = aux(zb)
                 LogDet += ld
 
-            self.add_loss([KL + log_q0 - log_r - LogDet])
+            self.add_loss(KL + log_q0 - log_r - LogDet)
 
         z = tf.expand_dims(z, axis=0) # [1, previous units size]
         Mh = (tf.tensordot((x * z), self.kernel_m, axes=[-1,0]) +
