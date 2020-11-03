@@ -150,6 +150,10 @@ class DenseNF(tf.keras.layers.Layer):
                                       input_shape=input_shape,
                                       dtype=self.dtype)
                     for _ in range(self.n_flows)]
+        self.Aux = [MaskedRealMVPFlow(self.flow_units,
+                                      input_shape=last_dim,
+                                      dtype=self.dtype)
+                    for _ in range(self.n_flows)]
         self.built = True
 
     @tf.function
@@ -184,7 +188,13 @@ class DenseNF(tf.keras.layers.Layer):
                                                     tf.square(self.kernel_m),
                                                     axes=[-1,0])
                                      + 1)
-            self.add_loss([KL, log_q0, LogDet])
+
+            zb = z
+            for aux in self.Aux:
+                zb, ld = aux(zb)
+                LogDet += ld
+
+            self.add_loss([KL + log_q0 - log_r - LogDet])
 
         z = tf.expand_dims(z, axis=0) # [1, previous units size]
         Mh = (tf.tensordot((x * z), self.kernel_m, axes=[-1,0]) +
